@@ -1,0 +1,83 @@
+/*
+ * calc.c
+ *
+ *  Created on: Sep 28, 2013
+ *      Author: matthew
+ */
+
+#include <stdio.h>
+
+int main(int argc, char **argv) {
+	//prevent buffOverflow attacks
+	int maxBufSize = 10;
+	char * str;
+	int numArgs = 3;
+	char * strToken;
+	char tokArray[numArgs];
+	str = fgets(str, maxBufSize, stdin);
+	int i = 0;
+
+	//check for failure in reading from command-line
+	if (str == NULL) {
+		exit(0);
+	}
+
+	//parse string into tokens, using " " as delimiter.
+	strToken[i] = strtok(str, " ");
+	while (i < 2) {
+		i++;
+		// NULL required as param for subsequent call on
+		// same string
+		strToken[i] = strtok(NULL, " ");
+		if (strToken[i] == NULL) {
+			fprintf(stdout, "Insufficient Arguments: %d given 3 expected",
+					(i + 1));
+			// handout specifies 0 for error (though usually 1)
+			exit(0);
+		}
+	}
+
+	//check for malformed input
+	int argOne, argTwo;
+	char * operator;
+	char * checkPtrOne;
+	char * checkPtrTwo;
+	int baseTen = 10;
+
+	argOne = (int) strtol(strToken[0], checkPtrOne, baseTen);
+	argTwo = (int) strtol(strToken[2], checkPtrTwo, baseTen);
+
+	if ((checkPtrOne == strToken[0]) || (checkPtrOne != NULL)) {
+		//error: either no digits found or malformed input
+		fprintf(stdout, "InputOne: %s not a digit", strToken[0]);
+		exit(0);
+	}
+
+	if ((checkPtrTwo == strToken[0]) || (checkPtrTwo != NULL)) {
+		//error: either no digits found or malformed input
+		fprintf(stdout, "InputTwo: %s not a digit", strToken[2]);
+		exit(0);
+	}
+
+	switch (strToken[1]) {
+
+	case ("+"):
+		return add(argOne, argTwo);
+		break;
+	case ("-"):
+		return sub(argOne, argTwo);
+		break;
+	case ("/"):
+		return cdiv(argOne, argTwo);
+		break;
+	case ("*"):
+		return mul(argOne, argTwo);
+		break;
+	case ("%"):
+		return mod(argOne, argTwo);
+	default:
+		printf("Error, Operation %s not supported", strToken[1]);
+		exit(0);
+	}
+
+}

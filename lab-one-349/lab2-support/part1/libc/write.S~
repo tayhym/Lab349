@@ -1,0 +1,35 @@
+@ write.S: write sycall wrapper
+@
+@ Authors: Group Member 1 <email address>
+@          Group Member 2 <email address>
+@ Date:    The current time & date
+
+#include <bits/swi.h>	@ added for cpp to interpret WRITE_SWI
+#include <errno.h>	@ for definition of extern errno 
+
+	.file	"write.S"
+	.text
+
+	.global	write
+
+write:
+	@ Needs more code.
+	@ Added some code below
+	
+
+	SWI WRITE_SWI	@ no change in params (r0-r2)
+	TST r0, #-1 	@ check for negative result (meaning error)
+	BPL done
+	NEG r0, r0	@ sysCall error, set errno 
+	str r0, [errorNum, #0]
+  	mov r0, #-1	@ set wrapper to return -1
+			
+
+done: 	@ only valid to test errno when syscall wrapper returns -1
+	MOV pc, lr
+
+
+errorNum: .word errno  
+
+
+

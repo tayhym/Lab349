@@ -1,0 +1,5 @@
+1. entry point addresss: 0x82d4
+2. first function called: _gmon_start
+3. -d flag disassembles only the sections of the object file expected to contain instructions. -D flag disassembles all contents of the file, including all sections and all data in ARM. 
+4. The interpretation is that of a continuous seqeunce of binary words. The actual data of text characters is not reflected, and thus the interpretation is not strictly correct. This means that .rodata stores read-only data via a sequence of binary data in memory, without storing information as to how it is to be used. The instruction using the .rodata would need to interpret the binary digits accordingly, whether as digits or as characters, for example. 
+

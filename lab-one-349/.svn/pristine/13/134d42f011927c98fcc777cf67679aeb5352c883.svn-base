@@ -1,0 +1,32 @@
+CC     = gcc
+CFLAGS = -O2 -Wall -Werror 
+
+objects = add.o cdiv.o mod.o mul.o sub.o
+
+default: calc
+
+.PHONY: default clean clobber
+
+calc: $(objects)
+	$(CC) -o $@ $^
+
+
+%.o: %.c
+	$(CC) -c $(CFLAGS) -o $@ $<
+	
+add.o: add.c math.h
+	$(CC) -o $@ $^
+	
+cdiv.o: cdiv.c math.h
+mod.o: mod.c math.h
+mul.o: mul.c math.h
+sub.o: sub.c math.h 
+
+%.o: %.c
+	$(CC) -c $(CFLAGS) -o $@ $<
+
+clean:
+	rm -f $(objects)
+
+clobber: clean
+	rm -f calc

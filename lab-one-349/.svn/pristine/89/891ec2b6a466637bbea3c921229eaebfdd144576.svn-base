@@ -1,0 +1,60 @@
+/*
+ * rot13.c: ROT13 cipher test application
+ *
+ * Authors: Group Member 1 <email address>
+ *          Group Member 2 <email address>
+ * Date:    The current time & date
+ */
+
+#include <swi.h>
+
+int main(void) {
+	/* Needs more code. */
+	/* Added some code below */
+	
+	/* loops indefinitely till syscall error */
+	while (1) {
+		/* assumes all characters read are alphabets */
+		/* block size 100 characters */
+		int blockSize = 100;
+		char *buf;
+		int numBytesRead = read(stdin, buf, blockSize);
+	
+		if (numBytesRead == 0) {
+			exit(0);
+		}
+	
+		else if (numBytesRead == -1) {
+			exit(1);
+		}
+ 
+	
+		char outBuf[numBytesRead];
+		int i;
+	
+		/* rotate characters based on their ascii values */
+		for (i = 0; i<numBytesRead;i++) {
+			if (char[i]<=77 && char[i]>=65) {
+				outBuf[i] = (char) ((int) char[i] +13);
+			}
+			else if (char[i]>=78 && char[i]<=99) {
+				outBuf[i] = (char) ((int) char[i] -13);
+			}
+			else if (char[i]>= 97 && char[i]<= 109) {
+				outBuf[i] = (char) ((int) char[i] + 13);
+			}
+			else {
+				outBuf[i] = (char) ((int) char[i] - 13);
+			} 
+ 		}
+	
+		int numBytesWritten = write(stdout, outBuf, numBytesRead);
+	
+		if (numBytesWritten == -1) {
+			exit(1);
+		}
+	}
+
+	return 0; // not reached 
+}
+

@@ -1,0 +1,36 @@
+ .file   "strTableTwo.c"                                 
+        .text                                                        
+        .align  2                                                    
+        .global strTableTwo                                          
+        .type   strTableTwo, %function                               
+strTableTwo:                                                         
+        @ Function supports interworking.                            
+        @ args = 0, pretend = 0, frame = 0                           
+        @ frame_needed = 0, uses_anonymous_args = 0                  
+        cmp     r3, #1          @ if (destLen < 1) exit function     
+        stmfd   sp!, {r4, r5}   @ store callee-saved variables       
+        bmi     .L11                                                 
+        mov     r5, r1                                               
+        add     r4, r1, r3      @ r4 = address of dest last character
+        sub     r1, r4, #1                        
+        @mov    r5, #0                            
+.L4:                                              
+        ldrb    ip, [r1, #0]    @ zero_extendqisi2
+        mov     r4, ip     
+.L7:                         
+        sub     ip, ip, #23  
+        cmp     ip, #23             
+        bge     .L7        
+
+.L5:                                                                 
+        cmp     r2, ip                                               
+        @add    r5, r5, #1                                           
+        strb    r0, [ip,r0]                       
+        cmp     r5, r1                            
+        sub     r1, r1, #1                        
+        bne     .L4                               
+.L11:                      
+        ldmfd   sp!, {r4, r5}
+        mov     pc, lr       
+        .size   strTable, .-strTable
+        .ident  "GCC: (GNU) 3.4.5" 

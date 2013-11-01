@@ -1,0 +1,12 @@
+3.1.6 Revision Control System Exercise (15 points)
+
+1. Files are: wire, crimpers
+Content of wire: strippers 
+Content of crimpers: 42
+
+2. Userid of person: ksubrama
+3. Date: 2008-09-17 (Wed, 17 Sep 2008)
+   Time: 07:52:43 -0400
+   Commit Message: Pins!
+   
+      

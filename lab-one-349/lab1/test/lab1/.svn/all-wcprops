@@ -1,0 +1,47 @@
+K 25
+svn:wc:ra_dav:version-url
+V 27
+/svn/!svn/ver/7/trunk/part1
+END
+math.c
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/!svn/ver/7/trunk/part1/math.c
+END
+disassembly.txt
+K 25
+svn:wc:ra_dav:version-url
+V 43
+/svn/!svn/ver/7/trunk/part1/disassembly.txt
+END
+test.txt
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/7/trunk/part1/test.txt
+END
+Makefile
+K 25
+svn:wc:ra_dav:version-url
+V 36
+/svn/!svn/ver/7/trunk/part1/Makefile
+END
+math.h
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/!svn/ver/7/trunk/part1/math.h
+END
+calc
+K 25
+svn:wc:ra_dav:version-url
+V 32
+/svn/!svn/ver/7/trunk/part1/calc
+END
+calc.c
+K 25
+svn:wc:ra_dav:version-url
+V 34
+/svn/!svn/ver/7/trunk/part1/calc.c
+END

@@ -1,0 +1,74 @@
+Part2asm Optimizations 
+
+*Started by trying to understand what the strTable function was implementing
+
+*removed: mov r5, r0 because neither r5 nor r0 are changed throughout the function
+*changed: ldrb r3, [r5,ip] to: ldrb r3, [r0,ip] in order to agree with the above change
+*changed: strneb r6, [r5,ip] to: ldrb r6, [r0,ip] in order to agree with the above change
+*changed: mov r0, r3 to mov r5, r3 in order to store an unchanging copy of r3(srcLen(
+*changed: cmp r2, r3 to cmp r2, r5 in order to agree with the above change
+
+*removed: sub ip, r3, #23 because it happens during the decrement by 23 loop
+*removed: cmp ip, #22 because we no longer did an initial subtraction after loading from src
+*removed: ble .L13 because we no longer did an initial subtraction after loading from src
+*changed: ldrb r3, [r1,r2] to ldrb ip, [r1,r2] in order to store the char value in ip so it can decrement the value in the .L7 loop.
+*removed: mov r5, r3 because we are no longer changing the value of r3.
+*changed: cmp r2, r5 to cmp r2, r3 in order to agree with the above changes.
+
+*changed: stmfd sp!, {r4, r5, r6} to stmfd sp!, {r4, r6} because we are no longer modifying r5 so we do not need to store it in the stack first.
+*changed: ldmfd sp!, {r4, r5, r6} to ldmfd sp!, {r4, r6} because we are no longer storing r5.
+
+*removed: ldrb r3, [r0,ip] because we can just always replace the char in r6(src)
+*removed: ldrb r6, [r1,r2] for the same reason as above
+*removed: cmp r3, r6 becuase we were no longer loading things to compare
+*changed: strnleb r6, [r0, ip] to strb r3, [r0,ip] because r6 we are no longer loading a char value into r6, and we always want to store regardless of what flags are set.
+
+*changed: stmfd sp!, {r4, r6} to stmfd sp!, {r4} because we are no longer modifying r6 so we do not need to store a copy in order to restore it
+*changed: ldmfd sp!, {r4, r6} to ldmfd sp!, {r4} becuase we are no longer storing r6.
+
+*removed: r4, r2 because we can use r4 as the outer counter without having to store r2
+*swapped: r4 and r2 in every instruction they were used
+
+*moved: cmp r2, r3 to above the initial: stmfd sp!, {r4} and 
+*changed: r2, r3 to cmp r3, #1 because we should check if dstLen is greater or equal to one first before any other operations.
+*moved: bge .L11 to immediately after the intial: stmfd sp!, {r4} because we needed to atleast store the values of r4-r6 because we load them back in .L11.
+*changed: bge .L11 to bmi .L11 because we want to jump is r3(srcLen) is not alteast 1.
+
+*removed: mov r4, #0 becuase we can use r3(srcLen) as our counter instead of counting up from zero.
+*removed: add r4, r4, #1 because we are no longer using r4 as our counter.
+*removed: cmp r4, r3 because we are longer using r4 to check if we have iterated all the way through src
+*added: subs r3, r3, #1 as the first instruction of .L4 in order to use r3 as the decrementing counter.
+*changed all the instructions using r4 to use r3 because we are now using r3 as r4.
+*added sub r3, r3, #1 as the last instruction of <main> in order for the offset in ldrb ip, [r1,r3] to be within bounds
+*changed blt .L9 to bpl .L9 because we only want to loop through again if the subs instruction does not set the negative flag.
+* added mov r4, ip as the last instruction in .L9, in order to save an unmoded copy of dst[i] 
+* had to change strb r3, [r0,ip] to strleb r4, [r0,ip] in order to store dst[i] in src[ip]
+
+Part2asm Cost Analysis 
+
+Based on original cost of 449, estimated own cost by subtracting number of instructions 
+deleted for the memory footprint and the new cycle cost from which type of instructions were deleted. 
+
+Memory Footprint: deletion of 3 mov instructions 
+		  deletion of 3 compares 
+		  deletion of 2 branches 
+		  deletion of 2 loads
+	 
+Memory footprint reduction = 10 instructions (50 points)
+
+Cycle Cost: 	  deletion of 3 mov instructions * 1 = 3
+		  deletion of 3 compares * 1 = 3 
+		  deletion of 2 branches * 3 = 6
+		  4 less loads 		 * 3 = 12
+		  2 less stores 	 * 3 = 6	
+
+Instruction Cycle footprint reduction: 30 cycles (30 points)
+Total reduction : 80 points 
+
+Total cost: 369 points
+
+
+Part2c Optimizations
+Look at part2c.c for versions of optimizations. 
+
+

@@ -1,0 +1,35 @@
+@ read.S: read sycall wrapper
+@
+@ Authors: Group Member 1 <email address>
+@          Group Member 2 <email address>
+@ Date:    The current time & date
+@ referenced: http://lists.busybox.net/pipermail/uclibc/2005-June/011894.html
+
+#include <bits/swi.h>	@ added for cpp to interpret READ_SWI
+#include <errno.h>	@ for definition of extern errno 
+
+	.file	"read.S"
+	.text
+
+	.global	read
+read:
+	@ Needs more code.
+	@ Added some code below
+	
+	SWI READ_SWI	@ no change in params (r0-r2)
+	TST r0, #-1 	@ check for negative result (meaning error)
+	BPL done
+	NEG r0, r0	@ sysCall error, set errno 
+	str r0, [errorNum, #0]
+  	mov r0, #-1	@ set wrapper to return -1
+			
+
+done: 	@ only valid to test errno when syscall wrapper returns -1
+	MOV pc, lr
+
+
+errorNum: .word errno  
+	
+
+
+	

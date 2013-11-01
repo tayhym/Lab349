@@ -1,0 +1,15 @@
+What does typing make do?
+Program looks for file named makeFile and executes it. 
+
+How to ask make to look for a different makeFile? 
+make -f myMakeFile
+
+What is the build process that the compiler and linker do 
+in the makeFile? 
+Compiler takes source files and outputs assembly files that
+assembler converts to object files. Linker takes object files
+and creates executable. This executable is taken by loader 
+and loaded into memory. 
+
+How is this related to the usual way of doing things? 
+Exactly the same, usual way is gcc file1.c file.c file2.c -o file

@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+
+int oddball(int *arr, int len);
+int randGenerator(int *arr, int len);
+int oddballOne(int *arr, int len);
+int oddballTwo(int *arr, int len);
+
+#ifndef N
+#define N (40)
+#endif
+
+#define ARRLEN (2*(N) - 1)
+
+int main() {
+	/* Keep this line here */
+	srand(time(NULL));
+
+	int numTests = 10000;
+	int index;
+	int arrSize = (2*(500))-1;
+	for (index = 0; index < numTests; index++) {
+		int *arr = malloc(arrSize * sizeof(int));
+		int num;
+
+		if (!arr) {
+			return -1;
+		}
+
+		randGenerator(arr, arrSize);
+		num = oddball(arr, arrSize);
+
+		int num1 = oddballOne(arr, arrSize);
+		int num2 = oddballTwo(arr, arrSize);
+		if ((num != num1) || (num != num2) || (num1 != num2)) {
+			printf("Oddball is %d\n", num);
+			printf("OddballOne is %d\n", num1);
+			printf("OddballTwo is %d\n", num2);
+			exit(0);
+		}
+	}
+
+	return 0;
+}
+
