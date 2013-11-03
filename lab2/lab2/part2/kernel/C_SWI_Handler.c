@@ -11,21 +11,21 @@
 #include <asm_functions.h>
 
 /* internal function prototypes specific to file */ 
-void service_SWI_Exit(unsigned int exit_stat);
+int service_SWI_Exit(unsigned int exit_stat);
 int service_SWI_Read(unsigned int *regs);
 int service_SWI_Write(unsigned int *regs);
 
 extern int exit_status;
-
+extern int globArray;
 /* Called by assembly Swi_Handler, with a swi number and a pointer to
  * register values on the stack. 
  * requires valid swi_Num, this check is done in kernel.
  * returns a return value, depending on which swi_handler was called.
  */
 int C_SWI_Handler(int swi_Num, unsigned int *regs) { 
+	printf("swi num is %x \n",swi_Num);
 	switch( swi_Num ) {
-		case 0x1: service_SWI_Exit((int)regs[0]);
-			  return 0;
+		case 0x1: return service_SWI_Exit((int)regs[0]);
 		case 0x3: return service_SWI_Read(regs);
 		case 0x4: return service_SWI_Write(regs);
 		default:
@@ -39,8 +39,11 @@ int C_SWI_Handler(int swi_Num, unsigned int *regs) {
  * Takes 1 parameter, the exit status. Exits kernel, returning 
  * exit status to U-Boot. 
  */
-void service_SWI_Exit(unsigned int exit_stat) {
+int service_SWI_Exit(unsigned int exit_stat) {
 	exit_status = exit_stat;
+	printf("exit status is %x\n",exit_status);
+	printf("globArray value is %x\n", globArray);
+	return exit_status;	
 }
 
 /* Implements the read syscall:  

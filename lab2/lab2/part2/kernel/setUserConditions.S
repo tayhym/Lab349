@@ -6,15 +6,17 @@
        	.global globArray
 	.global linkR                      
 setUserConditions:
+	ldr 	r4,=0xabcd
+	mov 	r5, lr 
 	stmfd	sp!, {r0-r12,lr}
-	ldr	r4, =linkR		@ store return address to main
-	str	lr, [r4]
+	ldr 	r4, =globArray		@ store sp_svc
+	str 	sp, [r4] 
+	@ldr	r4, =linkR		@ store return address to main
+	@str	lr, [r4]
 	mrs	r4, cpsr		@ load r4 with cpsr
 	bic 	r4, #0x1f		@ clear mode bits (last 5 bits)
 	orr	r4, r4, #0x0d0		@ mask IRQ and FIQ and set to user mode
 	msr	cpsr, r4		@ load new cpsr with masks
-	ldr	r4, =globArray		@ @store sp_svc
-	str	sp, [r4] 
 	mov	sp, #0xa3000000		@ set stack pointer to new user stack
 	subs	r4, r0, #1
 	blt	end

@@ -24,12 +24,16 @@ S_Handler:
 	bne	normal
 exitCall:
 	bl 	C_SWI_Handler		@ handle exit to set exit status
+	ldr 	r4, [sp, #14*4] 
+	msr 	cpsr, r4
 	ldr 	r4, =globArray		@ get address of globArray
 	ldr 	sp, [r4]		@ load sp with stored sp in globArray
-	ldr 	r4, =linkR		@ get return addr to main 
-	ldr 	lr, [r4] 
-	ldmfd 	sp!, {r0-r12}		@ restore kernel's registers
-	add 	sp, sp, #4 		@ new linkR is back to main 	
+	@ldr 	r4, =linkR		@ get return addr to main 
+	@ldr 	lr, [r4] 
+	add 	sp, sp, #4
+	ldmfd 	sp!, {r1-r12,lr}	@ restore kernel's registers
+	@add 	sp, sp, #4 		@ new linkR is back to main 	
+	mov 	lr, r5		
 	movs 	pc, lr			@ return to kernel.c main
 normal:
 	bl 	C_SWI_Handler
