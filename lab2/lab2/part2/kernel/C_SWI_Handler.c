@@ -1,5 +1,4 @@
-/*
- * Matthew Tay mhtay@andrew.cmu.edu	
+/* Matthew Tay mhtay@andrew.cmu.edu	
  * Deeptaanshu Kumar deeptaan@andrew.cmu.edu
  * Kevin Brennan kbrennan@andrew.cmu.edu
  */
@@ -11,19 +10,17 @@
 #include <asm_functions.h>
 
 /* internal function prototypes specific to file */ 
-int service_SWI_Exit(unsigned int exit_stat);
+int service_SWI_Exit(unsigned int exit_status);
 int service_SWI_Read(unsigned int *regs);
 int service_SWI_Write(unsigned int *regs);
 
-extern int exit_status;
-extern int globArray;
+
 /* Called by assembly Swi_Handler, with a swi number and a pointer to
  * register values on the stack. 
  * requires valid swi_Num, this check is done in kernel.
  * returns a return value, depending on which swi_handler was called.
  */
 int C_SWI_Handler(int swi_Num, unsigned int *regs) { 
-	printf("swi num is %x \n",swi_Num);
 	switch( swi_Num ) {
 		case 0x1: return service_SWI_Exit((int)regs[0]);
 		case 0x3: return service_SWI_Read(regs);
@@ -39,11 +36,8 @@ int C_SWI_Handler(int swi_Num, unsigned int *regs) {
  * Takes 1 parameter, the exit status. Exits kernel, returning 
  * exit status to U-Boot. 
  */
-int service_SWI_Exit(unsigned int exit_stat) {
-	exit_status = exit_stat;
-	printf("exit status is %x\n",exit_status);
-	printf("globArray value is %x\n", globArray);
-	return exit_status;	
+int service_SWI_Exit(unsigned int exit_status) {
+	return exit_status;
 }
 
 /* Implements the read syscall:  
@@ -60,9 +54,11 @@ int service_SWI_Read(unsigned int *regs) {
 	int fd = (int) *regs;
 	char *buf = (char *) *(regs+1);
 	size_t count = (size_t) *(regs+2);
+	
 	// initialize useful internal variables
 	int bytesRead = 0;
-	char c;		
+	char c;	
+
 	// require file descriptor to be stdin
 	if (fd != STDIN_FILENO) {
 		return -EBADF;
@@ -71,37 +67,38 @@ int service_SWI_Read(unsigned int *regs) {
 	if (count>0x10000) {
 		return -EFAULT;
 	}		
-	while (tstc()!=0) {
-		//read a character from stdin 
-		c = getc();
-		//check for EOT character
-		if ((int) c == 4) {
-			return bytesRead;
-		}
-		//check for backspace or delete character
-		else if (((int) c == 8) || ((int) c == 127)) {
-			//remove previous character, if there was a prev character
-			if ( bytesRead > 0) {
-				bytesRead--; 
-				puts("\b \b");
+	while( bytesRead < count ){
+		if ( tstc()!=0 ){
+			//read a character from stdin 
+			c = getc();
+			//check for EOT character
+			if ((int) c == 4) {
+				return bytesRead;
+			}
+			//check for backspace or delete character
+			else if (((int) c == 8) || ((int) c == 127)) {
+				//remove previous character, if there was a prev character
+				if ( bytesRead > 0) {
+					bytesRead--; 
+					puts("\b \b");
+				}
+			}
+			//check for newline or carriage return 
+			else if (((int) c == 10) || ((int) c == 13)) {
+				//place newline in the buffer
+				*(buf+bytesRead) = '\n';
+				putc('\n');
+				bytesRead++;
+				return bytesRead;
+			}
+
+			//write to stdout. function blocks until task completes.
+			else {
+				*(buf+bytesRead) = c;
+				putc(c);
+				bytesRead++;
 			}
 		}
-		//check for newline or carriage return 
-		else if (((int) c == 10) || ((int) c == 13)) {
-			//place newline in the buffer
-			*(buf+bytesRead) = '\n';
-			putc('\n');
-			bytesRead++;
-			return bytesRead;	 
-		}
-
-		//write to stdout. function blocks until task completes.
-		else {
-			putc(c);
-			*(buf+bytesRead) = c;
-			bytesRead++;
-		}
-	
 	}
 	return bytesRead;
 }
@@ -141,13 +138,20 @@ int service_SWI_Write(unsigned int *regs) {
 	
 	else {
 		while (bytesWritten < count) {
-			putc(*(buf+bytesWritten));
-			bytesWritten++;
+			char c = *(buf+bytesWritten);
+			if ( (int)c == 0 || (int)c == 3 || (int)c == 4 ){
+				return bytesWritten;
+			}
+			else {
+				putc(c);
+				bytesWritten++;
+			}
 		}
 		return bytesWritten;
 	}
 }		
 	 
+
 
 
 
