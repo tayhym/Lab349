@@ -1,21 +1,33 @@
+/*
+ * kernel.c: Kernel main (entry) function
+ *
+ * Author: Matthew Tay <mhtay@andrew.cmu.edu>
+ *         Deeptaanshu Kumar <deeptaan@andrew.cmu.edu>
+	   Kevin Brennan <kbrennan@andrew.cmu.edu>
+ * Date:   11:46 10/27/2013
+ */
+
+/* swi handler written in c that is called by assembly
+   swi handler */
+
+#include <c_functions.h>
 #include <exports.h>
-#include <arm/psr.h>
-#include <arm/exception.h>
-#include <arm/interrupt.h>
-#include <arm/timer.h>
+#include <bits/swi.h>
+#include <asm_functions.h>
 
-#define vTableAddr 0x08;
-#define userAddr 0xa0000000;
-
-uint32_t global_data;
 extern int S_Handler(void);
-extern int setUserConditions(int argc, char *argv[], int userAddr);
+extern int setUserConditions(int argc, char *argv[]);
 
-int kmain(int argc, char** argv, uint32_t table)
-{
-	app_startup(); /* bss is valid after this point */
-	global_data = table;
-
+/* set up global integer array for error number and for return status to uBoot
+* globArray[0] = link register
+* linkR[0] = original stack pointer
+* exit_status[0] = exit_status
+*/
+int globArray[1];
+int linkR[1];  
+int exit_status[1];
+                                                                            
+int main(int argc, char *argv[]) {                                            
 	asm("stmfd sp!, {r4-r11,lr}");
 	asm("ldr r4, =linkR");
 	asm("str sp, [r4]");
@@ -24,10 +36,10 @@ int kmain(int argc, char** argv, uint32_t table)
         unsigned int *uBootSwiAddr;                                           
         unsigned int instruc;                                                 
         unsigned int oldInstrucOne;                                           
-        unsigned int oldInstrucTwo;  
-
-	/* check instruction at 0x8 is ldr pc, [pc, #imm12] */                
-        instruc = *((unsigned int *)vTableAddr);                     
+        unsigned int oldInstrucTwo;                                           
+                                                                       
+        /* check instruction at 0x8 is ldr pc, [pc, #imm12] */                
+        instruc = *((unsigned int *)0x8);                     
         if ((instruc ^ 0xe59ff000) >> 12) {                                   
                 return 0xbadc0de;                             
         }                        
@@ -42,7 +54,7 @@ int kmain(int argc, char** argv, uint32_t table)
         	return 0xbadc0de;
 	}                                                                     
         else {                                                                
-                uBootSwiAddr = (unsigned int *)*((unsigned int*)( vTableAddr + (int)offset + 0x8));             
+                uBootSwiAddr = (unsigned int *)*((unsigned int*)( 0x8 + (int)offset + 0x8));             
         }
                                                                                 
         /* save old instructions at uBootSwiAddr */                             
@@ -54,7 +66,7 @@ int kmain(int argc, char** argv, uint32_t table)
 	*uBootSwiAddr = 0xe51ff004;
 
 	/* Set up user space and jump to user function */
-	int status = setUserConditions(argc,argv,userAddr);  
+	int status = setUserConditions(argc,argv);  
 	*exit_status = status;	
 
 	/* Restore U-Boot's SWI Handler */
@@ -68,4 +80,5 @@ int kmain(int argc, char** argv, uint32_t table)
 	asm("ldmfd sp!, {r4-r11,lr}");
 
 	return status;
-}
+}                                                                               
+

@@ -9,7 +9,7 @@
 
 uint32_t global_data;
 extern int S_Handler(void);
-extern int setUserConditions(int argc, char *argv[], int userAddr);
+extern int setUserConditions(int argc, char *argv[]);
 
 int kmain(int argc, char** argv, uint32_t table)
 {
