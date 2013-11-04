@@ -8,9 +8,6 @@
 @ This thus supports reentrant calls to S_Handler                              
 
 	.global S_Handler
-	.global exit_status
-	.global globArray
-
 S_Handler:                                                                     
         sub	sp, sp, #4          	@ leave room on stack for spsr                 
         stmfd	sp!, {r0-r12, lr} 	@ store gp regs, lr to prepare to call swi     
@@ -24,16 +21,12 @@ S_Handler:
 	bne	normal
 exitCall:
 	bl 	C_SWI_Handler		@ handle exit to set exit status
-	ldr 	r4, [sp, #14*4] 
-	msr 	cpsr, r4
+	ldr	r2, [sp, #14*4]
+	msr	spsr, r2
 	ldr 	r4, =globArray		@ get address of globArray
 	ldr 	sp, [r4]		@ load sp with stored sp in globArray
-	@ldr 	r4, =linkR		@ get return addr to main 
-	@ldr 	lr, [r4] 
-	add 	sp, sp, #4
-	ldmfd 	sp!, {r1-r12,lr}	@ restore kernel's registers
-	@add 	sp, sp, #4 		@ new linkR is back to main 	
-	mov 	lr, r5		
+	add	sp, sp, #0x4
+	ldmfd 	sp!, {r1-r12,lr}	@ restore kernal's registers
 	movs 	pc, lr			@ return to kernel.c main
 normal:
 	bl 	C_SWI_Handler

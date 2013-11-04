@@ -1,17 +1,17 @@
-/** @file exit.S
- *
- * @brief exit sycall wrapper
- *
- * @author Mike Kasick <mkasick@andrew.cmu.edu>
- * @date   Sun, 07 Oct 2007 01:52:31 -0400
- * 
- * @author Kartik Subramanian <ksubrama@andrew.cmu.edu>
- * @date 2008-10-29
- */
+@ exit.S: exit sycall wrapper
+@
+@ Authors: Matthew Tay <mhtay@andrew.cmu.edu>
+@          Kevin Brennan <kbrennan@andrew.cmu.edu>
+@	   Deeptaanshu Kumar <deeptaan@andrew.cmu.edu>
+@ Date:    2.38am 14/10/2013
 
-#include <asm.h>
+#include <bits/swi.h>	
 
-	.file "exit.S"
+	.file	"exit.S"
+	.text
 
-FUNC(exit)
-	@ Add code here.  Put your name at the top.
+	.global	exit
+exit:
+	@ added code starting below
+	@ OABI convention has r0 as param 1
+	SWI EXIT_SWI

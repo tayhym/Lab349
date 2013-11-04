@@ -16,16 +16,21 @@
 #include <asm_functions.h>
 
 extern int S_Handler(void);
-extern void setUserConditions(void);
+extern int setUserConditions(int argc, char *argv[]);
 
-/* set up global integers for error number and for return status to main
+/* set up global integer array for error number and for return status to uBoot
 * globArray[0] = link register
+* linkR[0] = original stack pointer
+* exit_status[0] = exit_status
 */
-int linkR;  
-int exit_status;
-int globArray;
+int globArray[1];
+int linkR[1];  
+int exit_status[1];
                                                                             
 int main(int argc, char *argv[]) {                                            
+	asm("stmfd sp!, {r4-r11,lr}");
+	asm("ldr r4, =linkR");
+	asm("str sp, [r4]");
 
         unsigned int offset;                                                 
         unsigned int *uBootSwiAddr;                                           
@@ -56,21 +61,24 @@ int main(int argc, char *argv[]) {
         oldInstrucOne = *uBootSwiAddr;                                          
 	oldInstrucTwo = *((unsigned int *)uBootSwiAddr + 1);                    
  
-        /* store new ldr instruction and swi handler addr 
-	in uboot swi handler */               
-        *((unsigned int *)uBootSwiAddr + 1 ) = 
-		(unsigned)((unsigned int *)S_Handler);                 
+        /* store new ldr instruction and swi handler addr in uboot swi handler */               
+        *((unsigned int *)uBootSwiAddr + 1 ) = (unsigned)((unsigned int *)S_Handler);                 
 	*uBootSwiAddr = 0xe51ff004;
 
-	printf("calling user function...");
-	/* Set up user space, store return address(main) 
-	and jump to user function */
-	setUserConditions();  
-	printf("returned \n");
+	/* Set up user space and jump to user function */
+	int status = setUserConditions(argc,argv);  
+	*exit_status = status;	
+
 	/* Restore U-Boot's SWI Handler */
 	*uBootSwiAddr = oldInstrucOne;                                          
         *((unsigned int *)uBootSwiAddr + 1) = oldInstrucTwo;                    
 	
-	return exit_status;
-}
+	asm("ldr r4, =exit_status");
+	asm("ldr r0, [r4]");
+	asm("ldr r4, =linkR");
+	asm("ldr sp, [r4]");
+	asm("ldmfd sp!, {r4-r11,lr}");
+
+	return status;
+}                                                                               
 

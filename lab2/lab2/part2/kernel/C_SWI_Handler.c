@@ -1,4 +1,5 @@
-/* Matthew Tay mhtay@andrew.cmu.edu	
+/*
+ * Matthew Tay mhtay@andrew.cmu.edu	
  * Deeptaanshu Kumar deeptaan@andrew.cmu.edu
  * Kevin Brennan kbrennan@andrew.cmu.edu
  */
@@ -151,7 +152,6 @@ int service_SWI_Write(unsigned int *regs) {
 	}
 }		
 	 
-
 
 
 
