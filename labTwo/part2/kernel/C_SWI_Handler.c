@@ -28,12 +28,12 @@ int C_SWI_Handler(int swi_Num, unsigned int *regs) {
 	printf("regs[2] %x\n", regs[2]);
 	int retVal;  
 	switch(swi_Num) {
-		case 0x000001: service_SWI_Exit(regs);
+		case 0x900001: service_SWI_Exit(regs);
 				return errNum;
 				break;
-		case 0x000003: retVal = return service_SWI_Read(regs);
+		case 0x900003: retVal = service_SWI_Read(regs);
 				break;
-		case 0x000004: retVal = return service_SWI_Write(regs);
+		case 0x900004: retVal = service_SWI_Write(regs);
 				break;
 		default:
 			// should not reach here 

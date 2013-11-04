@@ -17,13 +17,10 @@
 extern int S_Handler(void);
 extern void setUserConditions(void);
 
-/* set up global integer array for error number and for return status to uBoot
-* globArray[0] = link register 
-* globArray[1] = error status
-*/
 int errNum; 
 int oldsp;
 int retAddrToGum; 
+int retAddrToUser; 
 
 int main(int argc, char *argv[]) {
 	asm volatile (                                                        
@@ -39,7 +36,6 @@ int main(int argc, char *argv[]) {
 	unsigned int *uBootSwiAddr;
 	unsigned int instruc; 
 	unsigned int vecHoldingUBootSwiAddr;
-	unsigned int isNeg=0;
 	unsigned int *swiHandlerAddr;
 	unsigned int oldInstrucOne; 
 	unsigned int oldInstrucTwo; 
@@ -52,23 +48,11 @@ int main(int argc, char *argv[]) {
 	if ((instruc ^ 0xe59FF000) >> 12) {
 		return 0xbadc0de;
 	}
-	/* determine offset from pc, set isNeg if offset negative  */
-	offset = (*((unsigned *)0x08)) & 0x0FFF;
-	if (instruc & 0x800) {
-		isNeg = 1;
-	 	// calculate the absolute value of offset
-		offset = ~offset + 1;	
-	}  
 	/* calculate address holding uBoot_SWI_addr 
-	 * determined by adding signed offset to pc, including prefetch
+	 * determined by adding offset to pc, including prefetch
 	 */
-	if (~isNeg) {
-		vecHoldingUBootSwiAddr = 0x8 + (int) offset + 0x8; 
-	}
-	else {
-		
-		vecHoldingUBootSwiAddr = 0x8 - (int)offset + 0x8;
-	}
+	vecHoldingUBootSwiAddr = 0x8 + (int)offset + 0x8;
+	
 	uBootSwiAddr =(unsigned int *) *((unsigned int*)vecHoldingUBootSwiAddr);	
 	/* install into uBootSwiAddr 2 instructions 
 	 * 	first instruction is ldr pc, [pc, #imm12]
@@ -95,7 +79,6 @@ int main(int argc, char *argv[]) {
 	printf("set\n");
 	*uBootSwiAddr = oldInstrucOne;
 	*((unsigned int *)uBootSwiAddr + 1) = oldInstrucTwo;
-	retAddrToGum = (int) *((unsigned int *)uBootSwiAddr + 2);	
 	return errNum;
 }
 
