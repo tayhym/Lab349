@@ -19,18 +19,18 @@ extern int S_Handler(void);
 extern int setUserConditions(int argc, char *argv[]);
 
 /* set up global integer array for error number and for return status to uBoot
-* globArray[0] = link register
-* linkR[0] = original stack pointer
-* exit_status[0] = exit_status
+* globArray = link register
+* linkR = original stack pointer
+* exit_status = exit_status
 */
-int globArray[1];
-int linkR[1];  
-int exit_status[1];
+volatile int globArray;
+volatile int linkR;  
+volatile int exit_status;
                                                                             
 int main(int argc, char *argv[]) {                                            
-	asm("stmfd sp!, {r4-r11,lr}");
-	asm("ldr r4, =linkR");
-	asm("str sp, [r4]");
+	asm volatile("stmfd sp!, {r4-r11,lr}");
+	asm volatile("ldr r4, =linkR");
+	asm volatile("str sp, [r4]");
 
         unsigned int offset;                                                 
         unsigned int *uBootSwiAddr;                                           
@@ -73,11 +73,11 @@ int main(int argc, char *argv[]) {
 	*uBootSwiAddr = oldInstrucOne;                                          
         *((unsigned int *)uBootSwiAddr + 1) = oldInstrucTwo;                    
 	
-	asm("ldr r4, =exit_status");
-	asm("ldr r0, [r4]");
-	asm("ldr r4, =linkR");
-	asm("ldr sp, [r4]");
-	asm("ldmfd sp!, {r4-r11,lr}");
+	asm volatile("ldr r4, =exit_status");
+	asm volatile("ldr r0, [r4]");
+	asm volatile("ldr r4, =linkR");
+	asm volatile("ldr sp, [r4]");
+	asm volatile("ldmfd sp!, {r4-r11,lr}");
 
 	return status;
 }                                                                               
