@@ -2,16 +2,16 @@
 @Deeptaanshu Kumar deeptaan
 @Kevin Brennan kbrennan
 
-	.global setUserConditions
+		.global setUserConditions
        	.global globArray                      
 setUserConditions:
 	stmfd	sp!, {r0-r12,lr}
 	ldr	r4, =globArray
 	str	sp, [r4]			@ save kernel stack pointer 
-	mrs	r4, cpsr		@ load r4 with cpsr
+	mrs	r4, cpsr			@ load r4 with cpsr
 	bic 	r4, #0x1f		@ clear mode bits (last 5 bits)
 	orr	r4, r4, #0x0d0		@ mask IRQ and FIQ and set to user mode
-	msr	cpsr, r4		@ load new cpsr with masks
+	msr	cpsr, r4			@ load new cpsr with masks
 	mov	sp, #0xa3000000		@ set stack pointer to new user stack
 	subs	r4, r0, #1		
 	blt	end
@@ -24,5 +24,5 @@ loop:
 
 end:
 	stmfd	sp!, {r0}	
-	ldr	pc, r3		@ set program counter to 0xa2000000
+	ldr	pc ,=0xa0000000		@ set program counter to user program
 

@@ -14,7 +14,7 @@
 	.global	read
 
 read:
-	stmfd sp!, {r0-r12, r14} @ store registers
+	stmfd sp!, {r1-r12, r14} @ store registers
 	SWI READ_SWI	@ arguments are the parameters in r0 and r1 
 	ldr r3, =-1 	@ mvn r3, #0 (stores -1 for comparison)
 	TST r0, r3 	@ check for negative result (meaning error)
@@ -26,7 +26,7 @@ read:
 			
 
 done: 	@ only valid to test errno when syscall wrapper returns -1
-	ldmfd sp!, {r0-r12, r14} @ restore callee-saved registers
+	ldmfd sp!, {r1-r12, r14} @ restore registers
 	MOVS pc, lr @ change back to user mode
 
 

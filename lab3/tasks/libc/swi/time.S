@@ -4,11 +4,20 @@
  *
  * @author Kartik Subramanian <ksubrama@andrew.cmu.edu>
  * @date 2008-10-31
+ * Revised by: 
+ * @Matthew Tay mhtay
+ * @Deeptaanshu Kumar deeptaan
+ * @Kevin Brennan kbrennan
  */
 
 #include <asm.h>
 
 	.file "time.S"
+	.global FUNC(time)
 
 FUNC(time)
 	@ Add code here.  Put your name at the top.
+	stmfd sp!, {r1-r12,r14}  @ store link to user code 
+	SWI TIME_SWI
+	ldmfd sp!, {r1-r12,r14}
+	movs pc, lr

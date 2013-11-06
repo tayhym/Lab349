@@ -4,11 +4,18 @@
  *
  * @author Kartik Subramanian <ksubrama@andrew.cmu.edu>
  * @date 2008-10-31
+ * Revised by: 
+ * @Matthew Tay mhtay
+ * @Deeptaanshu Kumar deeptaan
+ * @Kevin Brennan kbrennan
  */
 
 #include <asm.h>
 
 	.file "sleep.S"
-
+	.global FUNC(sleep)
 FUNC(sleep)
-	@ Add code here.  Put your names at the top.
+	stmfd sp!, {r0-r12,r14}  @ store link to user code 
+	SWI SLEEP_SWI
+	ldmfd sp!, {r0-r12,r14}
+	movs pc, lr

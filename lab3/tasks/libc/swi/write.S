@@ -14,7 +14,7 @@
 	.global	write
 
 write:
-	stmfd sp!, {r0-r12,r14} @ store registers
+	stmfd sp!, {r1-r12,r14} @ store registers
 	SWI WRITE_SWI			
 	ldr r3, =-1	@ load r3 with -1
 	TST r0, r3 	@ check for negative result (meaning error)
@@ -26,7 +26,7 @@ write:
 			
 
 done: 	@ only valid to test errno when syscall wrapper returns -1
-	ldmfd sp!, {r0-r12, r14} @ restore registers
+	ldmfd sp!, {r1-r12, r14} @ restore registers
 	MOVS pc, lr		@ return back to user mode in single atomic instruction
 	
 
