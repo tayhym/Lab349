@@ -68,7 +68,7 @@ int service_SWI_Read(unsigned int *regs) {
 	if (count>0x10000) {
 		return -EFAULT;
 	}		
-	while( bytesRead < (int)count ){
+	while( bytesRead < count ){
 		if ( tstc()!=0 ){
 			//read a character from stdin 
 			c = getc();

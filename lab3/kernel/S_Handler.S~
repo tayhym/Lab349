@@ -25,7 +25,7 @@ exitCall:
 	msr	spsr, r2
 	ldr 	r4, =globArray		@ get address of globArray
 	ldr 	sp, [r4]		@ load sp with stored sp in globArray
-	add	sp, sp, #0x4
+	add		sp, sp, #0x4
 	ldmfd 	sp!, {r1-r12,lr}	@ restore kernel's registers
 	mov 	pc, lr			@ return to kernel.c main
 normal:
