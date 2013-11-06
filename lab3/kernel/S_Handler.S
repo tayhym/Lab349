@@ -9,7 +9,7 @@
 
 	.global S_Handler
 S_Handler:                                                                     
-        sub	sp, sp, #4          	@ leave room on stack for spsr                 
+        sub	sp, sp, #4          	@ leave room on stack for spsr of (USER)                  
         stmfd	sp!, {r0-r12, lr} 	@ store gp regs, lr to prepare to call swi     
         mrs	r2, spsr            	@ get spsr into gp registers                   
         str	r2, [sp, #14*4]     	@ store spsr for return to user mode    
