@@ -14,19 +14,20 @@
 	.global	write
 
 write:
-	stmfd sp!, {r4-r12,r14} @ store callee saved registers
-	SWI WRITE_SWI	@ no change in params (r0-r2) caller-saved in ARM
+	stmfd sp!, {r0-r12,r14} @ store registers
+	SWI WRITE_SWI			
 	ldr r3, =-1	@ load r3 with -1
 	TST r0, r3 	@ check for negative result (meaning error)
 	BPL done
 	NEG r0, r0	@ sysCall error, set errno 
 	ldr r3, =errno 	@ loads r3 with address of errno  
-  	mov r0, #-1	@ set wrapper to return -1
+  	str r0, [r3]	@ load errno with negative of sysCall return value
+	mov r0, #-1	@ set wrapper to return -1
 			
 
 done: 	@ only valid to test errno when syscall wrapper returns -1
-	ldmfd sp!, {r4-r12, r14} @ restore callee saved registers
-	MOV pc, lr
+	ldmfd sp!, {r0-r12, r14} @ restore registers
+	MOVS pc, lr		@ return back to user mode in single atomic instruction
 	
 
 

@@ -2,7 +2,7 @@
 @
 @ Authors: Kevin Brennan <kbrennan@andrew.cmu.edu>
 @          Deeptaanshu Kumar <deeptaan@andrew.cmu.edu>
-@	   Matthew Tay <mhtay@andrew.cmu.edu>
+@		   Matthew Tay <mhtay@andrew.cmu.edu>
 @ Date:    2.38am 14/10/2013
 
 @ included for SWI handler address
@@ -14,8 +14,8 @@
 	.global	read
 
 read:
-	stmfd sp!, {r4-r12, r14} @ store all callee-saved registers
-	SWI READ_SWI	@ no change in params (r0-r2) ARM caller-saved
+	stmfd sp!, {r0-r12, r14} @ store registers
+	SWI READ_SWI	@ arguments are the parameters in r0 and r1 
 	ldr r3, =-1 	@ mvn r3, #0 (stores -1 for comparison)
 	TST r0, r3 	@ check for negative result (meaning error)
 	BPL done
@@ -26,8 +26,8 @@ read:
 			
 
 done: 	@ only valid to test errno when syscall wrapper returns -1
-	ldmfd sp!, {r4-r12, r14} @ restore callee-saved registers
-	MOV pc, lr
+	ldmfd sp!, {r0-r12, r14} @ restore callee-saved registers
+	MOVS pc, lr @ change back to user mode
 
 
 	
