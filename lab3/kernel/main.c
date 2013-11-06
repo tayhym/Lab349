@@ -43,7 +43,7 @@ int kmain(int argc, char** argv, uint32_t table)
          */                                                                   
         if (offset>>11) {                                                         
         	return 0xbadc0de;
-	}                                                                     
+		}                                                                     
         else {                                                                
                 uBootSwiAddr = (unsigned *)*((unsigned *)(VTABLE_ADDR+(int)offset+0x8));             
         }
