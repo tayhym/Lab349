@@ -17,7 +17,9 @@ int service_SWI_Write(unsigned int *regs);
 
 /* does the pushing of argv elements unto user stack, prints out for check */
 unsigned int *pushArgsUntoUserStack(unsigned int argc, char **argv, unsigned int *stackPointer) {
+	printf("entering pushArgsUntoUserStack\n");
 	unsigned int i;
+	if (argc>0) {
 	for (i = 0; i< argc; i++) {
 		printf("argc value is %x\n", argc);
 		printf("argv value is %s\n",argv[i]);
@@ -27,6 +29,11 @@ unsigned int *pushArgsUntoUserStack(unsigned int argc, char **argv, unsigned int
 	stackPointer--;
 	*stackPointer = argc; 
 	printf("number of argc last stored on stack: %x at location %x \n",*stackPointer, (unsigned int)stackPointer);
+	}
+	else {
+		printf("argc less than or equal zero: %x\n", argc);
+	}
+	
 	return stackPointer;	
 }
 

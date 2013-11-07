@@ -5,7 +5,7 @@
 #include <arm/timer.h>
 
 #define VTABLE_ADDR 0x08
-#define USER_ADDR 0xa0000000
+#define USER_ADDR 0xa0000000	// double check
 
 uint32_t global_data;
 extern int S_Handler(void);
@@ -28,7 +28,7 @@ int kmain(int argc, char** argv, uint32_t table)
         unsigned int instruc;                                                 
         unsigned int oldInstrucOne;                                           
         unsigned int oldInstrucTwo;  
-
+	int status;
 	/* check instruction at 0x8 is ldr pc, [pc, #imm12] */                
         instruc = *((unsigned *)VTABLE_ADDR);                     
         if ((instruc ^ 0xe59ff000) >> 12) {                                   
@@ -54,11 +54,14 @@ int kmain(int argc, char** argv, uint32_t table)
  
         /* store new ldr instruction and swi handler addr in uboot swi handler */               
         *((unsigned *)uBootSwiAddr + 1 ) = (unsigned)((unsigned *)S_Handler);                 
+	printf("wired in swi handler\n");
 	*uBootSwiAddr = 0xe51ff004;
 
+	printf("calling set userConditions\n");
 	/* Set up user space and jump to user function */
-	int status = setUserConditions(argc,argv,USER_ADDR);	
-
+	status = setUserConditions(argc,argv,USER_ADDR);	
+	
+	printf("restoring old swi handler\n");
 	/* Restore U-Boot's SWI Handler */
 	*uBootSwiAddr = oldInstrucOne;                                          
         *((unsigned *)uBootSwiAddr + 1) = oldInstrucTwo;                    
@@ -66,6 +69,6 @@ int kmain(int argc, char** argv, uint32_t table)
 	asm volatile("ldr r4, =linkR");
 	asm volatile("ldr sp, [r4]");
 	asm volatile("ldmfd sp!, {r4-r11,lr}");
-
+	printf("returning to uboot\n");
 	return status;
 }

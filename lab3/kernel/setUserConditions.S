@@ -9,14 +9,15 @@ setUserConditions:		@ r0 = argc r1 = argv @
 	stmfd	sp!, {r0-r12,lr}
 	ldr	r4, =globArray
 	str	sp, [r4]		@ save kernel stack pointer 
+
+	ldr r2, =0xa3000000	
+	bl pushArgsUntoUserStack
+	
 	mrs	r4, cpsr		@ load r4 with cpsr
 	bic 	r4, #0x1f		@ clear mode bits (last 5 bits)
 	orr	r4, r4, #0x0d0		@ mask IRQ and FIQ and set to user mode
 	msr	cpsr, r4		@ load new cpsr with masks
-	
-	ldr r2, =0xa3000000				 @@ 
-	bl pushArgsUntoUserStack			 @@ 
-	mov sp, r0							 @@ 
+	mov 	sp, r0			@ store the latest user stack value
 	
 	@mov	sp, #0xa3000000		@ set stack pointer to new user stack
 	@subs	r4, r0, #1		
@@ -30,5 +31,5 @@ setUserConditions:		@ r0 = argc r1 = argv @
 
 @end:
 	@stmfd	sp!, {r0}	
-	mov	pc , r2			@ set program counter to user program
+	ldr pc ,=0xa0000000		@ load user program 
 
