@@ -11,9 +11,10 @@
  */
 
 #include <asm.h>
+#include <bits/swi.h>
 
 	.file "sleep.S"
-	.global FUNC(sleep)
+
 FUNC(sleep)
 	stmfd sp!, {r0-r12,r14}  @ store link to user code 
 	SWI SLEEP_SWI

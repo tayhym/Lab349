@@ -14,7 +14,7 @@ setUserConditions:		@ r0 = argc r1 = argv @
 	orr	r4, r4, #0x0d0		@ mask IRQ and FIQ and set to user mode
 	msr	cpsr, r4		@ load new cpsr with masks
 	
-	ldr r2, =#0xa3000000				 @@ 
+	ldr r2, =0xa3000000				 @@ 
 	bl pushArgsUntoUserStack			 @@ 
 	mov sp, r0							 @@ 
 	

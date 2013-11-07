@@ -17,16 +17,16 @@ int service_SWI_Write(unsigned int *regs);
 
 /* does the pushing of argv elements unto user stack, prints out for check */
 unsigned int *pushArgsUntoUserStack(unsigned int argc, char **argv, unsigned int *stackPointer) {
-	int i;
+	unsigned int i;
 	for (i = 0; i< argc; i++) {
 		printf("argc value is %x\n", argc);
 		printf("argv value is %s\n",argv[i]);
 		stackPointer--;
-		stackPointer[i] = argv[i];
+		*(stackPointer+i) = (unsigned int)argv[i];
 	}
 	stackPointer--;
 	*stackPointer = argc; 
-	printf("number of argc last stored on stack: %x at location %x \n",*stackPointer, stackPointer);
+	printf("number of argc last stored on stack: %x at location %x \n",*stackPointer, (unsigned int)stackPointer);
 	return stackPointer;	
 }
 

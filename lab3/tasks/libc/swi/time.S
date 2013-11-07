@@ -11,13 +11,14 @@
  */
 
 #include <asm.h>
+#include <bits/swi.h>
 
 	.file "time.S"
-	.global FUNC(time)
-
-FUNC(time)
+	.global time
+time:
 	@ Add code here.  Put your name at the top.
 	stmfd sp!, {r1-r12,r14}  @ store link to user code 
 	SWI TIME_SWI
 	ldmfd sp!, {r1-r12,r14}
 	movs pc, lr
+

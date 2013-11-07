@@ -27,7 +27,7 @@ write:
 
 done: 	@ only valid to test errno when syscall wrapper returns -1
 	ldmfd sp!, {r1-r12, r14} @ restore registers
-	MOVS pc, lr		@ return back to user mode in single atomic instruction
+	MOVS pc, lr @ return back to user mode in single atomic instruction
 	
 
 
