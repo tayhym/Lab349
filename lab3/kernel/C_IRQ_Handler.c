@@ -12,7 +12,7 @@
 
 #define RESOLUTION 10
 
-extern volatile unsigned long timer;
+extern volatile unsigned long clock;
 
 /* Called by assembly I_Handler */
 void C_IRQ_Handler() {
@@ -33,6 +33,6 @@ void C_IRQ_Handler() {
 		reg_set(OSTMR_OSSR_ADDR, 0x1);
 
 		/* Offset between next timer interrupt determines resolution */
-		timer++;
+		clock++;
 	}
 }

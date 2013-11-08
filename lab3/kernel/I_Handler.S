@@ -17,6 +17,6 @@ I_Handler:
         msr	spsr, r2                @ restore spsr
         ldmfd  	sp!, {r0-r12,lr}        @ restore registers from stack
         add  	sp, sp, #4                @ reclaim space from spsr
-        movs  	pc, lr                        @ return to previous mode - assume cpsr will get irq  
+        movs  	pc, lr, #4                    @ return to previous mode - assume cpsr will get irq  
 
 

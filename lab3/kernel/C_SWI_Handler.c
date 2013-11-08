@@ -17,7 +17,7 @@ int service_SWI_Write(unsigned int *regs);
 unsigned long service_SWI_Time(void);
 void service_SWI_Sleep(unsigned long delay);
 
-extern volatile unsigned long timer;
+extern volatile unsigned long clock;
 
 /* Called by assembly Swi_Handler, with a swi number and a pointer to
  * register values on the stack. 
@@ -163,7 +163,7 @@ int service_SWI_Write(unsigned int *regs) {
 }		
 	 
 unsigned long service_SWI_Time() {
-	return timer;
+	return clock;
 }
 
 void service_SWI_Sleep( unsigned long delay ) {

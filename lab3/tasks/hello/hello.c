@@ -13,6 +13,5 @@ int main(int argc, char** argv)
 {
 	const char hello[] = "Hello World\r\n";
 	write(STDOUT_FILENO, hello, sizeof(hello) - 1);
-	exit(0x53);
 	return 0x53;
 }
