@@ -1,11 +1,11 @@
-/home/abc/18349/lab3/tasks/libc/string/strcpy.o:  \
- /home/abc/18349/lab3/tasks/libc/string/strcpy.c \
-  /home/abc/18349/lab3/tasks/libc/include/string.h \
-  /home/abc/18349/lab3/tasks/libc/include/sys/types.h \
-  /home/abc/18349/lab3/tasks/libc/include/bits/types.h
+/home/matthew/Documents/18-349/lab349/lab3/tasks/libc/string/strcpy.o:  \
+ /home/matthew/Documents/18-349/lab349/lab3/tasks/libc/string/strcpy.c \
+  /home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/string.h \
+  /home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/sys/types.h \
+  /home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/bits/types.h
 
-/home/abc/18349/lab3/tasks/libc/include/string.h:
+/home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/string.h:
 
-/home/abc/18349/lab3/tasks/libc/include/sys/types.h:
+/home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/sys/types.h:
 
-/home/abc/18349/lab3/tasks/libc/include/bits/types.h:
+/home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/bits/types.h:

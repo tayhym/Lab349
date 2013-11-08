@@ -1,8 +1,8 @@
-/home/abc/18349/lab3/tasks/libc/stdlib/ctype.o:  \
- /home/abc/18349/lab3/tasks/libc/stdlib/ctype.c \
-  /home/abc/18349/lab3/tasks/libc/include/ctype.h \
-  /home/abc/18349/lab3/tasks/libc/include/inline.h
+/home/matthew/Documents/18-349/lab349/lab3/tasks/libc/stdlib/ctype.o:  \
+ /home/matthew/Documents/18-349/lab349/lab3/tasks/libc/stdlib/ctype.c \
+  /home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/ctype.h \
+  /home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/inline.h
 
-/home/abc/18349/lab3/tasks/libc/include/ctype.h:
+/home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/ctype.h:
 
-/home/abc/18349/lab3/tasks/libc/include/inline.h:
+/home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/inline.h:
