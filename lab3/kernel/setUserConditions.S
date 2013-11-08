@@ -31,5 +31,5 @@ loop:
 
 end:
 	stmfd	sp!, {r0}	
-	ldr pc ,=0xa0000000		@ load user program 
+	mov	pc, r2			@ load user program 
 

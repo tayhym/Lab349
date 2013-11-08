@@ -24,12 +24,12 @@ setUserConditions:		@ r0 = argc r1 = argv @
 	blt	end
 
 loop:
-	ldr	r5, [r1,r4,lsl #2]	@ lsl by 2 to multiply each offset by 4
+	ldr	r5, [r1,r4,asl #2]	@ lsl by 2 to multiply each offset by 4
 	stmfd 	sp!, {r5}		@ place argc and argv on user stack
 	subs	r4, r4, #0x1
 	bpl 	loop	
 
 end:
 	stmfd	sp!, {r0}	
-	ldr pc ,=0xa0000000		@ load user program 
+	mov	pc, r2			@ load user program 
 

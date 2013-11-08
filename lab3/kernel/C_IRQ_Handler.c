@@ -9,7 +9,7 @@
 #include <arm/interrupt.h>
 #include <arm/timer.h>
 
-#define RESOLUTION 
+#define RESOLUTION 10
 
 extern volatile unsigned long timer;
 
@@ -23,7 +23,7 @@ void C_IRQ_Handler() {
 		/* Find current time */
 		uint32_t nextIntTime = reg_read(OSTMR_OSMR_ADDR(0));
 		/* Add desired offset */
-		nextIntTime += msToCycles(RESOLUTION); // Find way to determine next time desired
+		nextIntTime += (msToCycles(RESOLUTION)); // Find way to determine next time desired
 		/* Set next interrupt time */
 		reg_write(OSTMR_OSMR_ADDR(0), nextIntTime);
 		/* Acknowledge match occured and clear flag */
