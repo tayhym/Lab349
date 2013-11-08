@@ -12,7 +12,7 @@
 
 #define RESOLUTION 10
 
-extern volatile unsigned long timer;
+extern volatile unsigned long clock;
 
 /* Called by assembly I_Handler */
 void C_IRQ_Handler() {
@@ -22,6 +22,7 @@ void C_IRQ_Handler() {
 	/* Check if timer interrupt flag is set */
 	isTimerInt = (isTimerInt >> (INT_OSTMR_0 - 1)) & 0x01;
 	if (isTimerInt) {
+		printf("Timer interrupt happened\n");
 		/* Find current time */
 		uint32_t nextIntTime = reg_read(OSTMR_OSMR_ADDR(0));
 		/* Add desired offset */
