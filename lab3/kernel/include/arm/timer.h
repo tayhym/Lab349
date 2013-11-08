@@ -39,7 +39,7 @@
 #ifndef ASSEMBLER
 
 /* Add your C code here.  Put your group name at the top! */
-#define msToCycles(time) ((1000*time)/OSTMR_FREQ)
+#define msToCycles(time) ((time*OSTMR_FREQ)/1000)
 
 #endif /* ASSEMBLER */
 

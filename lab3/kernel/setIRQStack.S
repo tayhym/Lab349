@@ -1,0 +1,16 @@
+	
+	.global setIRQStack
+
+setIRQStack:
+	stmfd	sp!, {r0-r12,lr}
+	mrs	r4, cpsr		@ load r4 with cpsr
+	mov	r2, r4
+	bic 	r4, #0x1f		@ clear mode bits (last 5 bits)
+	orr	r4, r4, #0x0d1		@ mask IRQ, mask FIQ, and set to IRQ mode
+	msr	cpsr, r4		@ load new cpsr with masks
+	mov	sp, r0			@ set stack pointer to new user stack
+	msr	cpsr, r2
+	ldmfd	sp!, {r0-r12,lr} 	@ restore kernel registers
+	movs	pc, lr			@ return to kernel main
+
+	

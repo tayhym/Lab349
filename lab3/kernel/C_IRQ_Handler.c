@@ -8,6 +8,7 @@
 #include <arm/reg.h>
 #include <arm/interrupt.h>
 #include <arm/timer.h>
+#include <exports.h>
 
 #define RESOLUTION 10
 
@@ -15,15 +16,17 @@ extern volatile unsigned long timer;
 
 /* Called by assembly I_Handler */
 void C_IRQ_Handler() {
+	printf("IRQ Happened!\n");
 	/* Find which interrupt flags are set */
 	uint32_t isTimerInt = reg_read(INT_ICPR_ADDR);
 	/* Check if timer interrupt flag is set */
 	isTimerInt = (isTimerInt >> (INT_OSTMR_0 - 1)) & 0x01;
 	if (isTimerInt) {
+		printf("Timer interrupt happened\n");
 		/* Find current time */
 		uint32_t nextIntTime = reg_read(OSTMR_OSMR_ADDR(0));
 		/* Add desired offset */
-		nextIntTime += (msToCycles(RESOLUTION)); // Find way to determine next time desired
+		nextIntTime += (msToCycles(RESOLUTION));
 		/* Set next interrupt time */
 		reg_write(OSTMR_OSMR_ADDR(0), nextIntTime);
 		/* Acknowledge match occured and clear flag */

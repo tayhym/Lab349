@@ -8,12 +8,14 @@
 #define SWI_ADDR 0x08
 #define IRQ_ADDR 0x18
 #define USER_ADDR 0xa0000000
+#define IRQ_SP 0xa1500000
 
 #define LDR_PC 0xe59ff000
 #define LDR_INSTR 0xe51ff004
 
 extern int S_Handler(void);
 extern int I_Handler(void);
+extern void setIRQStack(unsigned int sp);
 extern int setUserConditions(int argc, char *argv[], int addr);
 
 uint32_t global_data;
@@ -77,15 +79,19 @@ int kmain(int argc, char** argv, uint32_t table)
 	*kernelIrqAddr = LDR_INSTR;        
 	*((unsigned int*)kernelIrqAddr + 1 ) = (unsigned int)((unsigned int*)I_Handler);                  
 
-
-
 	/* Initialize timer and IRQ stack */
 	timer = 0; 			// Initialize clock for sleep and time
+	printf("time = %x\n",timer);
+	setIRQStack(IRQ_SP);
+
 	uint32_t currTime = reg_read(OSTMR_OSMR_ADDR(0)); // Get current timer
 	currTime += msToCycles(10); 	// Set next timer interrupt
 	reg_write(OSTMR_OSMR_ADDR(0), currTime);
-	reg_set(OSTMR_OIER_ADDR, OSTMR_OIER_E0); // Enable timer interrupts
-
+	reg_write(INT_ICMR_ADDR, 0x02000000);	 // Mask all bits but the the timer interrupt
+	reg_clear(INT_ICLR_ADDR, INT_OSTMR_0);   // Ensure that timer interrupt is always IRQ 
+	reg_set(OSTMR_OIER_ADDR, OSTMR_OIER_E0); // Set OSMR0 match register to active
+	
+	printf("time %x\n",timer);
 
 	printf("calling set userConditions\n");
 	/* Set up user space and jump to user function */
