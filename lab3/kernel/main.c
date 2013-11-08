@@ -92,9 +92,9 @@ int kmain(int argc, char** argv, uint32_t table)
 	printf("exit status = %x\n", status);
 	/* Restore U-Boot's SWI Handler */
 	*kernelSwiAddr = swiInstrOne;                                          
-        *((unsigned *)kernelSwiAddr + 1) = swiInstrTwo;
+        *((unsigned int*)kernelSwiAddr + 1) = swiInstrTwo;
 	*kernelIrqAddr = irqInstrOne;                                          
-        *((unsigned *)kernelIrqAddr + 1) = irqInstrTwo;                    
+        *((unsigned int*)kernelIrqAddr + 1) = irqInstrTwo;                    
 	
 	asm volatile("ldr r4, =linkR");
 	asm volatile("ldr sp, [r4]");

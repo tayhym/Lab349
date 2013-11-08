@@ -30,7 +30,7 @@ int main( int argc, char** argv) {
 	const char *debugTwo = "debug Two in rot13.c\n";
 	write(STDOUT_FILENO, debugTwo, 25);
 	char outbufTwo[blockSize];
-	char *theSecondTry = "theSecondTry\n";
+	const char *theSecondTry = "theSecondTry\n";
 	read(STDIN_FILENO, outbufTwo, 15); 
 	write(STDOUT_FILENO, debugTwo, 25);
 	write(STDOUT_FILENO, theSecondTry,25);
@@ -41,10 +41,10 @@ int main( int argc, char** argv) {
 		/* assumes all characters read are alphabets */
 		/* block size 100 characters */
 		char buf[blockSize];
-		char *debugFive = "debug 2.5 in rot13.c\n";
+		const char *debugFive = "debug 2.5 in rot13.c\n";
 		write(STDOUT_FILENO, debugFive,25);
 		int numBytesRead = read(STDIN_FILENO, buf, blockSize);
-		char *debugThree = "debug Three in rot13.c\n";
+		const char *debugThree = "debug Three in rot13.c\n";
 		write(STDOUT_FILENO, debugThree,25);
 
 		if (numBytesRead == 0) {
@@ -54,7 +54,7 @@ int main( int argc, char** argv) {
 			exit(1);
 		}
 
-		char *debugFour = "debug Four in rot13.c\n";
+		const char *debugFour = "debug Four in rot13.c\n";
 		write(STDOUT_FILENO, debugFour,25);	
 		char outBuf[numBytesRead]; //@ remove +1
 		int i;
