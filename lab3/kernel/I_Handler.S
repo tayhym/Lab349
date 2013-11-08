@@ -14,19 +14,15 @@ I_Handler:
         stmfd	sp!, {r0-r12, lr} 	@ store gp regs, lr to prepare to call swi    
         mrs	r2, spsr            	@ get spsr into gp registers           
         str	r2, [sp, #14*4]     	@ store spsr for return to user mode    
-       	
-					@ disable further IRQs 
-	
+
+	mrs	r2, cpsr
+	orr	r2, r2, #0x08
+	msr	cpsr, r2	
+		
 	bl	C_IRQ_Handler		@ handle interrupt
 	ldr	r2, [sp, #14*4]		@ restore spsr
 	msr	spsr, r2		@ restore spsr
 	ldmfd	sp!, {r0-r12,lr}	@ restore registers from stack
 	add	sp, sp, #4		@ reclaim space from spsr
-<<<<<<< HEAD
-	@subs	pc, lr, #4		@ adjust ???
-	movs	pc, lr
-=======
 	movs 	pc, lr			@ return to previous mode	
 
-
->>>>>>> 811a550312655c025e6580b27e7d7a3252d70fdb
