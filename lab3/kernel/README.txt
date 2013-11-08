@@ -1,3 +1,7 @@
+ICLR bit 0 zeroed out -> all interrupts handled as IRQ.
+IRQ enabled perpetually, even during setUserConditions, this is to time the time taken since the 
+start of the kernel.
+
 tasks: 
 wire in the irq handler  (done)
 write the irq handler: 
@@ -16,4 +20,3 @@ write the irq handler:
 Tasks that must be done in some part of code: 
 -> masks all other types of interrupts
 -> creating a timer resolution of 10 ms
-
