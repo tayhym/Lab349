@@ -19,8 +19,8 @@ extern int setUserConditions(int argc, char *argv[], int addr);
 uint32_t global_data;
 volatile uint32_t timer;
 
-volatile int globArray[1];
-volatile int linkR[1];
+int globArray[1];
+int linkR[1];
 
 int kmain(int argc, char** argv, uint32_t table)
 {
@@ -39,10 +39,10 @@ int kmain(int argc, char** argv, uint32_t table)
         unsigned int swiInstrTwo;
 	unsigned int irqInstrOne;                                           
         unsigned int irqInstrTwo;  
-	int status;
+	volatile int status;
 
 	/* check instruction at 0x08 is ldr pc, [pc, #imm12] */
-	/* check if imm12 is positive */                
+	/* check if immediate offset is positive */                
         instr = *((unsigned *)SWI_ADDR);
 	offset = (int)(instr & 0x0fff);                  
         if (((instr ^ LDR_PC) >> 12) || (offset >> 11)) {
@@ -54,10 +54,9 @@ int kmain(int argc, char** argv, uint32_t table)
         }
 
 	/* check instruction at 0x18 is ldr pc, [pc, #imm12] */
-	/* check if imm12 is positive */                 
+	/* check if immediate offset is positive */                 
         instr = *((unsigned int*)IRQ_ADDR); 
-	offset = (int)(instr & 0x0fff);
-	printf("offset %x\n",offset);                      
+	offset = (int)(instr & 0x0fff);                     
         if (((instr ^ LDR_PC) >> 12) || (offset >> 11)) {                                   
                 return 0xbadc0de;                             
         }                                                                    
@@ -72,7 +71,7 @@ int kmain(int argc, char** argv, uint32_t table)
 	irqInstrTwo = *((unsigned *)kernelIrqAddr + 1);                   
  
         /* Store load and jump address instructions */               
-	printf("wired in swi handler\n");
+	printf("wired in handler\n");
 	*kernelSwiAddr = LDR_INSTR;        
 	*((unsigned *)kernelSwiAddr + 1 ) = (unsigned)((unsigned *)S_Handler);
 	*kernelIrqAddr = LDR_INSTR;        
@@ -90,7 +89,7 @@ int kmain(int argc, char** argv, uint32_t table)
 	/* Set up user space and jump to user function */
 	status = setUserConditions(argc, argv, USER_ADDR);	
 	
-	printf("restoring old swi handler\n");
+	printf("exit status = %x\n", status);
 	/* Restore U-Boot's SWI Handler */
 	*kernelSwiAddr = swiInstrOne;                                          
         *((unsigned *)kernelSwiAddr + 1) = swiInstrTwo;
