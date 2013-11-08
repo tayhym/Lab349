@@ -1,5 +1,4 @@
-/home/matthew/Documents/18-349/lab349/lab3/kernel/start.o:  \
- /home/matthew/Documents/18-349/lab349/lab3/kernel/start.S \
-  /home/matthew/Documents/18-349/lab349/lab3/kernel/include/asm.h
+/home/abc/18349/lab3/kernel/start.o: /home/abc/18349/lab3/kernel/start.S \
+  /home/abc/18349/lab3/kernel/include/asm.h
 
-/home/matthew/Documents/18-349/lab349/lab3/kernel/include/asm.h:
+/home/abc/18349/lab3/kernel/include/asm.h:
