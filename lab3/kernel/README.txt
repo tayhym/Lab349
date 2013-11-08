@@ -1,0 +1,18 @@
+tasks: 
+wire in the irq handler  (done)
+write the irq handler: 
+	- determine if timer interrupt has occurred 
+	- act on positive timer interrupt: 
+		-> initializes the sp_irq to point to 0xa1500000
+		<sub out to C_irq handler> 
+		-> loads the match registers without drift
+			stores OSMR0 with correct timer value
+		-> 
+	- ignore all other timer interrupts
+
+
+
+Tasks that must be done in some part of code: 
+-> masks all other types of interrupts
+-> creating a timer resolution of 10 ms
+
