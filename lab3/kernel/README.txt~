@@ -2,7 +2,7 @@ tasks:
 wire in the irq handler  (done)
 write the irq handler: 
 	- determine if timer interrupt has occurred 
-	- disable all further irq 
+	- disable all further irq (done)
 	- act on positive timer interrupt: 
 		-> initializes the sp_irq to point to 0xa1500000  (done)
 		<sub out to C_irq handler> 			  (done)	
