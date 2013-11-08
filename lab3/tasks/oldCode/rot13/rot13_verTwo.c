@@ -10,14 +10,12 @@
 #include <unistd.h>
 #include <stdlib.h>
 
-
 int main( int argc, char** argv) {
 	int k;
-	int blockSize = 20;
-	
-	const char *debugString = "the debug in rot13.c\n";
-	write(STDOUT_FILENO, debugString, 20);
-
+	int blockSize = 100;
+	char spacer[1];
+	spacer[0] = '\n';
+		
 	for ( k = 0; k < argc; k++ ) {
 		int numWritten = write(STDOUT_FILENO,argv[k],blockSize);
 		if ( numWritten == -1 ){
@@ -26,27 +24,15 @@ int main( int argc, char** argv) {
 		else if ( numWritten == 0 ) {
 			exit(0);
 		}
+		write(STDOUT_FILENO,spacer,1);
 	}
-	const char *debugTwo = "debug Two in rot13.c\n";
-	write(STDOUT_FILENO, debugTwo, 25);
-	char outbufTwo[blockSize];
-	const char *theSecondTry = "theSecondTry\n";
-	read(STDIN_FILENO, outbufTwo, 15); 
-	write(STDOUT_FILENO, debugTwo, 25);
-	write(STDOUT_FILENO, theSecondTry,25);
-
-	exit(0);
+	
 	/* loops indefinitely till syscall error */
 	while (1) {
 		/* assumes all characters read are alphabets */
 		/* block size 100 characters */
 		char buf[blockSize];
-		const char *debugFive = "debug 2.5 in rot13.c\n";
-		write(STDOUT_FILENO, debugFive,25);
 		int numBytesRead = read(STDIN_FILENO, buf, blockSize);
-		const char *debugThree = "debug Three in rot13.c\n";
-		write(STDOUT_FILENO, debugThree,25);
-
 		if (numBytesRead == 0) {
 			exit(0);
 		}
@@ -54,8 +40,7 @@ int main( int argc, char** argv) {
 			exit(1);
 		}
 
-		const char *debugFour = "debug Four in rot13.c\n";
-		write(STDOUT_FILENO, debugFour,25);	
+	
 		char outBuf[numBytesRead]; //@ remove +1
 		int i;
 		/* rotate characters based on their ascii values */
@@ -80,7 +65,8 @@ int main( int argc, char** argv) {
  		}
 	
 		outBuf[numBytesRead-1] = '\n';
-		int numBytesWritten = write(STDOUT_FILENO, outBuf, numBytesRead);			
+		int numBytesWritten = write(STDOUT_FILENO, outBuf, numBytesRead);
+	
 		
 		if (numBytesWritten == -1) { 
                 	exit(1);
@@ -100,8 +86,7 @@ int main( int argc, char** argv) {
 		}
 	
 	}
-	write(STDOUT_FILENO, debugString, 10);
-	
+
 	return 0; // not reached 
 }
 

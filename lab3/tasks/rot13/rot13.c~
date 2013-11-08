@@ -15,7 +15,7 @@ int main( int argc, char** argv) {
 	int k;
 	int blockSize = 20;
 	
-	char *debugString = "debugging string in rot13.c\n";
+	const char *debugString = "the debug in rot13.c\n";
 	write(STDOUT_FILENO, debugString, 20);
 
 	for ( k = 0; k < argc; k++ ) {
@@ -27,7 +27,7 @@ int main( int argc, char** argv) {
 			exit(0);
 		}
 	}
-	char *debugTwo = "debug Two in rot13.c\n";
+	const char *debugTwo = "debug Two in rot13.c\n";
 	write(STDOUT_FILENO, debugTwo, 25);
 	char outbufTwo[blockSize];
 	char *theSecondTry = "theSecondTry\n";
