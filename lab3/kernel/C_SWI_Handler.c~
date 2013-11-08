@@ -14,7 +14,8 @@
 int service_SWI_Exit(unsigned int exit_status);
 int service_SWI_Read(unsigned int *regs);
 int service_SWI_Write(unsigned int *regs);
-
+unsigned long service_SWI_Time(void);
+void service_SWI_Sleep(unsigned long delay);
 
 /* Called by assembly Swi_Handler, with a swi number and a pointer to
  * register values on the stack. 
@@ -22,10 +23,15 @@ int service_SWI_Write(unsigned int *regs);
  * returns a return value, depending on which swi_handler was called.
  */
 int C_SWI_Handler(int swi_Num, unsigned int *regs) { 
+	printf("swi_Num = %d\n");
 	switch( swi_Num ) {
 		case 0x1: return service_SWI_Exit((int)regs[0]);
 		case 0x3: return service_SWI_Read(regs);
 		case 0x4: return service_SWI_Write(regs);
+		case 0x6: return service_SWI_Time();
+		case 0x7: 
+			service_SWI_Sleep((unsigned long)regs[0]);
+			return 0;
 		default:
 			// should not reach here 
 			printf("Swi not supported by mini-Kernel");
@@ -114,7 +120,6 @@ int service_SWI_Read(unsigned int *regs) {
  *	    return num characters written. 
  */ 
 int service_SWI_Write(unsigned int *regs) {
-
 	//get parameters
 	int fd = (int) *regs;
 	const char *buf = (const char *) *(regs+1);
@@ -155,10 +160,12 @@ int service_SWI_Write(unsigned int *regs) {
 	}
 }		
 	 
+unsigned long service_SWI_Time( void ) {
+	return 0;
+}
 
+void service_SWI_Sleep( unsigned long delay ) {
 
-
-
-
+}
 
 

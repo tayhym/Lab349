@@ -18,9 +18,8 @@ int main( int argc, char** argv) {
 	const char *debugString = "the debug in rot13.c\n";
 	write(STDOUT_FILENO, debugString, 20);
 
-	for ( k = argc-1; k >=0 ; k-- ) {
+	for ( k = 0; k < argc; k++ ) {
 		int numWritten = write(STDOUT_FILENO,argv[k],blockSize);
-		write(STDOUT_FILENO, "\n",1);
 		if ( numWritten == -1 ){
 			exit(1);
 		}
@@ -28,15 +27,15 @@ int main( int argc, char** argv) {
 			exit(0);
 		}
 	}
-	/*const char *debugTwo = "debug Two in rot13.c\n";
+	const char *debugTwo = "debug Two in rot13.c\n";
 	write(STDOUT_FILENO, debugTwo, 25);
 	char outbufTwo[blockSize];
 	const char *theSecondTry = "theSecondTry\n";
 	read(STDIN_FILENO, outbufTwo, 15); 
 	write(STDOUT_FILENO, debugTwo, 25);
-	write(STDOUT_FILENO, theSecondTry,25);*/
+	write(STDOUT_FILENO, theSecondTry,25);
 
-	//exit(0);
+	exit(0);
 	/* loops indefinitely till syscall error */
 	while (1) {
 		/* assumes all characters read are alphabets */
