@@ -2,22 +2,31 @@
 @ Deeptaanshu Kumer deeptaan
 @ Kevin Brennan kbrennan
 
-@ On entering I_Handler, CPU has switched to IRQ mode, and saves cpsr into spsr
-@ I_Handler stores registers on stack, stores saved user state (spsr)
-@ After handling the interrupt, it restores the registers from the stack
-@ and returns to user function
+@ called when there is an IRQ that updates the main time variable. 
+@ 
                              
 	.global I_Handler
 
 I_Handler:                                                                     
-        sub	sp, sp, #4        	@ leave room on stack for spsr of (USER)      
+        ldr sp, =0xa1500000		@ set sp_irq to middle of dram
+
+	sub	sp, sp, #4        	@ leave room on stack for spsr of previous state    
         stmfd	sp!, {r0-r12, lr} 	@ store gp regs, lr to prepare to call swi    
         mrs	r2, spsr            	@ get spsr into gp registers           
         str	r2, [sp, #14*4]     	@ store spsr for return to user mode    
-       	bl	C_IRQ_Handler		@ handle interrupt
+       	
+					@ disable further IRQs 
+	
+	bl	C_IRQ_Handler		@ handle interrupt
 	ldr	r2, [sp, #14*4]		@ restore spsr
 	msr	spsr, r2		@ restore spsr
 	ldmfd	sp!, {r0-r12,lr}	@ restore registers from stack
 	add	sp, sp, #4		@ reclaim space from spsr
+<<<<<<< HEAD
 	@subs	pc, lr, #4		@ adjust ???
 	movs	pc, lr
+=======
+	movs 	pc, lr			@ return to previous mode	
+
+
+>>>>>>> 811a550312655c025e6580b27e7d7a3252d70fdb

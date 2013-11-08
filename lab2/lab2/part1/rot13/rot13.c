@@ -15,7 +15,7 @@ int main( int argc, char** argv) {
 	int k;
 	int blockSize = 20;
 	
-	const char *debugString = "the debug in rot13.c\n";
+	char *debugString = "debugging string in rot13.c\n";
 	write(STDOUT_FILENO, debugString, 20);
 
 	for ( k = 0; k < argc; k++ ) {
@@ -27,24 +27,22 @@ int main( int argc, char** argv) {
 			exit(0);
 		}
 	}
-	const char *debugTwo = "debug Two in rot13.c\n";
+	char *debugTwo = "debug Two in rot13.c\n";
 	write(STDOUT_FILENO, debugTwo, 25);
 	char outbufTwo[blockSize];
-	const char *theSecondTry = "theSecondTry\n";
+
 	read(STDIN_FILENO, outbufTwo, 15); 
 	write(STDOUT_FILENO, debugTwo, 25);
-	write(STDOUT_FILENO, theSecondTry,25);
-
-	exit(0);
+	return 0;
 	/* loops indefinitely till syscall error */
 	while (1) {
 		/* assumes all characters read are alphabets */
 		/* block size 100 characters */
 		char buf[blockSize];
-		const char *debugFive = "debug 2.5 in rot13.c\n";
+		char *debugFive = "debug 2.5 in rot13.c\n";
 		write(STDOUT_FILENO, debugFive,25);
 		int numBytesRead = read(STDIN_FILENO, buf, blockSize);
-		const char *debugThree = "debug Three in rot13.c\n";
+		char *debugThree = "debug Three in rot13.c\n";
 		write(STDOUT_FILENO, debugThree,25);
 
 		if (numBytesRead == 0) {
@@ -54,7 +52,7 @@ int main( int argc, char** argv) {
 			exit(1);
 		}
 
-		const char *debugFour = "debug Four in rot13.c\n";
+		char *debugFour = "debug Four in rot13.c\n";
 		write(STDOUT_FILENO, debugFour,25);	
 		char outBuf[numBytesRead]; //@ remove +1
 		int i;

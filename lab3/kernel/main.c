@@ -19,8 +19,8 @@ extern int setUserConditions(int argc, char *argv[], int addr);
 uint32_t global_data;
 volatile uint32_t timer;
 
-int globArray[1];
-int linkR[1];
+volatile int globArray[1];
+volatile int linkR[1];
 
 int kmain(int argc, char** argv, uint32_t table)
 {
@@ -42,15 +42,15 @@ int kmain(int argc, char** argv, uint32_t table)
 	volatile int status;
 
 	/* check instruction at 0x08 is ldr pc, [pc, #imm12] */
-	/* check if immediate offset is positive */                
-        instr = *((unsigned *)SWI_ADDR);
+	/* check if imm12 is positive */                
+        instr = *((unsigned int*)SWI_ADDR);
 	offset = (int)(instr & 0x0fff);                  
         if (((instr ^ LDR_PC) >> 12) || (offset >> 11)) {
 		printf("bad\n");                                  
                 return 0xbadc0de;                             
         }                                                                      
         else {                                                                
-                kernelSwiAddr = (unsigned *)*((unsigned *)(SWI_ADDR + offset + 0x8));             
+                kernelSwiAddr = (unsigned int*)*((unsigned int*)(SWI_ADDR + offset + 0x8));             
         }
 
 	/* check instruction at 0x18 is ldr pc, [pc, #imm12] */
@@ -61,21 +61,21 @@ int kmain(int argc, char** argv, uint32_t table)
                 return 0xbadc0de;                             
         }                                                                    
         else {                                                                
-                kernelIrqAddr = (unsigned *)*((unsigned *)(IRQ_ADDR + offset + 0x8));             
+                kernelIrqAddr = (unsigned int*)*((unsigned int*)(IRQ_ADDR + offset + 0x8));             
         }
                                                                                 
         /* Save old SWI and IRQ Handler Instructions */                             
         swiInstrOne = *kernelSwiAddr;                                          
-	swiInstrTwo = *((unsigned *)kernelSwiAddr + 1);
+	swiInstrTwo = *((unsigned int*)kernelSwiAddr + 1);
 	irqInstrOne = *kernelIrqAddr;                                          
-	irqInstrTwo = *((unsigned *)kernelIrqAddr + 1);                   
+	irqInstrTwo = *((unsigned int*)kernelIrqAddr + 1);                   
  
         /* Store load and jump address instructions */               
-	printf("wired in handler\n");
+	printf("wired in swi handler\n");
 	*kernelSwiAddr = LDR_INSTR;        
-	*((unsigned *)kernelSwiAddr + 1 ) = (unsigned)((unsigned *)S_Handler);
+	*((unsigned int*)kernelSwiAddr + 1 ) = (unsigned int)((unsigned int*)S_Handler);
 	*kernelIrqAddr = LDR_INSTR;        
-	*((unsigned *)kernelIrqAddr + 1 ) = (unsigned)((unsigned *)I_Handler);                  
+	*((unsigned int*)kernelIrqAddr + 1 ) = (unsigned int)((unsigned int*)I_Handler);                  
 
 
 
@@ -94,9 +94,9 @@ int kmain(int argc, char** argv, uint32_t table)
 	printf("exit status = %x\n", status);
 	/* Restore U-Boot's SWI Handler */
 	*kernelSwiAddr = swiInstrOne;                                          
-        *((unsigned *)kernelSwiAddr + 1) = swiInstrTwo;
+        *((unsigned int*)kernelSwiAddr + 1) = swiInstrTwo;
 	*kernelIrqAddr = irqInstrOne;                                          
-        *((unsigned *)kernelIrqAddr + 1) = irqInstrTwo;                    
+        *((unsigned int*)kernelIrqAddr + 1) = irqInstrTwo;                    
 	
 	asm volatile("ldr r4, =linkR");
 	asm volatile("ldr sp, [r4]");
