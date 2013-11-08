@@ -19,5 +19,5 @@ I_Handler:
 	msr	spsr, r2		@ restore spsr
 	ldmfd	sp!, {r0-r12,lr}	@ restore registers from stack
 	add	sp, sp, #4		@ reclaim space from spsr
-	subs	pc, lr, #4		@ adjust ???
-
+	@subs	pc, lr, #4		@ adjust ???
+	movs	pc, lr

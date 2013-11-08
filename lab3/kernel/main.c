@@ -80,9 +80,11 @@ int kmain(int argc, char** argv, uint32_t table)
 
 
 	/* Initialize timer and IRQ stack */
-	timer = 0;
-	//reg_write(size_t addr, uint32_t data)
-
+	timer = 0; 			// Initialize clock for sleep and time
+	uint32_t currTime = reg_read(OSTMR_OSMR_ADDR(0)); // Get current timer
+	currTime += msToCycles(10); 	// Set next timer interrupt
+	reg_write(OSTMR_OSMR_ADDR(0), currTime);
+	reg_set(OSTMR_OIER_ADDR, OSTMR_OIER_E0); // Enable timer interrupts
 
 
 	printf("calling set userConditions\n");
