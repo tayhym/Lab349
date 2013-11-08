@@ -52,6 +52,7 @@ int service_SWI_Exit(unsigned int exit_status) {
  *	 			
  */
 int service_SWI_Read(unsigned int *regs) {
+	return 0xa;
 	int fd = (int) *regs;
 	char *buf = (char *) *(regs+1);
 	size_t count = (size_t) *(regs+2);
@@ -113,6 +114,7 @@ int service_SWI_Read(unsigned int *regs) {
  *	    return num characters written. 
  */ 
 int service_SWI_Write(unsigned int *regs) {
+	printf("in swi_write\n");
 	//get parameters
 	int fd = (int) *regs;
 	const char *buf = (const char *) *(regs+1);
@@ -148,6 +150,7 @@ int service_SWI_Write(unsigned int *regs) {
 				bytesWritten++;
 			}
 		}
+		printf("returning from swi_write, num Bytes Written = %x\n", (unsigned int) bytesWritten);
 		return bytesWritten;
 	}
 }		

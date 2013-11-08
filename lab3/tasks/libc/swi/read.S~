@@ -25,7 +25,7 @@ read:
 			
 
 done: 	@ only valid to test errno when syscall wrapper returns -1
-	ldmfd sp!, {r4-r12, r14} @ restore registers
+	ldmfd sp!, {r1-r12, r14} @ restore registers
 	mov pc, lr @ change back to user mode
 
 
