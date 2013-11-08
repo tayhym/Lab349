@@ -19,8 +19,8 @@ extern int setUserConditions(int argc, char *argv[], int addr);
 uint32_t global_data;
 volatile uint32_t timer;
 
-volatile int globArray[1];
-volatile int linkR[1];
+int globArray[1];
+int linkR[1];
 
 int kmain(int argc, char** argv, uint32_t table)
 {
@@ -42,8 +42,13 @@ int kmain(int argc, char** argv, uint32_t table)
 	volatile int status;
 
 	/* check instruction at 0x08 is ldr pc, [pc, #imm12] */
+<<<<<<< HEAD
 	/* check if imm12 is positive */                
         instr = *((unsigned int*)SWI_ADDR);
+=======
+	/* check if immediate offset is positive */                
+        instr = *((unsigned *)SWI_ADDR);
+>>>>>>> a20be698a8358f78324ec4f431aaad79cf1315e9
 	offset = (int)(instr & 0x0fff);                  
         if (((instr ^ LDR_PC) >> 12) || (offset >> 11)) {
 		printf("bad\n");                                  
@@ -71,7 +76,7 @@ int kmain(int argc, char** argv, uint32_t table)
 	irqInstrTwo = *((unsigned int*)kernelIrqAddr + 1);                   
  
         /* Store load and jump address instructions */               
-	printf("wired in swi handler\n");
+	printf("wired in handler\n");
 	*kernelSwiAddr = LDR_INSTR;        
 	*((unsigned int*)kernelSwiAddr + 1 ) = (unsigned int)((unsigned int*)S_Handler);
 	*kernelIrqAddr = LDR_INSTR;        

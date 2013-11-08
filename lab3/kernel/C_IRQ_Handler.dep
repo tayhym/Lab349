@@ -3,7 +3,8 @@
   /home/abc/18349/lab3/kernel/include/types.h \
   /home/abc/18349/lab3/kernel/include/arm/reg.h \
   /home/abc/18349/lab3/kernel/include/inline.h \
-  /home/abc/18349/lab3/kernel/include/arm/interrupt.h
+  /home/abc/18349/lab3/kernel/include/arm/interrupt.h \
+  /home/abc/18349/lab3/kernel/include/arm/timer.h
 
 /home/abc/18349/lab3/kernel/include/types.h:
 
@@ -12,3 +13,5 @@
 /home/abc/18349/lab3/kernel/include/inline.h:
 
 /home/abc/18349/lab3/kernel/include/arm/interrupt.h:
+
+/home/abc/18349/lab3/kernel/include/arm/timer.h:
