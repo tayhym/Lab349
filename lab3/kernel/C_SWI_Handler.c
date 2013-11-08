@@ -17,6 +17,8 @@ int service_SWI_Write(unsigned int *regs);
 unsigned long service_SWI_Time(void);
 void service_SWI_Sleep(unsigned long delay);
 
+extern volatile unsigned long timer;
+
 /* Called by assembly Swi_Handler, with a swi number and a pointer to
  * register values on the stack. 
  * requires valid swi_Num, this check is done in kernel.
@@ -160,12 +162,14 @@ int service_SWI_Write(unsigned int *regs) {
 	}
 }		
 	 
-unsigned long service_SWI_Time( void ) {
-	return 0;
+unsigned long service_SWI_Time() {
+	return timer;
 }
 
 void service_SWI_Sleep( unsigned long delay ) {
-
+	unsigned long waitTime = service_SWI_Time();
+	waitTime += delay;
+	while( service_SWI_Time() < waitTime );
 }
 
 

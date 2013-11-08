@@ -9,6 +9,10 @@
 #include <arm/interrupt.h>
 #include <arm/timer.h>
 
+#define RESOLUTION 
+
+extern volatile unsigned long timer;
+
 /* Called by assembly I_Handler */
 void C_IRQ_Handler() {
 	/* Find which interrupt flags are set */
@@ -19,10 +23,13 @@ void C_IRQ_Handler() {
 		/* Find current time */
 		uint32_t nextIntTime = reg_read(OSTMR_OSMR_ADDR(0));
 		/* Add desired offset */
-		nextIntTime += 10; // Find way to determine next time desired
+		nextIntTime += msToCycles(RESOLUTION); // Find way to determine next time desired
 		/* Set next interrupt time */
 		reg_write(OSTMR_OSMR_ADDR(0), nextIntTime);
 		/* Acknowledge match occured and clear flag */
 		reg_set(OSTMR_OSSR_ADDR, 0x1);
+
+		/* Offset between next timer interrupt determines resolution */
+		timer++;
 	}
 }
