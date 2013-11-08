@@ -19,4 +19,4 @@ FUNC(sleep)
 	stmfd sp!, {r0-r12,r14}  @ store link to user code 
 	SWI SLEEP_SWI
 	ldmfd sp!, {r0-r12,r14}
-	movs pc, lr
+	mov pc, lr
