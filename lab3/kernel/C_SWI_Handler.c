@@ -114,7 +114,7 @@ int service_SWI_Read(unsigned int *regs) {
  *	    return num characters written. 
  */ 
 int service_SWI_Write(unsigned int *regs) {
-	printf("in swi_write\n");
+
 	//get parameters
 	int fd = (int) *regs;
 	const char *buf = (const char *) *(regs+1);
