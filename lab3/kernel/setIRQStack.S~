@@ -11,6 +11,6 @@ setIRQStack:
 	mov	sp, r0			@ set stack pointer to new user stack
 	msr	cpsr, r2
 	ldmfd	sp!, {r0-r12,lr} 	@ restore kernel registers
-	mov	pc, lr			@ return to kernel main
+	movs	pc, lr			@ return to kernel main
 
 	
