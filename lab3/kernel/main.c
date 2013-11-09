@@ -85,11 +85,11 @@ int kmain(int argc, char** argv, uint32_t table)
 	setIRQStack(IRQ_SP);
 
 	uint32_t timerTarget = reg_read(OSTMR_OSCR_ADDR); // Get current timer
-	timerTarget += msToCycles(100); 	// Set next timer interrupt
+	timerTarget += (uint32_t)msToCycles(1); 	// Set next timer interrupt
 	
 	reg_write(OSTMR_OSMR_ADDR(0), timerTarget);
 	reg_set(OSTMR_OIER_ADDR, OSTMR_OIER_E0); // Set OSMR0 match register to active
-	//reg_clear(OSTMR_OSCR_ADDR, 0x0);
+	reg_clear(OSTMR_OSCR_ADDR, 0x0);
 	reg_set(INT_ICMR_ADDR, INT_OSTMR_0);	 // Mask all bits but the the timer interrupt
 	reg_clear(INT_ICLR_ADDR, INT_OSTMR_0);   // Ensure that timer interrupt is always IRQ 
 	

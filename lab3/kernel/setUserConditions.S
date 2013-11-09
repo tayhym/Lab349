@@ -14,8 +14,7 @@ setUserConditions:		@ r0 = argc r1 = argv @
 	@bl pushArgsUntoUserStack
 	
 	mrs	r4, cpsr		@ load r4 with cpsr
-	bic 	r4, #0x0f		@ clear mode bits (last 5 bits)
-	@orr	r4, r4, #0x010		@ set to user mode
+	bic 	r4, #0xef		@ clear mode bits (last 5 bits)
 	msr	cpsr, r4		@ load new cpsr with masks
 	mov 	sp, r0			@ store the latest user stack value
 	
