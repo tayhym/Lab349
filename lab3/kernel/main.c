@@ -4,6 +4,9 @@
 #include <arm/interrupt.h>
 #include <arm/timer.h>
 #include <arm/reg.h>
+//for tests
+#include <unistd.h>
+#include <bits/fileno.h>
 
 #define SWI_ADDR 0x08
 #define IRQ_ADDR 0x18
@@ -111,5 +114,43 @@ int kmain(int argc, char** argv, uint32_t table)
 	asm volatile("ldr sp, [r4]");
 	asm volatile("ldmfd sp!, {r4-r11,lr}");
 	printf("returning to uboot\n");
+	
+	/*
+	TEST CASES
+	*/
+	
+	printf("TEST CASES\n");
+	
+	/*
+	TEST CASE #1
+	*/
+	
+	printf("Test case 1:\n");
+	printf("Prints alphabet for certain time with pause in between\n");
+	
+	int state = 0;
+	char buf[2];
+	buf[1] = '\b';
+	int counter = 0; //determines length of program, can be set to user input
+	int letterValue = 65;
+	while(counter < 100000) {
+		if(letterValue > 90)
+		{
+			letterValue = 65;
+		}
+		buf[0] = (char)letterValue; // store character
+		write(STDOUT_FILENO,buf,1); // write stored character
+		sleep(100);
+		buf[0] = '\b';		
+		write(STDOUT_FILENO,buf,2);
+		counter++;
+	}
+	
+	/*
+	TEST CASE #2
+	*/
+	
+	printf("\nTest case 2:\n");
+	
 	return status;
 }
