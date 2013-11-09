@@ -6,7 +6,6 @@
  */
 
 #include <unistd.h>
-#include <bits/fileno.h>
 
 int main(int argc, char** argv) {	
 	int state = 0;
