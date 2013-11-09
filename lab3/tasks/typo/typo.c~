@@ -37,6 +37,5 @@ int main(int argc, char** argv)
 		printf("%.1fs\n",millis);
 		
 	}
-
 	return -1; // Program should never terminate via return
 }
