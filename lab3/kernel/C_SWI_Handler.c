@@ -169,7 +169,8 @@ unsigned long service_SWI_Time() {
 void service_SWI_Sleep( unsigned long delay ) {
 	unsigned long waitTime = service_SWI_Time();
 	waitTime += delay;
-	while( service_SWI_Time() < waitTime );
+	while( service_SWI_Time() < waitTime ) {
+	}
 }
 
 
