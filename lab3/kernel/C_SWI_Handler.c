@@ -29,12 +29,6 @@ extern unsigned int resolution;
  * returns a return value, depending on which swi_handler was called.
  */
 int C_SWI_Handler(int swi_Num, unsigned int *regs) {
-	asm volatile("stmfd sp!, {r0}");
-	asm volatile("mrs r0, cpsr");
-	asm volatile("bic r0, r0, #0xec");
-	asm volatile("msr cpsr, r0");
-	asm volatile("ldmfd sp!, {r0}");
-
 	switch( swi_Num ) {
 		case 0x1: return service_SWI_Exit((int)regs[0]);
 		case 0x3: return service_SWI_Read(regs);

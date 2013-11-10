@@ -15,18 +15,7 @@ unsigned int test[1];
 
 int main(int argc, char** argv)
 {
-
-	asm volatile("ldr r4, =test");
-	asm volatile("mrs r5, cpsr");
-	asm volatile("str r5, [r4]");
-	printf("cpsr2 = %x\n",*test);
-
-
 	const char hello[] = "Hello World\r\n";
 	write(STDOUT_FILENO, hello, sizeof(hello) - 1);
-	int i =0;
-	while(1){
-		i++;
-	}
 	return 0x53;
 }

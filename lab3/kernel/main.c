@@ -82,7 +82,7 @@ int kmain(int argc, char** argv, uint32_t table)
 	setIRQStack(IRQ_SP);
 	
 	/* Calculate time between IRQs based on desired resolution */
-	offset = (resolution * OSTMR_FREQ)/1000;
+	offset = (resolution * OSTMR_FREQ_VERDEX)/1000;
 
 	/* Setup memory mapped registers for timer*/
 	reg_write(OSTMR_OSMR_ADDR(0), offset);	      // Set match register to desired offset

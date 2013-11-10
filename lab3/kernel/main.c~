@@ -24,8 +24,6 @@ unsigned int resolution = 10;
 volatile int globArray[1];
 volatile int linkR[1];
 
-volatile int test[1];
-
 int kmain(int argc, char** argv, uint32_t table)
 {
 	app_startup(); /* bss is valid after this point */
