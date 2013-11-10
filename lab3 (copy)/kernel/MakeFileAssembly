@@ -1,0 +1,13 @@
+C      = arm-linux-gcc
+OBJCOPY = arm-linux-objcopy
+CFLAGS  = -O2 -ffixed-r8 -ffreestanding -Wall -Werror -nostdinc \
+          -I ../uboot/include -I include
+ASFLAGS = -nostdinc -I ../uboot/include -I include
+LDFLAGS = -nostdlib -Wl,-N,-Ttext,$(LOAD_ADDR)
+
+objects = setUserConditions.o S_Handler.o pushArgsUntoUserStack.o
+%.o: %.S
+	$(CC) -c $(ASFLAGS) -o $@ $<
+
+clean:
+	rm -f $(objects)

@@ -1,0 +1,8 @@
+/home/matthew/Documents/18-349/lab349/lab3/tasks/libc/swi/sleep.o:  \
+ /home/matthew/Documents/18-349/lab349/lab3/tasks/libc/swi/sleep.S \
+  /home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/asm.h \
+  /home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/bits/swi.h
+
+/home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/asm.h:
+
+/home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/bits/swi.h:
