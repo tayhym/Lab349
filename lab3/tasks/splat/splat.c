@@ -26,11 +26,13 @@ int main(int argc, char** argv) {
 		}
 		else if (state == 3) {
 			buf[0] = (char)92; // / character
+			state = -1;
 		}
 		write(STDOUT_FILENO,buf,1); // write stored character
 		sleep(200);		    // wait 200ms
 		buf[0] = '\b';		
 		write(STDOUT_FILENO,buf,2); // erase char written to stdout
+		state++;
 	}
 	
 	return -1; // Program should never terminate via return

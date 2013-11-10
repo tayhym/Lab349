@@ -9,7 +9,8 @@ setIRQStack:
 	orr	r4, r4, #0x0d1		@ mask IRQ, mask FIQ, and set to IRQ mode
 	msr	cpsr, r4		@ load new cpsr with masks
 	mov	sp, r0			@ set stack pointer to new user stack
-	bic	r2, #0xe0
+	bic	r2, r2, #0xef
+	msr	cpsr, r2
 	ldmfd	sp!, {r0-r12,lr} 	@ restore kernel registers
 	mov	pc, lr			@ return to kernel main
 

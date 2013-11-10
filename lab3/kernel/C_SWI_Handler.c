@@ -9,6 +9,9 @@
 #include <bits/fileno.h>
 #include <exports.h>
 #include <asm_functions.h>
+#include <arm/timer.h>
+#include <arm/interrupt.h>
+#include <arm/reg.h>
 
 /* internal function prototypes specific to file */ 
 int service_SWI_Exit(unsigned int exit_status);
@@ -25,7 +28,7 @@ extern volatile unsigned long clock;
  * returns a return value, depending on which swi_handler was called.
  */
 int C_SWI_Handler(int swi_Num, unsigned int *regs) { 
-	printf("swi_Num = %d\n",swi_Num);
+	//printf("swi_Num = %d\n",swi_Num);
 	switch( swi_Num ) {
 		case 0x1: return service_SWI_Exit((int)regs[0]);
 		case 0x3: return service_SWI_Read(regs);
@@ -157,19 +160,28 @@ int service_SWI_Write(unsigned int *regs) {
 				bytesWritten++;
 			}
 		}
-		printf("returning from swi_write, num Bytes Written = %x\n", (unsigned int) bytesWritten);
+		//printf("returning from swi_write, num Bytes Written = %x\n", (unsigned int) bytesWritten);
 		return bytesWritten;
 	}
 }		
 	 
-unsigned long service_SWI_Time() {
-	return clock;
+unsigned long service_SWI_Time( void ) {
+	return reg_read(OSTMR_OSCR_ADDR);
 }
 
 void service_SWI_Sleep( unsigned long delay ) {
-	unsigned long waitTime = service_SWI_Time();
-	waitTime += delay;
-	while( service_SWI_Time() < waitTime ) {
+	unsigned long start = service_SWI_Time();
+	while(1) {
+		unsigned long end = service_SWI_Time();
+		if ( start > end ) {
+			start = end;
+		}
+		else {
+			end = end - start;
+			if ((end*1000/OSTMR_FREQ) >= delay ) {
+				return;
+			}
+		}
 	}
 }
 
