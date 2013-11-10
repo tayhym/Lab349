@@ -17,7 +17,7 @@ extern volatile unsigned long clock;
 
 /* Called by assembly I_Handler */
 void C_IRQ_Handler() {
-	printf("IRQ!\n");
+	//printf("IRQ!\n");
 	/* Find which interrupt flags are set */
 	uint32_t isTimerInt = reg_read(INT_ICPR_ADDR);
 	/* Check if timer interrupt flag is set */

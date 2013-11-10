@@ -1,17 +1,17 @@
-/home/abc/18349/lab3/tasks/rot13/rot13.o:  \
- /home/abc/18349/lab3/tasks/rot13/rot13.c \
-  /home/abc/18349/lab3/tasks/libc/include/unistd.h \
-  /home/abc/18349/lab3/tasks/libc/include/bits/fileno.h \
-  /home/abc/18349/lab3/tasks/libc/include/sys/types.h \
-  /home/abc/18349/lab3/tasks/libc/include/bits/types.h \
-  /home/abc/18349/lab3/tasks/libc/include/stdlib.h
+/home/matthew/Documents/18-349/lab349/lab3/tasks/rot13/rot13.o:  \
+ /home/matthew/Documents/18-349/lab349/lab3/tasks/rot13/rot13.c \
+  /home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/unistd.h \
+  /home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/bits/fileno.h \
+  /home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/sys/types.h \
+  /home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/bits/types.h \
+  /home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/stdlib.h
 
-/home/abc/18349/lab3/tasks/libc/include/unistd.h:
+/home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/unistd.h:
 
-/home/abc/18349/lab3/tasks/libc/include/bits/fileno.h:
+/home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/bits/fileno.h:
 
-/home/abc/18349/lab3/tasks/libc/include/sys/types.h:
+/home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/sys/types.h:
 
-/home/abc/18349/lab3/tasks/libc/include/bits/types.h:
+/home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/bits/types.h:
 
-/home/abc/18349/lab3/tasks/libc/include/stdlib.h:
+/home/matthew/Documents/18-349/lab349/lab3/tasks/libc/include/stdlib.h:
