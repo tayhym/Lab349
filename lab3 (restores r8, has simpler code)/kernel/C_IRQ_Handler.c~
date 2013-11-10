@@ -1,0 +1,35 @@
+/*
+ * Matthew Tay mhtay@andrew.cmu.edu	
+ * Deeptaanshu Kumar deeptaan@andrew.cmu.edu
+ * Kevin Brennan kbrennan@andrew.cmu.edu
+ */
+
+#include <types.h>
+#include <arm/reg.h>
+#include <arm/interrupt.h>
+#include <arm/timer.h>
+#include <exports.h>
+
+#define RESOLUTION 100
+#define OFFSET 0x12000
+
+extern volatile unsigned long clock;
+
+/* Called by assembly I_Handler */
+void C_IRQ_Handler() {;
+	//printf("status1 = %x\n",reg_read(INT_ICPR_ADDR));
+	/* Find which interrupt flags are set */
+	uint32_t isTimerInt = reg_read(INT_ICPR_ADDR);
+	/* Check if timer interrupt flag is set */
+	//isTimerInt = (isTimerInt >> INT_OSTMR_0) & 0x01;
+	if (((isTimerInt >> INT_OSTMR_0) & 0x01)) {
+		printf("clock = %lu\n",clock);
+		//reg_write(OSTMR_OSMR_ADDR(0),OFFSET); // just need to reset counter
+		reg_clear(OSTMR_OSCR_ADDR,0x0); // should be a clear
+		reg_set(OSTMR_OSSR_ADDR, OSTMR_OIER_E0);
+
+		clock++;
+	}
+}
+	
+

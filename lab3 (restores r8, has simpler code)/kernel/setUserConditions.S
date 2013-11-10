@@ -1,0 +1,67 @@
+@Matthew Tay mhtay
+@Deeptaanshu Kumar deeptaan
+@Kevin Brennan kbrennan
+
+	.global setUserConditions
+       	.global globArray   
+	@.global pushArgsUntoUserStack                    
+setUserConditions:		@ r0 = argc r1 = argv @ 
+	stmfd	sp!, {r0-r12,lr}
+	ldr	r4, =globArray
+	str	sp, [r4]		@ save kernel stack pointer 
+
+	@ldr r2, =0xa3000000	
+	@bl pushArgsUntoUserStack
+	
+	@mrs	r4, cpsr		@ load r4 with cpsr
+	@bic 	r4, #0xef		@ clear mode bits (last 5 bits)
+	mov	r4, #0xd0 	
+	msr	cpsr, r4		@ set to IFt_USER 110_10000
+
+	
+	mov	sp, #0xa3000000		@ set stack pointer to new user stack
+	subs	r4, r0, #1		
+	blt	end
+
+loop:
+	ldr	r5, [r1,r4, lsl #2]	@ lsl by 2 to multiply each offset by 4
+	stmfd 	sp!, {r5}		@ place argc and argv on user stack
+	subs	r4, r4, #0x1
+	bpl 	loop	
+
+end:
+	stmfd	sp!, {r0}		@ store argc
+	mov 	r3, #0x10		@ ift_USER 000_10000	
+	msr	cpsr, r3	
+	mov	pc, r2			@ load user program 
+
+
+@setUserConditions:		@ r0 = argc r1 = argv @ 
+@	stmfd	sp!, {r0-r12,lr}
+@	ldr	r4, =globArray
+@	str	sp, [r4]		@ save kernel stack pointer 
+
+@	@ldr r2, =0xa3000000	
+	@bl pushArgsUntoUserStack
+	
+@	mrs	r4, cpsr		@ load r4 with cpsr
+@	bic 	r4, #0xef		@ clear mode bits (last 5 bits)
+@	msr	cpsr, r4		@ load new cpsr with masks
+@	mov 	sp, r0			@ store the latest user stack value
+	
+@	mov	sp, #0xa3000000		@ set stack pointer to new user stack
+@	subs	r4, r0, #1		
+@	blt	end
+
+@loop:
+@	ldr	r5, [r1,r4,asl #2]	@ lsl by 2 to multiply each offset by 4
+@	stmfd 	sp!, {r5}		@ place argc and argv on user stack
+@	subs	r4, r4, #0x1
+@	bpl 	loop	
+
+@end:
+@	stmfd	sp!, {r0}	
+@	mov	pc, r2			@ load user program 
+
+
+

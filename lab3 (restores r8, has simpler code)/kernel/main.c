@@ -1,0 +1,110 @@
+#include <exports.h>
+#include <arm/psr.h>
+#include <arm/exception.h>
+#include <arm/interrupt.h>
+#include <arm/timer.h>
+#include <arm/reg.h>
+
+#define SWI_ADDR 0x08
+#define IRQ_ADDR 0x18
+#define USER_ADDR 0xa0000000
+
+#define IRQ_SP 0xa1500000	//added here
+#define LDR_PC 0xe59ff000
+#define LDR_INSTR 0xe51ff004
+
+extern int S_Handler(void);
+extern int I_Handler(void);
+extern int setUserConditions(int argc, char *argv[], int addr);
+extern void setIRQStack(unsigned int IRQ_sp);
+
+
+uint32_t global_data;
+volatile uint32_t timer;
+volatile uint32_t clock; // added here 
+
+volatile int globArray[1];
+volatile int linkR[1];
+
+int kmain(int argc, char** argv, uint32_t table)
+{
+	app_startup(); /* bss is valid after this point */
+	global_data = table;
+
+	asm volatile("stmfd sp!, {r4-r11,lr}");
+	asm volatile("ldr r4, =linkR");
+	asm volatile("str sp, [r4]");
+
+        unsigned int instr;
+	unsigned int offset;                                                 
+        unsigned int *kernelSwiAddr;
+	unsigned int *kernelIrqAddr;                                             
+        unsigned int swiInstrOne;                                           
+        unsigned int swiInstrTwo;
+	unsigned int irqInstrOne;                                           
+        unsigned int irqInstrTwo;  
+	int status;
+
+//	/* check instruction at 0x08 is ldr pc, [pc, #imm12] */
+	/* check if imm12 is positive */                
+        instr = *((unsigned *)SWI_ADDR);
+	offset = (int)(instr & 0x0fff);                  
+        if (((instr ^ LDR_PC) >> 12) || (offset >> 11)) {
+		printf("bad\n");                                  
+                return 0xbadc0de;                             
+        }                                                                      
+        else {                                                                
+                kernelSwiAddr = (unsigned *)*((unsigned *)(SWI_ADDR + offset + 0x8));             
+        }
+
+	/* check instruction at 0x18 is ldr pc, [pc, #imm12] */
+	/* check if imm12 is positive */                 
+        instr = *((unsigned int*)IRQ_ADDR); 
+	offset = (int)(instr & 0x0fff);
+	printf("offset %x\n",offset);                      
+        if (((instr ^ LDR_PC) >> 12) || (offset >> 11)) {                                   
+                return 0xbadc0de;                             
+        }                                                                    
+        else {                                                                
+                kernelIrqAddr = (unsigned *)*((unsigned *)(IRQ_ADDR + offset + 0x8));             
+        }
+                                                                                
+//        /* Save old SWI and IRQ Handler Instructions */                             
+        swiInstrOne = *kernelSwiAddr;                                          
+	swiInstrTwo = *((unsigned *)kernelSwiAddr + 1);
+	irqInstrOne = *kernelIrqAddr;                                          
+	irqInstrTwo = *((unsigned *)kernelIrqAddr + 1);                   
+ 
+//        /* Store load and jump address instructions */               
+	printf("wired in swi handler\n");
+	*kernelSwiAddr = LDR_INSTR;        
+	*((unsigned *)kernelSwiAddr + 1 ) = (unsigned)((unsigned *)S_Handler);
+	*kernelIrqAddr = LDR_INSTR;        
+	*((unsigned *)kernelIrqAddr + 1 ) = (unsigned)((unsigned *)I_Handler);                  
+
+
+
+//	/* Initialize timer and IRQ stack */
+	timer = 0;
+	clock = 0;
+	setIRQStack(IRQ_SP);				// added here
+	
+
+
+	printf("calling set userConditions\n");
+	/* Set up user space and jump to user function */
+	status = setUserConditions(argc, argv, USER_ADDR);	
+	
+	printf("restoring old swi handler\n");
+	/* Restore U-Boot's SWI Handler */
+	*kernelSwiAddr = swiInstrOne;                                          
+        *((unsigned *)kernelSwiAddr + 1) = swiInstrTwo;
+	*kernelIrqAddr = irqInstrOne;                                          
+        *((unsigned *)kernelIrqAddr + 1) = irqInstrTwo;                    
+	
+	asm volatile("ldr r4, =linkR");
+	asm volatile("ldr sp, [r4]");
+	asm volatile("ldmfd sp!, {r4-r11,lr}");
+	printf("returning to uboot\n");
+	return status;
+}
