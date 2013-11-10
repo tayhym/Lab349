@@ -3,15 +3,13 @@
 @ Kevin Brennan kbrennan
 
 @ called when there is an IRQ that updates the main time variable. 
-@ 
-                             
+                  
 	.global I_Handler
 
 I_Handler: 
 	sub	sp, sp, #4              @ leave room on stack for spsr of previous state    
         stmfd	sp!, {r0-r12, lr}       @ store gp regs, lr to prepare to call swi    
-        mrs	r2, spsr                @ get spsr into gp registers
-	bic	r2, r2, #0xe0           
+        mrs	r2, spsr                @ get spsr into gp registers         
         str	r2, [sp, #14*4]         @ store spsr for return to user mode 
         bl	C_IRQ_Handler           @ handle interrupt
         ldr	r2, [sp, #14*4]         @ restore spsr

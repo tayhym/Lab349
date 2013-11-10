@@ -27,8 +27,7 @@ extern volatile unsigned long clock;
  * requires valid swi_Num, this check is done in kernel.
  * returns a return value, depending on which swi_handler was called.
  */
-int C_SWI_Handler(int swi_Num, unsigned int *regs) { 
-	//printf("swi_Num = %d\n",swi_Num);
+int C_SWI_Handler(int swi_Num, unsigned int *regs) {
 	switch( swi_Num ) {
 		case 0x1: return service_SWI_Exit((int)regs[0]);
 		case 0x3: return service_SWI_Read(regs);
@@ -166,22 +165,16 @@ int service_SWI_Write(unsigned int *regs) {
 }		
 	 
 unsigned long service_SWI_Time( void ) {
-	return reg_read(OSTMR_OSCR_ADDR);
+	return clock;
 }
 
 void service_SWI_Sleep( unsigned long delay ) {
 	unsigned long start = service_SWI_Time();
+	delay = delay/10;
+	delay += start;
+	printf("clock = %lu\n",start);
 	while(1) {
-		unsigned long end = service_SWI_Time();
-		if ( start > end ) {
-			start = end;
-		}
-		else {
-			end = end - start;
-			if ((end*1000/OSTMR_FREQ) >= delay ) {
-				return;
-			}
-		}
+		if (delay <= service_SWI_Time()) return;
 	}
 }
 
