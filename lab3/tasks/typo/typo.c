@@ -12,30 +12,27 @@
 #include <stdio.h>
 
 #define BLOCKSIZE 100
-#define OSTMR_FREQ 3686400
 
 int main(int argc, char** argv)
 {
 	char buf[BLOCKSIZE];
 	unsigned long diff;
-	double millis;
 	while(1) {
 		buf[0] = '>';
-		write(STDOUT_FILENO,buf,1);
+		write(STDOUT_FILENO,buf,1);	// Write prompt
 		unsigned long startTime = time();
-		int bytesRead = read(STDIN_FILENO,buf,BLOCKSIZE);
+		int bytesRead = read(STDIN_FILENO,buf,BLOCKSIZE); // Read till enter
 		unsigned long endTime = time();
-		write(STDOUT_FILENO,buf,bytesRead);
-		putchar('\n');
+		if ( write(STDOUT_FILENO,buf,bytesRead) < 1 ) return 0; // Echo read characters
+
 		if (endTime < startTime) {
 			diff = (UINT32_MAX - startTime) + endTime;
 		}
 		else {
 			diff = endTime - startTime;
 		}
-		millis = ((double)1000)*(((double)diff)/((double)OSTMR_FREQ));
-		printf("%.1fs\n",millis);
-		
+		printf("%lu.%lu ms\n", (diff/10), (diff%10)); //print difference
+		// difference is divided by 10 because of resolution of 10ms
 	}
 
 	return -1; // Program should never terminate via return

@@ -82,7 +82,7 @@ int kmain(int argc, char** argv, uint32_t table)
 	setIRQStack(IRQ_SP);
 	
 	/* Calculate time between IRQs based on desired resolution */
-	offset = (resolution * OSTMR_FREQ)/1000;
+	offset = (resolution * OSTMR_FREQ_VERDEX)/1000;
 
 	/* Setup memory mapped registers for timer*/
 	reg_write(OSTMR_OSMR_ADDR(0), offset);	      // Set match register to desired offset
@@ -100,9 +100,12 @@ int kmain(int argc, char** argv, uint32_t table)
 	*kernelIrqAddr = irqInstrOne;                                          
         *((unsigned int*)kernelIrqAddr + 1) = irqInstrTwo; 
                   
+	asm volatile("mov r0, %[rtn]": :[rtn] "r" (status));
 	asm volatile("ldr r4, =globArray");
 	asm volatile("ldr sp, [r4]");
 	asm volatile("ldmfd sp!, {r4-r11,lr}");
 
+	asm volatile("mov %[result], r0": [result] "=r" (status) : );
+	printf("returning to uboot\n");
 	return status;
 }

@@ -87,6 +87,9 @@ int service_SWI_Read(unsigned int *regs) {
 			if ((int) c == 4) {
 				return bytesRead;
 			}
+			else if ((int) c == 3) {
+				return 0;
+			}
 			//check for backspace or delete character
 			else if (((int) c == 8) || ((int) c == 127)) {
 				//remove previous character, if there was a prev character

@@ -29,12 +29,6 @@ extern unsigned int resolution;
  * returns a return value, depending on which swi_handler was called.
  */
 int C_SWI_Handler(int swi_Num, unsigned int *regs) {
-	//asm volatile("stmfd sp!, {r0}");
-	//asm volatile("mrs r0, cpsr");
-	//asm volatile("bic r0, r0, #0xec");
-	//asm volatile("msr cpsr, r0");
-	//asm volatile("ldmfd sp!, {r0}");
-
 	switch( swi_Num ) {
 		case 0x1: return service_SWI_Exit((int)regs[0]);
 		case 0x3: return service_SWI_Read(regs);
@@ -93,6 +87,9 @@ int service_SWI_Read(unsigned int *regs) {
 			if ((int) c == 4) {
 				return bytesRead;
 			}
+			else if ((int) c == 3) {
+				return 0;
+			}
 			//check for backspace or delete character
 			else if (((int) c == 8) || ((int) c == 127)) {
 				//remove previous character, if there was a prev character
@@ -130,6 +127,10 @@ int service_SWI_Read(unsigned int *regs) {
  *	    return num characters written. 
  */ 
 int service_SWI_Write(unsigned int *regs) {
+	if ((int) getc() == 3) {	
+		return 0;
+	}
+
 	//get parameters
 	int fd = (int) *regs;
 	const char *buf = (const char *) *(regs+1);

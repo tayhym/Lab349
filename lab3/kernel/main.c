@@ -100,9 +100,12 @@ int kmain(int argc, char** argv, uint32_t table)
 	*kernelIrqAddr = irqInstrOne;                                          
         *((unsigned int*)kernelIrqAddr + 1) = irqInstrTwo; 
                   
+	/* Restore kernel registers and set r0 to exit status */
+	asm volatile("mov r0, %[rtn]": :[rtn] "r" (status));
 	asm volatile("ldr r4, =globArray");
 	asm volatile("ldr sp, [r4]");
 	asm volatile("ldmfd sp!, {r4-r11,lr}");
+	asm volatile("mov %[result], r0": [result] "=r" (status) : );
 
 	return status;
 }

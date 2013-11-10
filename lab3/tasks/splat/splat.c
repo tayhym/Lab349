@@ -32,7 +32,7 @@ int main(int argc, char** argv) {
 		sleep(200);		    // wait 200ms
 		buf[0] = '\b';		
 		write(STDOUT_FILENO,buf,2); // erase char written to stdout
-		state++;
+		state++;	
 	}
 	
 	return -1; // Program should never terminate via return
