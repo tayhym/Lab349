@@ -3,22 +3,16 @@
 @Kevin Brennan kbrennan
 
 	.global setUserConditions
-       	.global globArray   
-	@.global pushArgsUntoUserStack                    
-setUserConditions:		@ r0 = argc r1 = argv @ 
-	stmfd	sp!, {r0-r12,lr}
-	ldr	r4, =globArray
-	str	sp, [r4]		@ save kernel stack pointer 
-
-	@ldr r2, =0xa3000000	
-	@bl pushArgsUntoUserStack
-	
+       	.global globArray
+                  
+setUserConditions:
+	ldr	r4, =linkR
+	str	lr, [r4]		@ save kernel stack pointer
 	mrs	r4, cpsr		@ load r4 with cpsr
-	bic 	r4, r4, #0xff		@ clear IRQ mask and set to USER mode
-	orr	r4, r4, #0x10
+	bic 	r4, r4, #0xff		@ clear all masks
+	orr	r4, r4, #0x10		@ set USER mode bits
 	msr	cpsr, r4		@ switch to USER mode
 	mov 	sp, r0			@ store the latest user stack value
-	
 	mov	sp, #0xa3000000		@ set stack pointer to new user stack
 	subs	r4, r0, #1		
 	blt	end
