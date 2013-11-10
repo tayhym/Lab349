@@ -10,7 +10,7 @@
 /* swi handler written in c that is called by assembly
    swi handler */
 
-//#include <c_functions.h>
+#include <c_functions.h>
 #include <exports.h>
 #include <bits/swi.h>
 #include <asm_functions.h>
