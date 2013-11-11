@@ -1,0 +1,17 @@
+/home/abc/18349/lab3/tasks/periodic/periodic.o:  \
+ /home/abc/18349/lab3/tasks/periodic/periodic.c \
+  /home/abc/18349/lab3/tasks/libc/include/unistd.h \
+  /home/abc/18349/lab3/tasks/libc/include/bits/fileno.h \
+  /home/abc/18349/lab3/tasks/libc/include/sys/types.h \
+  /home/abc/18349/lab3/tasks/libc/include/bits/types.h \
+  /home/abc/18349/lab3/tasks/libc/include/stdlib.h
+
+/home/abc/18349/lab3/tasks/libc/include/unistd.h:
+
+/home/abc/18349/lab3/tasks/libc/include/bits/fileno.h:
+
+/home/abc/18349/lab3/tasks/libc/include/sys/types.h:
+
+/home/abc/18349/lab3/tasks/libc/include/bits/types.h:
+
+/home/abc/18349/lab3/tasks/libc/include/stdlib.h:
