@@ -31,8 +31,7 @@ int main(int argc, char** argv)
 		else {
 			diff = endTime - startTime;
 		}
-		printf("%lu.%lu ms\n", (diff/10), (diff%10)); //print difference
-		// difference is divided by 10 because of resolution of 10
+		printf("%lu.%lu s\n", (diff/100), (diff%100)); //print difference
 	}
 
 	return -1; // Program should never terminate via return
