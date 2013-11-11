@@ -1,0 +1,6 @@
+PROGS_TEST_OBJS := testRand.o
+PROGS_TEST_OBJS := $(PROGS_TEST_OBJS:%=$(TDIR)/testRand/%)
+ALL_OBJS += $(PROGS_HELLO_OBJS)
+
+$(TDIR)/bin/testRand : $(TSTART) $(PROGS_TEST_OBJS) $(TLIBC)
+

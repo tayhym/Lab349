@@ -12,6 +12,7 @@
 #include <arm/timer.h>
 #include <arm/interrupt.h>
 #include <arm/reg.h>
+#include <types.h>
 
 /* internal function prototypes specific to file */ 
 int service_SWI_Exit(unsigned int exit_status);
@@ -127,10 +128,6 @@ int service_SWI_Read(unsigned int *regs) {
  *	    return num characters written. 
  */ 
 int service_SWI_Write(unsigned int *regs) {
-	if ((int) getc() == 3) {	
-		return 0;
-	}
-
 	//get parameters
 	int fd = (int) *regs;
 	const char *buf = (const char *) *(regs+1);
@@ -175,11 +172,22 @@ unsigned long service_SWI_Time( void ) {
 }
 
 void service_SWI_Sleep( unsigned long delay ) {
+	/* If zero delay, no need for calculations */
+	if (delay == 0) return;
+
+	int overflow = 0;
 	delay = delay/resolution;
 	unsigned long start = clock;
 	delay += start;
+	if (delay < start) overflow++; //set bit to indicate overflow
+
 	while(1) {
-		if (delay <= clock) return;
+		if (overflow){ // if overlow, wait till clock overflows as well
+			if (clock == UINT32_MAX) overflow = 0;
+		}
+		else {
+			if (delay <= clock) return;
+		}
 	}
 }
 
