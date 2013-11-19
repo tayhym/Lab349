@@ -1,17 +1,34 @@
-/** @file read.S
- *
- * @brief read sycall wrapper
- *
- * @author Mike Kasick <mkasick@andrew.cmu.edu>
- * @date   Sun, 07 Oct 2007 01:53:16 -0400
- * 
- * @author Kartik Subramanian <ksubrama@andrew.cmu.edu>
- * @date 2008-10-29
- */
+@ read.S: read sycall wrapper
+@
+@ Authors: Kevin Brennan <kbrennan@andrew.cmu.edu>
+@          Deeptaanshu Kumar <deeptaan@andrew.cmu.edu>
+@		   Matthew Tay <mhtay@andrew.cmu.edu>
+@ Date:    2.38am 14/10/2013
 
-#include <asm.h>
+@ included for SWI handler address
+#include <bits/swi.h>
 
-	.file "read.S"
+	.file	"read.S"
+	.text
 
-FUNC(read)
-	@ Add code here.  Put your names at the top.
+	.global read
+read:
+	stmfd sp!, {r4-r12, r14} @ store registers
+	SWI READ_SWI	@ arguments are the parameters in r0 and r1 
+	ldr r3, =-1 	@ mvn r3, #0 (stores -1 for comparison)
+	TST r0, r3 	@ check for negative result (meaning error)
+	BPL done
+	NEG r0, r0	@ sysCall error, set errno 
+  	ldr r3, =errno  @ r3 = address of global variable errno
+	str r0, [r3]	@ store to errno 
+	mov r0, #-1	@ set wrapper to return -1
+			
+
+done: 	@ only valid to test errno when syscall wrapper returns -1
+	ldmfd sp!, {r4-r12, r14} @ restore registers
+	mov pc, lr @ change back to user mode
+
+
+	
+
+	

@@ -98,6 +98,19 @@ int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused))
 
 	/* Set up user space and jump to user function */
 	setUserConditions(USER_ADDR);	
+	
+	/* Restore U-Boot's SWI Handler */
+	//*kernelSwiAddr = swiInstrOne;                                          
+        //*((unsigned int*)kernelSwiAddr + 1) = swiInstrTwo;
+	//*kernelIrqAddr = irqInstrOne;                                          
+        //*((unsigned int*)kernelIrqAddr + 1) = irqInstrTwo; 
+                  
+	/* Restore kernel registers and set r0 to exit status */
+	//asm volatile("mov r0, %[rtn]": :[rtn] "r" (status));
+	//asm volatile("ldr r4, =globArray");
+	//asm volatile("ldr sp, [r4]");
+	//asm volatile("ldmfd sp!, {r4-r11,lr}");
+	//asm volatile("mov %[result], r0": [result] "=r" (status) : );
 		
 	assert(0);        /* should never get here */
 }

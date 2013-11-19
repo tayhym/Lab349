@@ -1,0 +1,25 @@
+@ Matthew Tay mhtay
+@ Deeptaanshu Kumer deeptaan
+@ Kevin Brennan kbrennan
+
+@ called when there is an IRQ that updates the main time variable. 
+                  
+	.global I_Handler
+
+I_Handler: 
+	sub	sp, sp, #4              @ leave room on stack for spsr of previous state    
+        stmfd	sp!, {r0-r12, lr}       @ store gp regs, lr to prepare to call swi    
+        mrs	r2, cpsr                @ get spsr into gp registers         
+        str	r2, [sp, #14*4]         @ store spsr for return to user mode
+	
+	orr	r2, r2, #0xd2
+	msr	cpsr, r2
+
+        bl	C_IRQ_Handler           @ handle interrupt
+        ldr	r2, [sp, #14*4]         @ restore spsr
+        msr	cpsr, r2                @ restore spsr
+        ldmfd  	sp!, {r0-r12,lr}        @ restore registers from stack
+        add  	sp, sp, #4              @ reclaim space from spsr
+        subs  	pc, lr, #4              @ return to previous mode - assume cpsr will get irq  
+
+
