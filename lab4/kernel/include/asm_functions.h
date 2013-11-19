@@ -2,4 +2,4 @@
 int S_Handler(void);
 int I_Handler(void);
 void setIRQStack(unsigned int sp);
-int setUserConditions(int userAddr);
+int setUserConditions(unsigned int sp, int userAddr);

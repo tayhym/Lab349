@@ -21,23 +21,17 @@
 extern int S_Handler(void);
 extern int I_Handler(void);
 extern void setIRQStack(unsigned int sp);
-extern int setUserConditions(int addr);
+extern int setUserConditions(unsigned int sp, int addr);
 
 uint32_t global_data;
 volatile uint32_t clock;
 unsigned int resolution = 10;
-volatile int globArray[1];
-volatile int linkR[1];
 
 int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused)), uint32_t table)
 {
 
 	app_startup(); /* bss is valid after this point */
 	global_data = table;
-
-	asm volatile("stmfd sp!, {r4-r11,lr}");
-	asm volatile("ldr r4, =globArray");
-	asm volatile("str sp, [r4]");
 
         unsigned int instr;
 	unsigned int offset;                                                 
@@ -97,20 +91,7 @@ int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused))
 	reg_write(OSTMR_OSCR_ADDR, 0x0); 	      // Reset counter
 
 	/* Set up user space and jump to user function */
-	setUserConditions(USER_ADDR);	
-	
-	/* Restore U-Boot's SWI Handler */
-	//*kernelSwiAddr = swiInstrOne;                                          
-        //*((unsigned int*)kernelSwiAddr + 1) = swiInstrTwo;
-	//*kernelIrqAddr = irqInstrOne;                                          
-        //*((unsigned int*)kernelIrqAddr + 1) = irqInstrTwo; 
-                  
-	/* Restore kernel registers and set r0 to exit status */
-	//asm volatile("mov r0, %[rtn]": :[rtn] "r" (status));
-	//asm volatile("ldr r4, =globArray");
-	//asm volatile("ldr sp, [r4]");
-	//asm volatile("ldmfd sp!, {r4-r11,lr}");
-	//asm volatile("mov %[result], r0": [result] "=r" (status) : );
+	setUserConditions(USER_SP, USER_ADDR);	
 		
 	assert(0);        /* should never get here */
 }

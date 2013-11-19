@@ -1,0 +1,7 @@
+/home/abc/18349/lab4/kernel/math.o: /home/abc/18349/lab4/kernel/math.c \
+  /home/abc/18349/lab4/kernel/include/types.h \
+  /home/abc/18349/lab4/kernel/include/math.h
+
+/home/abc/18349/lab4/kernel/include/types.h:
+
+/home/abc/18349/lab4/kernel/include/math.h:

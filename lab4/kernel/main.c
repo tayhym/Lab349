@@ -13,6 +13,7 @@
 #define SWI_ADDR 0x08
 #define IRQ_ADDR 0x18
 #define USER_ADDR 0xa0000000
+#define USER_SP 0xa3000000
 #define IRQ_SP 0xa1000000
 
 #define LDR_PC 0xe59ff000
@@ -21,23 +22,17 @@
 extern int S_Handler(void);
 extern int I_Handler(void);
 extern void setIRQStack(unsigned int sp);
-extern int setUserConditions(int addr);
+extern int setUserConditions(unsigned int sp, int addr);
 
 uint32_t global_data;
 volatile uint32_t clock;
 unsigned int resolution = 10;
-volatile int globArray[1];
-volatile int linkR[1];
 
 int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused)), uint32_t table)
 {
 
 	app_startup(); /* bss is valid after this point */
 	global_data = table;
-
-	asm volatile("stmfd sp!, {r4-r11,lr}");
-	asm volatile("ldr r4, =globArray");
-	asm volatile("str sp, [r4]");
 
         unsigned int instr;
 	unsigned int offset;                                                 
@@ -97,7 +92,7 @@ int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused))
 	reg_write(OSTMR_OSCR_ADDR, 0x0); 	      // Reset counter
 
 	/* Set up user space and jump to user function */
-	setUserConditions(USER_ADDR);	
+	setUserConditions(USER_SP, USER_ADDR);	
 		
 	assert(0);        /* should never get here */
 }

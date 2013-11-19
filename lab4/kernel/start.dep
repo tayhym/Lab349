@@ -1,0 +1,4 @@
+/home/abc/18349/lab4/kernel/start.o: /home/abc/18349/lab4/kernel/start.S \
+  /home/abc/18349/lab4/kernel/include/asm.h
+
+/home/abc/18349/lab4/kernel/include/asm.h:

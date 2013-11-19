@@ -1,0 +1,5 @@
+/home/abc/18349/lab4/tasks/libc/swi/mutex_create.o:  \
+ /home/abc/18349/lab4/tasks/libc/swi/mutex_create.S \
+  /home/abc/18349/lab4/tasks/libc/include/asm.h
+
+/home/abc/18349/lab4/tasks/libc/include/asm.h:

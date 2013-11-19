@@ -1,0 +1,14 @@
+/home/abc/18349/lab4/kernel/sched/ub_test.o:  \
+ /home/abc/18349/lab4/kernel/sched/ub_test.c \
+  /home/abc/18349/lab4/kernel/include/sched.h \
+  /home/abc/18349/lab4/kernel/include/task.h \
+  /home/abc/18349/lab4/kernel/include/types.h \
+  /home/abc/18349/lab4/kernel/include/config.h
+
+/home/abc/18349/lab4/kernel/include/sched.h:
+
+/home/abc/18349/lab4/kernel/include/task.h:
+
+/home/abc/18349/lab4/kernel/include/types.h:
+
+/home/abc/18349/lab4/kernel/include/config.h:

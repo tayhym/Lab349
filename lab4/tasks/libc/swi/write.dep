@@ -1,0 +1,5 @@
+/home/abc/18349/lab4/tasks/libc/swi/write.o:  \
+ /home/abc/18349/lab4/tasks/libc/swi/write.S \
+  /home/abc/18349/lab4/tasks/libc/include/bits/swi.h
+
+/home/abc/18349/lab4/tasks/libc/include/bits/swi.h:
