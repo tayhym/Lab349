@@ -25,7 +25,7 @@ void scheduleTCBs(task_t *tasks, size_t num_tasks);
 
 void sched_init(task_t* main_task  __attribute__((unused)))
 {
-	scheduleTCBs(main_task	
+	
 }
 
 //**********************helper functions********************************

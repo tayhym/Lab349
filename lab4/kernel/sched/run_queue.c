@@ -82,7 +82,18 @@ void runqueue_init(void)
  */
 void runqueue_add(tcb_t* tcb  __attribute__((unused)), uint8_t prio  __attribute__((unused)))
 {
+	// add tcb to run_queue
+	run_list[prio] = tcb;
+
+	// set group_run_bits and run_bits
+	int ostcby = (prio>>3);
+	int ostcbx = (prio & 0x7);
 	
+	ostcby_bit = 0x1 << ostcby;
+	group_run_bits = group_run_bits | ostcby_bit;
+	
+	ostcbx_bit = 0x1 << ostcbx;
+	run_bits[ostcby] = run_bits[ostcby] | ostcbx_bit;	
 }
 
 
@@ -95,7 +106,23 @@ void runqueue_add(tcb_t* tcb  __attribute__((unused)), uint8_t prio  __attribute
  */
 tcb_t* runqueue_remove(uint8_t prio  __attribute__((unused)))
 {
-	return (tcb_t *)1; // fix this; dummy return to prevent warning messages	
+	// get tcb at given priority
+	tcb_t * tcb = run_list[prio];
+	
+	// set tcb at prio to null
+	run_list[prio] = null;
+	
+	// remove run_bits and group_run_bits
+	int ostcby = (prio>>3);
+	int ostcbx = (prio & 0x7);
+	
+	ostcby_bit = 0x1 << ostcby;
+	group_run_bits = group_run_bits & (~ostcby_bit);
+	
+	ostcbx_bit = 0x1 << ostcbx;
+	run_bits[ostcby] = run_bits[ostcby] & (~ostcbx_bit);	
+
+	return tcb;
 }
 
 /**
@@ -104,5 +131,14 @@ tcb_t* runqueue_remove(uint8_t prio  __attribute__((unused)))
  */
 uint8_t highest_prio(void)
 {
-	return 1; // fix this; dummy return to prevent warning messages	
+		
 }
+
+
+
+
+
+
+
+
+

@@ -55,7 +55,8 @@ void createTCBs(task_t *tasks, size_t num_tasks) {
 	for (int i=0; i<num_tasks;i++) {
 		// initialize empty context		
 		sched_context_t tcbContext = {.r4 = 0, .r5 = 0, .r6 = 0, .r7 = 0, .r8 = 0, .r9 = 0, 
-									  .r10 = 0, .r11 = 0, .sp = tasks[i].stack_pos, .lr = null};
+									  .r10 = 0, .r11 = 0, .sp = tasks[i].stack_pos,
+									  .lr = tasks[i].lambda};
 		// initialize empty tcp, without priority. 0 is reserved for king-for-a-day.
 		tcb_t tcb = {.native_prio = (i+1), .cur_prio = (i+1), .context = tcbContext, 
 					 .holds_lock = 0, .sleep_queue = null, .kstack =tasks[i].stack_pos,
@@ -64,6 +65,7 @@ void createTCBs(task_t *tasks, size_t num_tasks) {
 		run_list[i] = tcb;  
 	}
 }
+
 
 // sort from smallest completion time to largest 
 void scheduleTCBs(task_t *tasks, size_t num_tasks) {
@@ -81,8 +83,8 @@ void scheduleTCBs(task_t *tasks, size_t num_tasks) {
 
 // checks for error. return 0 on no error. 	
 int checkForError(task_t *tasks, size_t num_tasks) {
-	// use 1 for king-for-a-day, as mentioned in lecture	
-	if (num_tasks>63) {
+	// use 1 for king-for-a-day, as mentioned in lecture. 1 for idle task	
+	if (num_tasks>62) {
 		return EINVAL;
 	}
 	else if (!((tasks >= RAM_START_ADDR) && (tasks <= RAM_END_ADDR))) {
