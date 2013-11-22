@@ -22,12 +22,10 @@
 #include <arm/physmem.h>
 #include <device.h>
 
-void createTCBs(task_t *tasks, size_t num_tasks);
-void scheduleTCBs(task_t *tasks, size_t num_tasks);
-int findCompletionTime(task_t *tasks, size_t num_tasks);
-int findShortestPeriod(task_t *tasks, size_t num_tasks);
+double findUtilization(task_t *tasks, size_t num_tasks);
 int tasksNotSchedulable(task_t *tasks, size_t num_tasks);
 int checkForError(task_t *tasks, size_t num_tasks);
+void scheduleTasks(task_t *tasks, size_t num_tasks);
 
 int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
 {
@@ -35,14 +33,14 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 	// init empty run-queue 
 	runqueue_init();
 	// schedule TCBs 
-	scheduleTCBs(tasks, num_tasks);
+	scheduleTasks(tasks, num_tasks);
 	// check for errors
 	errorValue = checkForError(tasks, num_tasks);
 	if (errorValue != 0) {
 		return errorValue;
 	}
 	// create TCBs to house tasks 
-	createTCBs(tasks, num_tasks);
+	allocate_tasks(&tasks, num_tasks);
 
   return 1; /* remove this line after adding your code */
 }
@@ -50,28 +48,13 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 
 
 // ************** helper functions ****************************
-void createTCBs(task_t *tasks, size_t num_tasks) { 
-	
-	for (int i=0; i<num_tasks;i++) {
-		// initialize empty context		
-		sched_context_t tcbContext = {.r4 = 0, .r5 = 0, .r6 = 0, .r7 = 0, .r8 = 0, .r9 = 0, 
-									  .r10 = 0, .r11 = 0, .sp = tasks[i].stack_pos,
-									  .lr = tasks[i].lambda};
-		// initialize empty tcp, without priority. 0 is reserved for king-for-a-day.
-		tcb_t tcb = {.native_prio = (i+1), .cur_prio = (i+1), .context = tcbContext, 
-					 .holds_lock = 0, .sleep_queue = null, .kstack =tasks[i].stack_pos,
-					 .kstack_high = tasks[i].stack_pos};
-		
-		run_list[i] = tcb;  
-	}
-}
-
 
 // sort from smallest completion time to largest 
-void scheduleTCBs(task_t *tasks, size_t num_tasks) {
-	for (int x=0;x<num_tasks;x++) {
-		for (int y=0;y<num_tasks-1;y++) {
-			if (tasks[y].C > tasks[y+1].C) {
+void scheduleTasks(task_t *tasks, size_t num_tasks) {
+	size_t x; size_t y;
+	for (x=0;x<num_tasks;x++) {
+		for (y=0;y<num_tasks-1;y++) {
+			if (tasks[y].T > tasks[y+1].T) {
 				// swap 
 				task_t temp = tasks[y];
 				tasks[y] = tasks[y+1];
@@ -81,50 +64,45 @@ void scheduleTCBs(task_t *tasks, size_t num_tasks) {
 	}
 }	
 
+
 // checks for error. return 0 on no error. 	
 int checkForError(task_t *tasks, size_t num_tasks) {
-	// use 1 for king-for-a-day, as mentioned in lecture. 1 for idle task	
+	// use 0 for king-for-a-day, as mentioned in lecture. 63 for idle task	
 	if (num_tasks>62) {
 		return EINVAL;
 	}
-	else if (!((tasks >= RAM_START_ADDR) && (tasks <= RAM_END_ADDR))) {
+	else if (!(((unsigned) tasks >= RAM_START_ADDR) && ((unsigned)tasks <= RAM_END_ADDR))) {
 		return EFAULT;
 	}
-	else if (tasksNotSchedulable) {
+	else if (tasksNotSchedulable(tasks, num_tasks) == 1) {
 		return ESCHED;	
 	} 
 	return 0;
 }
 
-// find if tasks can be scheduled
+// find if tasks can be scheduled - 1 if not schedulable
 int tasksNotSchedulable(task_t *tasks, size_t num_tasks) {
-	int sPeriod = findShortestPeriod(tasks, num_tasks);
-	int cTime = findCompletionTime(tasks, num_tasks);
-	
-	// not enough time to run all tasks
-	if (cTime > sPeriod) {
-		return 1;
+	double utilization = findUtilization(tasks, num_tasks);
+	double UB_BOUND = 0.693;
+	if (utilization< UB_BOUND) {
+		return 0; 
 	}
-	return 0;
+	return 1;
 }
 
-// find shortest task period
-int findShortestPeriod(task_t *tasks, size_t num_tasks) {
-	int shortestPeriod;		
-	for (int i=0;i<num_tasks;i++) {
-		if ((i==0) || (shortestPeriod>tasks[i].T)) {
-			shortestPeriod = tasks[i].T;
-		}
+
+// find total utilization 
+double findUtilization(task_t *tasks, size_t num_tasks) {
+	size_t i;
+	double utilization = 0.0; 		
+	for (i=0;i<num_tasks;i++) {
+		double period = tasks[i].T;
+		double util = tasks[i].C/period;
+		utilization += util;
 	}
+	return utilization;
 }
 
-// find completion time for all tasks
-int findCompletionTime(task_t *tasks, size_t num_tasks) {
-	int cTime = 0;
-	for (int i = 0;i<num_tasks;i++) {
-		cTime += tasks[i].C;
-	}
-}
 
 //*****************************************************************
 

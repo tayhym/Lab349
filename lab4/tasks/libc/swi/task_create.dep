@@ -1,5 +1,5 @@
-/home/abc/18349/lab4/tasks/libc/swi/task_create.o:  \
- /home/abc/18349/lab4/tasks/libc/swi/task_create.S \
-  /home/abc/18349/lab4/tasks/libc/include/asm.h
+/home/matthew/Documents/18-349/lab349/lab4/tasks/libc/swi/task_create.o:  \
+ /home/matthew/Documents/18-349/lab349/lab4/tasks/libc/swi/task_create.S \
+  /home/matthew/Documents/18-349/lab349/lab4/tasks/libc/include/asm.h
 
-/home/abc/18349/lab4/tasks/libc/include/asm.h:
+/home/matthew/Documents/18-349/lab349/lab4/tasks/libc/include/asm.h:
