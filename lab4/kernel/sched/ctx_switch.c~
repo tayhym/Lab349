@@ -88,10 +88,7 @@ void dispatch_sleep(void)
 	} 
 	unsigned prio  = highest_prio();
 	unsigned cur_prio = get_cur_prio();
-	ctx_switch_full(&system_tcb[prio].context, &system_tcb[cur_prio].context);
-	
-	// now in new context, set cur_tcb
-	cur_tcb = &system_tcb[prio];	
+	ctx_switch_full(&system_tcb[prio].context, &system_tcb[cur_prio].context);	
 }
 
 /**

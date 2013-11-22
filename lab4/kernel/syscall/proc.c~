@@ -26,7 +26,7 @@ double findUtilization(task_t *tasks, size_t num_tasks);
 int tasksNotSchedulable(task_t *tasks, size_t num_tasks);
 int checkForError(task_t *tasks, size_t num_tasks);
 void scheduleTasks(task_t *tasks, size_t num_tasks);
-void makeTasksRunnable(task_t *tasks, size_t num_tasks);
+
 
 int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
 {
@@ -44,6 +44,7 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 	allocate_tasks(&tasks, num_tasks);
 	
 	
+	// initiate dispatcher 
 	
 	/* launch highest priority task */
 	

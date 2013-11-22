@@ -20,6 +20,7 @@
 #include <arm/physmem.h>
 
 tcb_t system_tcb[OS_MAX_TASKS]; /*allocate memory for system TCBs */
+
 void addIdleTask();
 void makeTasksRunnable(size_t num_tasks);
 
@@ -73,10 +74,12 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 		system_tcb[i].sleep_queue = (void *)0x0; 
 	}
 
-	//add idle task
+	// add idle task
 	addIdleTask();
 	
 	makeTasksRunnable(num_tasks);
+
+
 }
 
 
@@ -94,7 +97,6 @@ void makeTasksRunnable(size_t num_tasks) {
 
 // add Idle Task to systemTCB 
 void addIdleTask() {
-	
 	unsigned IDLE_STACK_POS = RAM_END_ADDR;
 	sched_context_t tcbContext = {.r4 = (unsigned) idle,  // lambda 
 								  .r5 = 0, 	   // user argument 0
@@ -113,6 +115,9 @@ void addIdleTask() {
 
 	// make idle task runnable	
 	runqueue_add(&system_tcb[IDLE_PRIO], IDLE_PRIO);
+
+	// init dispatcher
+	dispatch_init(&system_tcb[IDLE_PRIO]);
 }
 
 
