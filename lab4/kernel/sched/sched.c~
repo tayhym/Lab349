@@ -20,9 +20,8 @@
 #include <arm/physmem.h>
 
 tcb_t system_tcb[OS_MAX_TASKS]; /*allocate memory for system TCBs */
-extern static dev_t devices[NUM_DEVICES];
 void addIdleTask();
-volatile struct tcb *findSleepQueue(unsigned long T);
+void makeTasksRunnable(size_t num_tasks);
 
 void sched_init(task_t* main_task  __attribute__((unused)))
 {	// not used. 	
@@ -57,7 +56,7 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 	size_t i;
 
 	for (i=0; i<num_tasks;i++) {
-		// initialize empty context		
+		//initialize empty context		
 		sched_context_t tcbContext = {.r4 = (unsigned) taskList[i].lambda, // user_entry_point
 									  .r5 = (unsigned) taskList[i].data,   // user argument 0
 									  .r6 = (unsigned) taskList[i].stack_pos, // user sp
@@ -66,40 +65,32 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 									  .sp = taskList[i].stack_pos, // current user sp
 									  .lr = taskList[i].lambda};  // current user lr
 		
-		// find appropriate sleep queue 
-		volatile struct tcb* sleep_queue = findSleepQueue(taskList[i].T);
-		// initialize empty tcb
-		tcb_t tcb = {.native_prio = (i), 
-					 .cur_prio = (i), 
-					 .context = tcbContext, 
-					 .holds_lock = 0, 
-					 .sleep_queue = sleep_queue
-					};
-		// system_tcb holds state of all tasks
-		system_tcb[i] = tcb;  
-				
+		//initialize empty tcb
+		system_tcb[i].native_prio = i;
+		system_tcb[i].cur_prio = i;	
+		system_tcb[i].context = tcbContext;
+		system_tcb[i].holds_lock = 0;
+		system_tcb[i].sleep_queue = (void *)0x0; 
 	}
 
-	// add idle task
+	//add idle task
 	addIdleTask();
-		
+	
+	makeTasksRunnable(num_tasks);
 }
 
 
 //*****************************helper function *****************************************
 
-// find Sleep Queue for task 
-volatile struct tcb *findSleepQueue(unsigned long T) {
-	int i;
-	for (i=0;i<NUM_DEVICES;i++) {
-		if (dev_freq[i] == T) {
-			return devices[i].sleep_queue;	
-		}
-	}
-	return 0x0; // should not get here!
-}	
 
-
+// make tasks, other than idle task, runnable
+void makeTasksRunnable(size_t num_tasks) {	
+	size_t i;uint8_t prio;
+	for (i=0;i<num_tasks;i++) {
+		prio = i;
+		runqueue_add(&system_tcb[i], prio);			
+	}		
+}
 
 // add Idle Task to systemTCB 
 void addIdleTask() {
@@ -113,15 +104,15 @@ void addIdleTask() {
 								  .sp = (unsigned *) IDLE_STACK_POS, // current sp
 							      .lr = idle            // current lr  
 								 };
-	tcb_t tcb = {.native_prio = IDLE_PRIO, 
-		         .cur_prio = IDLE_PRIO, 
-                 .context = tcbContext, 
-			     .holds_lock = 0, 
-                 .sleep_queue = 0x0, 
-                };   				    // did not initialize kstack values.
 	
-	system_tcb[63] = tcb;
+	system_tcb[IDLE_PRIO].native_prio = IDLE_PRIO;
+	system_tcb[IDLE_PRIO].cur_prio = IDLE_PRIO;
+	system_tcb[IDLE_PRIO].context = tcbContext;
+	system_tcb[IDLE_PRIO].holds_lock = 0;
+	system_tcb[IDLE_PRIO].sleep_queue = (void *)0x0;
 
+	// make idle task runnable	
+	runqueue_add(&system_tcb[IDLE_PRIO], IDLE_PRIO);
 }
 
 

@@ -15,7 +15,7 @@
 
 
 
-static tcb_t run_list[OS_MAX_TASKS]  __attribute__((unused));
+static tcb_t *run_list[OS_MAX_TASKS]  __attribute__((unused));
 
 /* A high bit in this bitmap means that the task whose priority is
  * equal to the bit number of the high bit is runnable.
@@ -59,10 +59,9 @@ static uint8_t prio_unmap_table[]  __attribute__((unused)) =
 void runqueue_init(void)
 {	
 	int i;
-	// makes empty tcb(s)
+	// makes tcb(s) point to null
 	for (i=0; i<(OS_MAX_TASKS);i++) {		
-		tcb_t tcb; 
-		run_list[i] = tcb ;
+		run_list[i] = (void *)0x0;
 	}
 	// make run-bits all 0
 	for (i = 0; i<(OS_MAX_TASKS/8);i++) {
@@ -82,19 +81,21 @@ void runqueue_init(void)
  * only requirement is that the run queue for that priority is empty.  This
  * function needs to be externally synchronized.
  */
-void runqueue_add(tcb_t tcb  __attribute__((unused)), uint8_t prio  __attribute__((unused)))
+void runqueue_add(tcb_t *tcb  __attribute__((unused)), uint8_t prio  __attribute__((unused)))
 {
+	int ostcby; unsigned ostcby_bit;
+	int ostcbx; unsigned ostcbx_bit;
 	// add tcb to run_queue
 	run_list[prio] = tcb;
 
 	// set group_run_bits and run_bits
-	int ostcby = (prio>>3);
-	int ostcbx = (prio & 0x7);
+	ostcby = (prio>>3);
+	ostcbx = (prio & 0x7);
 	
-	unsigned ostcby_bit = 0x1 << ostcby;
+	ostcby_bit = 0x1 << ostcby;
 	group_run_bits = group_run_bits | ostcby_bit;
 	
-	unsigned ostcbx_bit = 0x1 << ostcbx;
+	ostcbx_bit = 0x1 << ostcbx;
 	run_bits[ostcby] = run_bits[ostcby] | ostcbx_bit;	
 }
 
@@ -106,13 +107,12 @@ void runqueue_add(tcb_t tcb  __attribute__((unused)), uint8_t prio  __attribute_
  *
  * This function needs to be externally synchronized.
  */
-tcb_t runqueue_remove(uint8_t prio  __attribute__((unused)))
+tcb_t *runqueue_remove(uint8_t prio  __attribute__((unused)))
 {
 	// get tcb at given priority
-	tcb_t tcb = (tcb_t) run_list[prio];
-	
+	tcb_t *tcb = run_list[prio];
 	// set tcb at prio to empty tcb
-	tcb_t tcbEmpty;
+	tcb_t *tcbEmpty = (tcb_t *)0x0;
 	run_list[prio] = tcbEmpty;
 	
 	// remove run_bits and group_run_bits
@@ -134,7 +134,10 @@ tcb_t runqueue_remove(uint8_t prio  __attribute__((unused)))
  */
 uint8_t highest_prio(void)
 {
-	return 0x1;			
+	unsigned y = prio_unmap_table[group_run_bits];
+	unsigned x = prio_unmap_table[run_bits[y]];
+	uint8_t prio = (y<<3) + x;
+	return prio;		
 }
 
 

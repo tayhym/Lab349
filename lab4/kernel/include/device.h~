@@ -21,6 +21,5 @@ void dev_init(void);
 void dev_wait(unsigned int dev);
 void dev_update(unsigned long num_millis);
 volatile struct tcb *findSleepQueue(unsigned long T);
-
 #endif /* _DEVICE_H_ */
 

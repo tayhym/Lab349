@@ -26,10 +26,11 @@ double findUtilization(task_t *tasks, size_t num_tasks);
 int tasksNotSchedulable(task_t *tasks, size_t num_tasks);
 int checkForError(task_t *tasks, size_t num_tasks);
 void scheduleTasks(task_t *tasks, size_t num_tasks);
+void makeTasksRunnable(task_t *tasks, size_t num_tasks);
 
 int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
 {
-	int errorValue; 	
+	int errorValue;	
 	// init empty run-queue 
 	runqueue_init();
 	// schedule TCBs 
@@ -39,15 +40,22 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 	if (errorValue != 0) {
 		return errorValue;
 	}
-	// create TCBs to house tasks 
+	// create TCBs to house tasks and make runnable 
 	allocate_tasks(&tasks, num_tasks);
-
-  return 1; /* remove this line after adding your code */
+	
+	
+	
+	/* launch highest priority task */
+	
+  	return 1; /* remove this line after adding your code */
 }
 
 
 
 // ************** helper functions ****************************
+
+
+
 
 // sort from smallest completion time to largest 
 void scheduleTasks(task_t *tasks, size_t num_tasks) {

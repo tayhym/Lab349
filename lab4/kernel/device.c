@@ -40,6 +40,7 @@ typedef struct dev dev_t;
 const unsigned long dev_freq[NUM_DEVICES] = {100, 200, 500, 50};
 static dev_t devices[NUM_DEVICES];
 
+
 /**
  * @brief Initialize the sleep queues and match values for all devices.
  */

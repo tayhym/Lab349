@@ -31,8 +31,8 @@ uint8_t get_cur_prio(void);
 tcb_t* get_cur_tcb(void);
 
 /* Run-queue/priority management */
-void runqueue_add(tcb_t tcb, uint8_t prio);
-tcb_t runqueue_remove(uint8_t prio);
+void runqueue_add(tcb_t* tcb, uint8_t prio);
+tcb_t* runqueue_remove(uint8_t prio);
 uint8_t highest_prio(void);
 void runqueue_init(void);
 
