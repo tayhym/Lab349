@@ -19,7 +19,6 @@
 
 #define EOT_CHAR 0x04
 #define DEL_CHAR 0x7f
-
 /* Read count bytes (or less) from fd into the buffer buf. */
 ssize_t read_syscall(int fd __attribute__((unused)), void *cbuf __attribute__((unused)), size_t count __attribute__((unused)))
 {

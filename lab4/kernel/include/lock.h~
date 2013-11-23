@@ -26,6 +26,13 @@ struct mutex
 };
 typedef struct mutex mutex_t;
 
+struct cond
+{
+	/* FILL THIS IN */
+	/* is not handled in this lab */
+};
+typedef struct cond cond_t;
+
 void mutex_init(void);	/* a function for initiating mutexes */
 int mutex_create(void);
 int mutex_lock(int mutex);

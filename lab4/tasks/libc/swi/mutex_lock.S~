@@ -1,0 +1,17 @@
+/** write.S: write sycall wrapper
+ *
+ * Authors: Deeptaanshu Kumar <deeptaan@andrew.cmu.edu>
+ *          Kevin Brennan <kbrennan@andrew.cmu.edu>
+ *	    Matthew Tay <mhtay@andrew.cmu.edu>
+ * Date:    19:43 2013-11-17 
+ */
+
+#include <asm.h>
+#include <bits/swi.h>
+
+	.file "mutex_lock.S"
+	.text
+
+FUNC(mutex_lock)
+	swi		MUTEX_LOCK
+	mov 	pc, lr

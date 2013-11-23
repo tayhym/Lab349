@@ -2,20 +2,17 @@
 #include <task.h>
 #include <sched.h>
 #include <assert.h>
-
 #include <exports.h>
 #include <arm/psr.h>
 #include <arm/exception.h>
 #include <arm/interrupt.h>
 #include <arm/timer.h>
 #include <arm/reg.h>
+#include <config.h>
 
 #define SWI_ADDR 0x08
 #define IRQ_ADDR 0x18
-#define USER_ADDR 0xa0000000
-#define USER_SP 0xa3000000
 #define IRQ_SP 0xa1000000
-
 #define LDR_PC 0xe59ff000
 #define LDR_INSTR 0xe51ff004
 
@@ -92,7 +89,7 @@ int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused))
 	reg_write(OSTMR_OSCR_ADDR, 0x0); 	      // Reset counter
 
 	/* Set up user space and jump to user function */
-	setUserConditions(USER_SP, USER_ADDR);	
+	setUserConditions(USR_STACK, USR_START_ADDR);	
 		
 	assert(0);        /* should never get here */
 }

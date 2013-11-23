@@ -8,7 +8,6 @@
 
 #include <types.h>
 #include <assert.h>
-
 #include <task.h>
 #include <sched.h>
 #include <device.h>

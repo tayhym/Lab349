@@ -15,12 +15,12 @@
 #include <kernel.h>
 #include <syscall.h>
 #include <sched.h>
-
 #include <arm/reg.h>
 #include <arm/psr.h>
 #include <arm/exception.h>
 #include <arm/physmem.h>
 #include <device.h>
+#include <assert.h>
 
 double findUtilization(task_t *tasks, size_t num_tasks);
 int tasksNotSchedulable(task_t *tasks, size_t num_tasks);
@@ -47,6 +47,7 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 	/* launch highest priority task */
 	//launchHighestPriority();	
 
+	assert(0); //task_create only returns error conditions
   	return 1; /* remove this line after adding your code */
 }
 
@@ -78,13 +79,13 @@ void scheduleTasks(task_t *tasks, size_t num_tasks) {
 int checkForError(task_t *tasks, size_t num_tasks) {
 	// use 0 for king-for-a-day, as mentioned in lecture. 63 for idle task	
 	if (num_tasks>62) {
-		return EINVAL;
+		return -EINVAL;
 	}
 	else if (!(((unsigned) tasks >= RAM_START_ADDR) && ((unsigned)tasks <= RAM_END_ADDR))) {
-		return EFAULT;
+		return -EFAULT;
 	}
 	else if (tasksNotSchedulable(tasks, num_tasks) == 1) {
-		return ESCHED;	
+		return -ESCHED;	
 	} 
 	return 0;
 }
@@ -118,7 +119,12 @@ double findUtilization(task_t *tasks, size_t num_tasks) {
 
 int event_wait(unsigned int dev  __attribute__((unused)))
 {
-  return 1; /* remove this line after adding your code */	
+	if (dev > NUM_DEVICES) {
+		return -EINVAL;
+	}
+	dev_wait(dev);
+  	
+	return 0; // Return 0 to indicate success
 }
 
 /* An invalid syscall causes the kernel to exit. */

@@ -11,6 +11,7 @@
 #include <bits/errno.h>
 #include <arm/timer.h>
 #include <syscall.h>
+#include <kernel.h>
 
 extern volatile unsigned long clock;
 extern unsigned int resolution;

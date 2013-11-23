@@ -65,7 +65,7 @@ int mutex_lock(int mutex  __attribute__((unused)))
 	tcb_t *currTask = get_cur_tcb();
 	mutex_t *currMutex = &(gtMutex[mutex]);
 	/* Check if current task already holds lock*/
-	if (currTask == currMutex->pHolding_Tcb) {
+	if (currTaks == currMutex->pHolding_Tcb) {
 		enable_interrupts();
 		return -EDEADLOCK;
 	}
