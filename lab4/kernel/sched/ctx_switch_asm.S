@@ -41,6 +41,11 @@ FUNC(launch_task)
 /* r0 points to the target context, r1 to the current context. */
 /* add your code to perform a full context switch */
 FUNC(ctx_switch_full)
+	@ disable interrupts
+	mrs r2, cpsr
+	
+	mov r2, #PSR_IRQ  
+	
 	@ save current context	
 	str r4, [r1, #0]	
 	str r5, [r1, #4]
@@ -64,6 +69,9 @@ FUNC(ctx_switch_full)
 	ldr r11, [r0, #28]
 	ldr sp, [r0, #32]
 	ldr lr, [r0, #36]
+
+	@enable interrupts
+	
 
 
 /* r0 points to target context */

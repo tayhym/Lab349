@@ -113,7 +113,7 @@ void addIdleTask() {
 	system_tcb[IDLE_PRIO].context = tcbContext;
 	system_tcb[IDLE_PRIO].holds_lock = 0;
 	system_tcb[IDLE_PRIO].sleep_queue = (void *)0x0;
-	system_tcb[IDLE_PRIO].kstack_high[0] =(uint32_t)system_tcb[i].kstack;
+	system_tcb[IDLE_PRIO].kstack_high[0] =(uint32_t)system_tcb[IDLE_PRIO].kstack;
 
 	// make idle task runnable	
 	runqueue_add(&system_tcb[IDLE_PRIO], IDLE_PRIO);
