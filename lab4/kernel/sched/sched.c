@@ -65,13 +65,14 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 									  .r10 = 0, .r11 = 0, 
 									  .sp = taskList[i].stack_pos, // current user sp
 									  .lr = taskList[i].lambda};  // current user lr
-		
+										
 		//initialize empty tcb
 		system_tcb[i].native_prio = i;
 		system_tcb[i].cur_prio = i;	
 		system_tcb[i].context = tcbContext;
 		system_tcb[i].holds_lock = 0;
 		system_tcb[i].sleep_queue = (void *)0x0; 
+		system_tcb[i].kstack_high[0] =(uint32_t) system_tcb[i].kstack;//kstack for svc operations
 	}
 
 	// add idle task
@@ -112,6 +113,7 @@ void addIdleTask() {
 	system_tcb[IDLE_PRIO].context = tcbContext;
 	system_tcb[IDLE_PRIO].holds_lock = 0;
 	system_tcb[IDLE_PRIO].sleep_queue = (void *)0x0;
+	system_tcb[IDLE_PRIO].kstack_high[0] =(uint32_t)system_tcb[i].kstack;
 
 	// make idle task runnable	
 	runqueue_add(&system_tcb[IDLE_PRIO], IDLE_PRIO);

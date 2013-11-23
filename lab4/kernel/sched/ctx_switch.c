@@ -42,11 +42,16 @@ void dispatch_init(tcb_t* idle __attribute__((unused)))
  */
 void dispatch_save(void)
 {	
+	// disable interrupts - if first time run task, then launch task. else, dispatch no save.
+	
+ 
 	unsigned prio  = highest_prio();
 	unsigned cur_prio = get_cur_prio();
 	ctx_switch_full(&system_tcb[prio].context, &system_tcb[cur_prio].context);
 	// now in new context, set cur_tcb 	
 	cur_tcb = &system_tcb[prio];
+	
+	//enable interrupts
 }
 
 /**
@@ -57,6 +62,8 @@ void dispatch_save(void)
  */
 void dispatch_nosave(void)
 {	
+	// disable interrupts
+
 	// temporarily remove current task, to find next highest priority
 	if (cur_tcb->native_prio != IDLE_PRIO) {
 		runqueue_remove(cur_tcb->native_prio);
@@ -71,6 +78,8 @@ void dispatch_nosave(void)
 	
 	// now in new context, set cur_tcb
 	cur_tcb = &system_tcb[prio];
+
+	// enable interrupts
 }
 
 
