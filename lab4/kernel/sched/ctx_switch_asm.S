@@ -30,7 +30,7 @@ FUNC(launch_task)
 	mov     r2, #0
 	mov     r3, #0
 	mov     r5, #0
-	mov     r8, #0
+	@mov     r8, #0	     /* preserve value of r8 as uboot jump table address */
 	mov     ip, #0
 	msr     cpsr_c, #(PSR_MODE_USR)
 	mov     sp, r6
@@ -42,9 +42,9 @@ FUNC(launch_task)
 /* add your code to perform a full context switch */
 FUNC(ctx_switch_full)
 	@ disable interrupts
-	mrs r2, cpsr
-	
-	mov r2, #PSR_IRQ  
+	mrs	r4, cpsr		@ load r4 with cpsr
+	orr	r4, r4, #PSR_IRQ	@ mask IRQs
+	msr	cpsr, r4		
 	
 	@ save current context	
 	str r4, [r1, #0]	
@@ -71,12 +71,20 @@ FUNC(ctx_switch_full)
 	ldr lr, [r0, #36]
 
 	@enable interrupts
-	
+	mrs	r4, cpsr		@ load r4 with cpsr
+	bic	r4, r4, #PSR_IRQ	@ enable IRQs
+	msr	cpsr, r4
 
 
 /* r0 points to target context */
 /*add your code to perform a half context switch */	
 FUNC(ctx_switch_half)
+	
+	@ disable interrupts
+	mrs	r4, cpsr		@ load r4 with cpsr
+	orr	r4, r4, #PSR_IRQ	@ mask IRQs
+	msr	cpsr, r4	
+
 	@load new context
 	ldr r4, [r0, #0]	
 	ldr r5, [r0, #4]
@@ -89,7 +97,10 @@ FUNC(ctx_switch_half)
 	ldr sp, [r0, #32]
 	ldr lr, [r0, #36]
 
-	
+	@enable interrupts
+	mrs	r4, cpsr		@ load r4 with cpsr
+	bic	r4, r4, #PSR_IRQ	@ enable IRQs
+	msr	cpsr, r4	
 
 
 
