@@ -17,7 +17,6 @@
 #define LDR_INSTR 0xe51ff004
 
 extern int S_Handler(void);
-extern int I_Handler(void);
 extern void setIRQStack(unsigned int sp);
 extern int setUserConditions(unsigned int sp, int addr);
 
@@ -72,7 +71,7 @@ int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused))
 	*kernelSwiAddr = LDR_INSTR;        
 	*((unsigned int*)kernelSwiAddr + 1 ) = (unsigned int)((unsigned int*)S_Handler);
 	*kernelIrqAddr = LDR_INSTR;        
-	*((unsigned int*)kernelIrqAddr + 1) = (unsigned int)((unsigned int*)I_Handler);                  
+	*((unsigned int*)kernelIrqAddr + 1) = (unsigned int)((unsigned int*)irq_wrapper);                  
 
 	/* Initialize timer and IRQ stack */
 	clock = 0;
