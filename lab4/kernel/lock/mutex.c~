@@ -74,6 +74,7 @@ int mutex_lock(int mutex  __attribute__((unused)))
 	if (currSleepQueue == 0) {
 		currTask->sleep_queue = currSleepQueue;
 		currSleepQueue = currTask;
+		return 0;
 	}
 
 	while ( currPrio >= (currSleepQueue->cur_prio)) {
@@ -108,6 +109,7 @@ int mutex_unlock(int mutex  __attribute__((unused)))
 	/* Check if other tasks waiting for mutex */
 	if (currSleepQueue == 0) {
 		currMutex->bLock = 0;
+		currMutex->bAvailable = 1;
 		currMutex->pHolding_Tcb = 0;
 	}
 	else {

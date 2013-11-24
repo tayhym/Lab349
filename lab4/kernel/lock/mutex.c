@@ -84,6 +84,8 @@ int mutex_lock(int mutex  __attribute__((unused)))
 
 	currTask->sleep_queue = currSleepQueue;
 	prevSleepQueue->sleep_queue = currTask;
+	currMutex->bAvailable = 0;
+	currMutex->bLock = 1;
 
 	dispatch_sleep();
 	return 0; //Return 0 to indicate success
@@ -109,6 +111,7 @@ int mutex_unlock(int mutex  __attribute__((unused)))
 	/* Check if other tasks waiting for mutex */
 	if (currSleepQueue == 0) {
 		currMutex->bLock = 0;
+		currMutex->bAvailable = 1;
 		currMutex->pHolding_Tcb = 0;
 	}
 	else {
