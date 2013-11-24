@@ -112,9 +112,9 @@ int mutex_unlock(int mutex  __attribute__((unused)))
 	else {
 		/* Wake up first task and give it the mutex*/
 		currMutex->pHolding_Tcb = currSleepQueue;
-		runqueue_add(currSleepQueue, currSleepQueue->cur_prio);
 		currMutex->pSleep_queue = currSleepQueue->sleep_queue;
-		currMutex->bLock = 1;
+		runqueue_add(currSleepQueue, currSleepQueue->cur_prio);
+		
 	}
 
 	return 0; //Return 0 to indicate success

@@ -104,7 +104,7 @@ int mutex_unlock(int mutex  __attribute__((unused)))
 	}
 
 	tcb_t *currSleepQueue = currMutex->pSleep_queue;
-	/* Check if current sleep queue is not null */
+	/* Check if other tasks waiting for mutex */
 	if (currSleepQueue == 0) {
 		currMutex->bLock = 0;
 		currMutex->pHolding_Tcb = 0;
