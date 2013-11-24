@@ -58,6 +58,8 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 	size_t i;
 
 	for (i=0; i<num_tasks;i++) {
+		printf("num tasks = %d",(int)num_tasks);
+		printf("i = %d",(int) i);
 		//initialize empty context		
 		sched_context_t tcbContext = {.r4 = (unsigned) taskList[i].lambda, // user_entry_point
 									  .r5 = (unsigned) taskList[i].data,   // user argument 0
@@ -76,11 +78,14 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 		system_tcb[i].kstack_high[0] =(uint32_t) system_tcb[i].kstack;//kstack for svc 																		    operations
 	}
 
+	printf("addIdleTask\n");
 	// add idle task
 	addIdleTask();
 	
+	printf("makeTasksRunnable\n");
 	makeTasksRunnable(num_tasks);
 	
+	printf("launchHighestPrio\n");
 	/* launch highest priority task */
 	launchHighestPrio();	
 
@@ -92,20 +97,24 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 
 // launch highest priority task
 void launchHighestPrio() {
+
 	unsigned prio = highest_prio();
 	/* extract r4 = user program entry point
 	 *	  	   r5 = prog argument 0
 	 *		   r6 = user stack pointer 
 	 */			 
+	printf("highest prio %x\n",(int) prio);	
 	unsigned entryPoint = system_tcb[prio].context.r4;
+	printf("entryPoint %x\n", (int) entryPoint);	
 	unsigned progData = system_tcb[prio].context.r5;
+	printf("progData %x\n", (int) progData); 
 	unsigned userSp = system_tcb[prio].context.r6;
-	/* push to registers, and launch task */
-	asm volatile("mov %[value], r4": [value] "=r" (entryPoint) : );
-	asm volatile("mov %[value], r5": [value] "=r" (progData) : );
-	asm volatile("mov %[value], r6": [value] "=r" (userSp) : );
-	asm volatile("mov %[value], r8": [value] "=r" (global_data) :);
+	printf("userSp %x\n", (int) userSp);
 	
+	/* dispatch to current priority group */ 
+	printf("dispatch no save\n");	
+	dispatch_nosave();
+	printf("launch task\n");
 	launch_task();
 }
 

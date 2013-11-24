@@ -41,10 +41,7 @@ FUNC(launch_task)
 /* r0 points to the target context, r1 to the current context. */
 /* add your code to perform a full context switch */
 FUNC(ctx_switch_full)
-	@ disable interrupts
-	mrs	r4, cpsr		@ load r4 with cpsr
-	orr	r4, r4, #PSR_IRQ	@ mask IRQs
-	msr	cpsr, r4		
+
 	
 	@ save current context	
 	str r4, [r1, #0]	
@@ -69,22 +66,17 @@ FUNC(ctx_switch_full)
 	ldr r11, [r0, #28]
 	ldr sp, [r0, #32]
 	ldr lr, [r0, #36]
+	mov pc, lr
 
-	@enable interrupts
-	mrs	r4, cpsr		@ load r4 with cpsr
-	bic	r4, r4, #PSR_IRQ	@ enable IRQs
-	msr	cpsr, r4
 
 
 /* r0 points to target context */
 /*add your code to perform a half context switch */	
 FUNC(ctx_switch_half)
 	
-	@ disable interrupts
-	mrs	r4, cpsr		@ load r4 with cpsr
-	orr	r4, r4, #PSR_IRQ	@ mask IRQs
-	msr	cpsr, r4	
-
+	@ save link reg back to launch task 
+	mov r3, lr
+	
 	@load new context
 	ldr r4, [r0, #0]	
 	ldr r5, [r0, #4]
@@ -97,10 +89,8 @@ FUNC(ctx_switch_half)
 	ldr sp, [r0, #32]
 	ldr lr, [r0, #36]
 
-	@enable interrupts
-	mrs	r4, cpsr		@ load r4 with cpsr
-	bic	r4, r4, #PSR_IRQ	@ enable IRQs
-	msr	cpsr, r4	
+	@ jump back to user program 
+	mov pc, r3
 
 
 

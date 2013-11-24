@@ -14,6 +14,8 @@
 #include <kernel.h>
 #include "sched_i.h"
 
+#include <arm/exception.h>
+
 #ifdef DEBUG_MUTEX
 #include <exports.h>
 #endif
@@ -42,9 +44,9 @@ void dispatch_init(tcb_t* idle __attribute__((unused)))
  */
 void dispatch_save(void)
 {	
-	// disable interrupts - if first time run task, then launch task. else, dispatch no save.
+	// disable interrupts - if first time run task, then launch task. else, dispatch no 		save.
+	disable_interrupts();
 	
- 
 	unsigned prio  = highest_prio();
 	unsigned cur_prio = get_cur_prio();
 	ctx_switch_full(&system_tcb[prio].context, &system_tcb[cur_prio].context);
@@ -52,6 +54,7 @@ void dispatch_save(void)
 	cur_tcb = &system_tcb[prio];
 	
 	//enable interrupts
+	enable_interrupts();
 }
 
 /**
@@ -63,6 +66,7 @@ void dispatch_save(void)
 void dispatch_nosave(void)
 {	
 	// disable interrupts
+	disable_interrupts();
 
 	// temporarily remove current task, to find next highest priority
 	if (cur_tcb->native_prio != IDLE_PRIO) {
@@ -80,6 +84,7 @@ void dispatch_nosave(void)
 	cur_tcb = &system_tcb[prio];
 
 	// enable interrupts
+	enable_interrupts();
 }
 
 
@@ -90,7 +95,8 @@ void dispatch_nosave(void)
  * There is always an idle task to switch to.
  */
 void dispatch_sleep(void)
-{
+{	
+	disable_interrupts();
 	// remove current task from run-bits, if not idle 
 	if (cur_tcb->native_prio != IDLE_PRIO) {
 		runqueue_remove(cur_tcb->native_prio);
@@ -100,7 +106,9 @@ void dispatch_sleep(void)
 	ctx_switch_full(&system_tcb[prio].context, &system_tcb[cur_prio].context);
 	
 	// now in new context, set cur_tcb
-	cur_tcb = &system_tcb[prio];	
+	cur_tcb = &system_tcb[prio];
+	
+	enable_interrupts();	
 }
 
 /**

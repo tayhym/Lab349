@@ -30,7 +30,7 @@ FUNC(launch_task)
 	mov     r2, #0
 	mov     r3, #0
 	mov     r5, #0
-	mov     r8, #0
+	@mov     r8, #0	     /* preserve value of r8 as uboot jump table address */
 	mov     ip, #0
 	msr     cpsr_c, #(PSR_MODE_USR)
 	mov     sp, r6
@@ -41,10 +41,7 @@ FUNC(launch_task)
 /* r0 points to the target context, r1 to the current context. */
 /* add your code to perform a full context switch */
 FUNC(ctx_switch_full)
-	@ disable interrupts
-	mrs r2, cpsr
-	
-	mov r2, #PSR_IRQ  
+
 	
 	@ save current context	
 	str r4, [r1, #0]	
@@ -69,14 +66,17 @@ FUNC(ctx_switch_full)
 	ldr r11, [r0, #28]
 	ldr sp, [r0, #32]
 	ldr lr, [r0, #36]
+	mov pc, lr
 
-	@enable interrupts
-	
 
 
 /* r0 points to target context */
 /*add your code to perform a half context switch */	
 FUNC(ctx_switch_half)
+	
+	@ save link reg back to launch task 
+	mov r3, lr
+	
 	@load new context
 	ldr r4, [r0, #0]	
 	ldr r5, [r0, #4]
@@ -89,7 +89,8 @@ FUNC(ctx_switch_half)
 	ldr sp, [r0, #32]
 	ldr lr, [r0, #36]
 
-	
+	@ jump back to user program 
+	mov pc, r3
 
 
 

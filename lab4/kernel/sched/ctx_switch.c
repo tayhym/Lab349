@@ -66,6 +66,7 @@ void dispatch_save(void)
 void dispatch_nosave(void)
 {	
 	// disable interrupts
+	disable_interrupts();
 
 	// temporarily remove current task, to find next highest priority
 	if (cur_tcb->native_prio != IDLE_PRIO) {
@@ -83,6 +84,7 @@ void dispatch_nosave(void)
 	cur_tcb = &system_tcb[prio];
 
 	// enable interrupts
+	enable_interrupts();
 }
 
 
@@ -93,7 +95,8 @@ void dispatch_nosave(void)
  * There is always an idle task to switch to.
  */
 void dispatch_sleep(void)
-{
+{	
+	disable_interrupts();
 	// remove current task from run-bits, if not idle 
 	if (cur_tcb->native_prio != IDLE_PRIO) {
 		runqueue_remove(cur_tcb->native_prio);
@@ -103,7 +106,9 @@ void dispatch_sleep(void)
 	ctx_switch_full(&system_tcb[prio].context, &system_tcb[cur_prio].context);
 	
 	// now in new context, set cur_tcb
-	cur_tcb = &system_tcb[prio];	
+	cur_tcb = &system_tcb[prio];
+	
+	enable_interrupts();	
 }
 
 /**
