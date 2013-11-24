@@ -1,11 +1,11 @@
-/home/matthew/Documents/18-349/lab349/lab4/kernel/arm/psr.o:  \
- /home/matthew/Documents/18-349/lab349/lab4/kernel/arm/psr.c \
-  /home/matthew/Documents/18-349/lab349/lab4/kernel/include/types.h \
-  /home/matthew/Documents/18-349/lab349/lab4/kernel/include/arm/psr.h \
-  /home/matthew/Documents/18-349/lab349/lab4/kernel/include/inline.h
+/home/abc/18349/lab4/kernel/arm/psr.o:  \
+ /home/abc/18349/lab4/kernel/arm/psr.c \
+  /home/abc/18349/lab4/kernel/include/types.h \
+  /home/abc/18349/lab4/kernel/include/arm/psr.h \
+  /home/abc/18349/lab4/kernel/include/inline.h
 
-/home/matthew/Documents/18-349/lab349/lab4/kernel/include/types.h:
+/home/abc/18349/lab4/kernel/include/types.h:
 
-/home/matthew/Documents/18-349/lab349/lab4/kernel/include/arm/psr.h:
+/home/abc/18349/lab4/kernel/include/arm/psr.h:
 
-/home/matthew/Documents/18-349/lab349/lab4/kernel/include/inline.h:
+/home/abc/18349/lab4/kernel/include/inline.h:

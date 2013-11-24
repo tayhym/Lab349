@@ -1,8 +1,8 @@
-/home/matthew/Documents/18-349/lab349/lab4/kernel/sched/ctx_switch_asm.o:  \
- /home/matthew/Documents/18-349/lab349/lab4/kernel/sched/ctx_switch_asm.S \
-  /home/matthew/Documents/18-349/lab349/lab4/kernel/include/asm.h \
-  /home/matthew/Documents/18-349/lab349/lab4/kernel/include/arm/psr.h
+/home/abc/18349/lab4/kernel/sched/ctx_switch_asm.o:  \
+ /home/abc/18349/lab4/kernel/sched/ctx_switch_asm.S \
+  /home/abc/18349/lab4/kernel/include/asm.h \
+  /home/abc/18349/lab4/kernel/include/arm/psr.h
 
-/home/matthew/Documents/18-349/lab349/lab4/kernel/include/asm.h:
+/home/abc/18349/lab4/kernel/include/asm.h:
 
-/home/matthew/Documents/18-349/lab349/lab4/kernel/include/arm/psr.h:
+/home/abc/18349/lab4/kernel/include/arm/psr.h:

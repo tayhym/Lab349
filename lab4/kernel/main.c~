@@ -2,7 +2,6 @@
 #include <task.h>
 #include <sched.h>
 #include <assert.h>
-
 #include <exports.h>
 #include <arm/psr.h>
 #include <arm/exception.h>

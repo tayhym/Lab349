@@ -1,5 +1,5 @@
-/home/matthew/Documents/18-349/lab349/lab4/tasks/libc/swi/read.o:  \
- /home/matthew/Documents/18-349/lab349/lab4/tasks/libc/swi/read.S \
-  /home/matthew/Documents/18-349/lab349/lab4/tasks/libc/include/bits/swi.h
+/home/abc/18349/lab4/tasks/libc/swi/read.o:  \
+ /home/abc/18349/lab4/tasks/libc/swi/read.S \
+  /home/abc/18349/lab4/tasks/libc/include/bits/swi.h
 
-/home/matthew/Documents/18-349/lab349/lab4/tasks/libc/include/bits/swi.h:
+/home/abc/18349/lab4/tasks/libc/include/bits/swi.h:

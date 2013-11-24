@@ -38,8 +38,6 @@ void mutex_init()
 
 int mutex_create(void)
 {
-	disable_interrupts();
-
 	/* Check for maximum number of mutices */
 	if (num_mutex == OS_NUM_MUTEX) {
 		enable_interrupts();
@@ -47,15 +45,12 @@ int mutex_create(void)
 	}
 	/* Otherwise init new mutex and add to array */
 	mutex_init();
-	enable_interrupts();
 
 	return (num_mutex-1);
 }
 
 int mutex_lock(int mutex  __attribute__((unused)))
-{
-	disable_interrupts();
-	
+{	
 	/* Check if mutex id has been initialized */
 	if (mutex >= num_mutex) {
 		enable_interrupts();
@@ -70,18 +65,28 @@ int mutex_lock(int mutex  __attribute__((unused)))
 		return -EDEADLOCK;
 	}
 
-   	enable_interrupts();
+	/* Check if mutex is acquirable based on current task priority */
+	uint8_t currPrio = get_cur_prio();
+	tcb_t *currSleepQueue = currMutex->pSleep_queue;
+	tcb_t *prevSleepQueue = currSleepQueue;
+	while ( currPrio >= (currSleepQueue->cur_prio)) {
+		prevSleepQueue = currSleepQueue;
+        currSleepQueue = currSleepQueue->sleep_queue;
+	}
+
+	currTask->sleep_queue = currSleepQueue;
+	prevSleepQueue->sleep_queue = currTask;
+
+	dispatch_sleep();
 	return 0; //Return 0 to indicate success
 }
 
 int mutex_unlock(int mutex  __attribute__((unused)))
 {
-	disable_interrupts();
-	
-	/* Check for errors */
+	/* Check if mutex has been initialized `*/
 	if (mutex >= num_mutex) {
 		enable_interrupts();
-		return -EINVAL; //Mutex hasn't been initialized yet
+		return -EINVAL;
 	}
 
 	tcb_t *currTask = get_cur_tcb();
@@ -89,10 +94,9 @@ int mutex_unlock(int mutex  __attribute__((unused)))
 	/* Check if current task does not holds lock*/
 	if (currTask != currMutex->pHolding_Tcb) {
 		enable_interrupts();
-		return -EDEADLOCK;
+		return -EPERM;
 	}
 
-	enable_interrupts();
 	return 0; //Return 0 to indicate success
 }
 
