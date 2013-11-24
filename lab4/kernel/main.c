@@ -23,7 +23,7 @@ extern int setUserConditions(unsigned int sp, int addr);
 
 uint32_t global_data;
 volatile uint32_t clock;
-unsigned int resolution = 10;
+unsigned int resolution = OS_TIMER_RESOLUTION;
 
 int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused)), uint32_t table)
 {

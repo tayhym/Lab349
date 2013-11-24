@@ -15,7 +15,7 @@
 #include <arm/psr.h>
 #include <arm/exception.h>
 
-volatile global uint32_t clock;
+extern volatile unsigned long clock;
 
 /**
  * @brief Fake device maintainence structure.
