@@ -38,6 +38,8 @@ void mutex_init()
 
 int mutex_create(void)
 {
+	disable_interrupts();
+
 	/* Check for maximum number of mutices */
 	if (num_mutex == OS_NUM_MUTEX) {
 		enable_interrupts();
@@ -46,11 +48,14 @@ int mutex_create(void)
 	/* Otherwise init new mutex and add to array */
 	mutex_init();
 
+	enable_interrupts();
 	return (num_mutex-1);
 }
 
 int mutex_lock(int mutex  __attribute__((unused)))
 {	
+	disable_interrupts();
+
 	/* Check if mutex id has been initialized */
 	if (mutex >= num_mutex) {
 		enable_interrupts();
@@ -74,6 +79,7 @@ int mutex_lock(int mutex  __attribute__((unused)))
 	if (currSleepQueue == 0) {
 		currTask->sleep_queue = currSleepQueue;
 		currSleepQueue = currTask;
+		enable_interrupts();
 		return 0;
 	}
 
@@ -88,12 +94,15 @@ int mutex_lock(int mutex  __attribute__((unused)))
 	currMutex->bLock = 1;
 
 	dispatch_sleep();
+	enable_interrupts();
 	return 0; //Return 0 to indicate success
 }
 
 int mutex_unlock(int mutex  __attribute__((unused)))
 {
-	/* Check if mutex has been initialized `*/
+	disable_interrupts();
+
+	/* Check if mutex has been initialized */
 	if (mutex >= num_mutex) {
 		enable_interrupts();
 		return -EINVAL;
@@ -121,6 +130,7 @@ int mutex_unlock(int mutex  __attribute__((unused)))
 		runqueue_add(currSleepQueue, currSleepQueue->cur_prio);
 	}
 
+	enable_interrupts();
 	return 0; //Return 0 to indicate success
 }
 

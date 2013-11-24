@@ -63,6 +63,8 @@ void dev_init(void)
  */
 void dev_wait(unsigned int dev __attribute__((unused)))
 {
+	disable_interrupts();
+
     tcb_t* sq = devices[dev].sleep_queue;
 	/* Check for empty sleep queue */
     if (sq == 0) {
@@ -78,6 +80,7 @@ void dev_wait(unsigned int dev __attribute__((unused)))
        sq->sleep_queue = 0;
     }
 
+    enable_interrupts();
     dispatch_sleep();
 }
 
@@ -91,6 +94,8 @@ void dev_wait(unsigned int dev __attribute__((unused)))
  */
 void dev_update(unsigned long millis __attribute__((unused)))
 {
+    disable_interrupts();
+
 	int i;
     for (i = (NUM_DEVICES-1); i > 0; i--) {
         if (devices[i].next_match == millis) {
@@ -108,5 +113,7 @@ void dev_update(unsigned long millis __attribute__((unused)))
             }
         }
     }
+
+    enable_interrupts();
 }
 

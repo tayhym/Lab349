@@ -20,6 +20,7 @@
 #include <arm/exception.h>
 #include <arm/physmem.h>
 #include <device.h>
+#include <assert.h>
 
 double findUtilization(task_t *tasks, size_t num_tasks);
 int tasksNotSchedulable(task_t *tasks, size_t num_tasks);
@@ -121,6 +122,7 @@ int event_wait(unsigned int dev  __attribute__((unused)))
 	if (dev > NUM_DEVICES) {
 		return -EINVAL;
 	}
+	tcb_t* currTask = get_cur_tcb();
 	dev_wait(dev);
   	
 	return 0; // Return 0 to indicate success
