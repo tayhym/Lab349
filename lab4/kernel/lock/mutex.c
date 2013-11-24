@@ -69,6 +69,12 @@ int mutex_lock(int mutex  __attribute__((unused)))
 	uint8_t currPrio = get_cur_prio();
 	tcb_t *currSleepQueue = currMutex->pSleep_queue;
 	tcb_t *prevSleepQueue = currSleepQueue;
+
+	/* Check if current sleep queue is null */
+	if (currSleepQueue == 0) {
+		
+	}
+
 	while ( currPrio >= (currSleepQueue->cur_prio)) {
 		prevSleepQueue = currSleepQueue;
         currSleepQueue = currSleepQueue->sleep_queue;
@@ -95,6 +101,20 @@ int mutex_unlock(int mutex  __attribute__((unused)))
 	if (currTask != currMutex->pHolding_Tcb) {
 		enable_interrupts();
 		return -EPERM;
+	}
+
+	tcb_t *currSleepQueue = currMutex->pSleep_queue;
+	/* Check if other tasks waiting for mutex */
+	if (currSleepQueue == 0) {
+		currMutex->bLock = 0;
+		currMutex->pHolding_Tcb = 0;
+	}
+	else {
+		/* Wake up first task and give it the mutex*/
+		currMutex->pHolding_Tcb = currSleepQueue;
+		runqueue_add(currSleepQueue, currSleepQueue->cur_prio);
+		currMutex->pSleep_queue = currSleepQueue->sleep_queue;
+		currMutex->bLock = 1;
 	}
 
 	return 0; //Return 0 to indicate success
