@@ -20,7 +20,7 @@ S_Handler:
         mov	r1, sp			@ pointer to parameters on stack        
         ldr	r0, [lr, #-4]		@ extract swi number                    
 	bic	r0, r0, #0xff000000	@ extract 24 bit swi number   
-	bic	r0, r0, #0x900000	
+
 
 	ldr 	r4, =global_data	@ restore table
 	ldr 	r8, [r4] 
