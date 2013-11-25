@@ -10,7 +10,10 @@
   /home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/kernel.h \
   /home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/sched/sched_i.h \
   /home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/sched.h \
-  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/task.h
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/task.h \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/arm/exception.h \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/inline.h \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/arm/psr.h
 
 /home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/types.h:
 
@@ -31,3 +34,9 @@
 /home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/sched.h:
 
 /home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/task.h:
+
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/arm/exception.h:
+
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/inline.h:
+
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/arm/psr.h:
