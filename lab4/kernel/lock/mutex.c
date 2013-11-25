@@ -72,7 +72,9 @@ int mutex_lock(int mutex  __attribute__((unused)))
 
 	/* Check if current sleep queue is null */
 	if (currSleepQueue == 0) {
-		
+		currTask->sleep_queue = currSleepQueue;
+		currSleepQueue = currTask;
+		return 0;
 	}
 
 	while ( currPrio >= (currSleepQueue->cur_prio)) {
@@ -114,7 +116,6 @@ int mutex_unlock(int mutex  __attribute__((unused)))
 		currMutex->pHolding_Tcb = currSleepQueue;
 		currMutex->pSleep_queue = currSleepQueue->sleep_queue;
 		runqueue_add(currSleepQueue, currSleepQueue->cur_prio);
-		
 	}
 
 	return 0; //Return 0 to indicate success
