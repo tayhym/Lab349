@@ -10,7 +10,7 @@
 #include <arm/timer.h>
 #include <exports.h>
 
-#include <device.h>
+#include <devices.h>
 extern volatile unsigned long clock;
 
 /* Called by assembly I_Handler */
