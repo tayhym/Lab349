@@ -1,7 +1,8 @@
-/home/abc/18349/lab4/kernel/math.o: /home/abc/18349/lab4/kernel/math.c \
-  /home/abc/18349/lab4/kernel/include/types.h \
-  /home/abc/18349/lab4/kernel/include/math.h
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/math.o:  \
+ /home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/math.c \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/types.h \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/math.h
 
-/home/abc/18349/lab4/kernel/include/types.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/types.h:
 
-/home/abc/18349/lab4/kernel/include/math.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/math.h:

@@ -1,5 +1,5 @@
-/home/abc/18349/lab4/tasks/libc/crt0.o:  \
- /home/abc/18349/lab4/tasks/libc/crt0.S \
-  /home/abc/18349/lab4/tasks/libc/include/asm.h
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/crt0.o:  \
+ /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/crt0.S \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/asm.h
 
-/home/abc/18349/lab4/tasks/libc/include/asm.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/asm.h:

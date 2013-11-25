@@ -1,20 +1,21 @@
-/home/abc/18349/lab4/tasks/libc/stdio/hexdump.o:  \
- /home/abc/18349/lab4/tasks/libc/stdio/hexdump.c \
-  /home/abc/18349/lab4/tasks/libc/include/ctype.h \
-  /home/abc/18349/lab4/tasks/libc/include/inline.h \
-  /home/abc/18349/lab4/tasks/libc/include/stdio.h \
-  /home/abc/18349/lab4/tasks/libc/include/stdarg.h \
-  /home/abc/18349/lab4/tasks/libc/include/sys/types.h \
-  /home/abc/18349/lab4/tasks/libc/include/bits/types.h
+ \
+ /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/stdio/hexdump.o:  \
+ /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/stdio/hexdump.c \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/ctype.h \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/inline.h \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/stdio.h \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/stdarg.h \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/sys/types.h \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/bits/types.h
 
-/home/abc/18349/lab4/tasks/libc/include/ctype.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/ctype.h:
 
-/home/abc/18349/lab4/tasks/libc/include/inline.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/inline.h:
 
-/home/abc/18349/lab4/tasks/libc/include/stdio.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/stdio.h:
 
-/home/abc/18349/lab4/tasks/libc/include/stdarg.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/stdarg.h:
 
-/home/abc/18349/lab4/tasks/libc/include/sys/types.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/sys/types.h:
 
-/home/abc/18349/lab4/tasks/libc/include/bits/types.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/bits/types.h:

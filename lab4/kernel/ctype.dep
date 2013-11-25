@@ -1,7 +1,8 @@
-/home/abc/18349/lab4/kernel/ctype.o: /home/abc/18349/lab4/kernel/ctype.c \
-  /home/abc/18349/lab4/kernel/include/ctype.h \
-  /home/abc/18349/lab4/kernel/include/inline.h
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/ctype.o:  \
+ /home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/ctype.c \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/ctype.h \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/inline.h
 
-/home/abc/18349/lab4/kernel/include/ctype.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/ctype.h:
 
-/home/abc/18349/lab4/kernel/include/inline.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/kernel/include/inline.h:

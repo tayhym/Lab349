@@ -63,6 +63,7 @@ void dispatch_save(void)
 void dispatch_nosave(void)
 {	
 	// disable interrupts
+
 	// temporarily remove current task, to find next highest priority
 	if (cur_tcb->native_prio != IDLE_PRIO) {
 		runqueue_remove(cur_tcb->native_prio);

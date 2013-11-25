@@ -14,6 +14,8 @@
 #include <kernel.h>
 #include "sched_i.h"
 
+#include <arm/exception.h>
+
 #ifdef DEBUG_MUTEX
 #include <exports.h>
 #endif
@@ -42,9 +44,9 @@ void dispatch_init(tcb_t* idle __attribute__((unused)))
  */
 void dispatch_save(void)
 {	
-	// disable interrupts - if first time run task, then launch task. else, dispatch no save.
+	// disable interrupts - if first time run task, then launch task. else, dispatch no 		save.
+	disable_interrupts();
 	
- 
 	unsigned prio  = highest_prio();
 	unsigned cur_prio = get_cur_prio();
 	ctx_switch_full(&system_tcb[prio].context, &system_tcb[cur_prio].context);
@@ -52,6 +54,7 @@ void dispatch_save(void)
 	cur_tcb = &system_tcb[prio];
 	
 	//enable interrupts
+	enable_interrupts();
 }
 
 /**

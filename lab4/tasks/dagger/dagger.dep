@@ -1,23 +1,23 @@
-/home/abc/18349/lab4/tasks/dagger/dagger.o:  \
- /home/abc/18349/lab4/tasks/dagger/dagger.c \
-  /home/abc/18349/lab4/tasks/libc/include/stdio.h \
-  /home/abc/18349/lab4/tasks/libc/include/stdarg.h \
-  /home/abc/18349/lab4/tasks/libc/include/sys/types.h \
-  /home/abc/18349/lab4/tasks/libc/include/bits/types.h \
-  /home/abc/18349/lab4/tasks/libc/include/task.h \
-  /home/abc/18349/lab4/tasks/libc/include/unistd.h \
-  /home/abc/18349/lab4/tasks/libc/include/bits/fileno.h
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/dagger/dagger.o:  \
+ /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/dagger/dagger.c \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/stdio.h \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/stdarg.h \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/sys/types.h \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/bits/types.h \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/task.h \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/unistd.h \
+  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/bits/fileno.h
 
-/home/abc/18349/lab4/tasks/libc/include/stdio.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/stdio.h:
 
-/home/abc/18349/lab4/tasks/libc/include/stdarg.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/stdarg.h:
 
-/home/abc/18349/lab4/tasks/libc/include/sys/types.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/sys/types.h:
 
-/home/abc/18349/lab4/tasks/libc/include/bits/types.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/bits/types.h:
 
-/home/abc/18349/lab4/tasks/libc/include/task.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/task.h:
 
-/home/abc/18349/lab4/tasks/libc/include/unistd.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/unistd.h:
 
-/home/abc/18349/lab4/tasks/libc/include/bits/fileno.h:
+/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/bits/fileno.h:
