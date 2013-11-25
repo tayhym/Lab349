@@ -23,6 +23,7 @@ tcb_t system_tcb[OS_MAX_TASKS]; /*allocate memory for system TCBs */
 
 void addIdleTask();
 void makeTasksRunnable(size_t num_tasks);
+void launchHighestPrio(void);
 
 void sched_init(task_t* main_task  __attribute__((unused)))
 {	// not used. 	
@@ -72,20 +73,41 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 		system_tcb[i].context = tcbContext;
 		system_tcb[i].holds_lock = 0;
 		system_tcb[i].sleep_queue = (void *)0x0; 
-		system_tcb[i].kstack_high[0] =(uint32_t) system_tcb[i].kstack;//kstack for svc operations
+		system_tcb[i].kstack_high[0] =(uint32_t) system_tcb[i].kstack;//kstack for svc 																		    operations
 	}
 
 	// add idle task
 	addIdleTask();
 	
 	makeTasksRunnable(num_tasks);
-
+	
+	/* launch highest priority task */
+	launchHighestPrio();	
 
 }
 
 
 //*****************************helper function *****************************************
 
+
+// launch highest priority task
+void launchHighestPrio() {
+	unsigned prio = highest_prio();
+	/* extract r4 = user program entry point
+	 *	  	   r5 = prog argument 0
+	 *		   r6 = user stack pointer 
+	 */			 
+	unsigned entryPoint = system_tcb[prio].context.r4;
+	unsigned progData = system_tcb[prio].context.r5;
+	unsigned userSp = system_tcb[prio].context.r6;
+	/* push to registers, and launch task */
+	asm volatile("mov %[value], r4": [value] "=r" (entryPoint) : );
+	asm volatile("mov %[value], r5": [value] "=r" (progData) : );
+	asm volatile("mov %[value], r6": [value] "=r" (userSp) : );
+	asm volatile("mov %[value], r8": [value] "=r" (global_data) :);
+	
+	launch_task();
+}
 
 // make tasks, other than idle task, runnable
 void makeTasksRunnable(size_t num_tasks) {	
