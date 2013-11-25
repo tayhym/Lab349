@@ -92,9 +92,12 @@ ssize_t write_syscall(int fd  __attribute__((unused)), const void *cbuf  __attri
 		return -EFAULT;
 	}
 
+	puts("a\n");
+	
 	while (bytesWritten < count) {
 		char c = *(buf+bytesWritten);
 		if ( (int)c == 0 || (int)c == 3 || (int)c == 4 ){
+			puts("b\n");
 			return bytesWritten;
 		}
 		else {

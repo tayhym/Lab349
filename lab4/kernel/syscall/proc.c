@@ -122,6 +122,7 @@ int event_wait(unsigned int dev  __attribute__((unused)))
 	if (dev > NUM_DEVICES) {
 		return -EINVAL;
 	}
+	printf("event_wait");
 	dev_wait(dev);
   	
 	return 0; // Return 0 to indicate success

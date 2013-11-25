@@ -9,11 +9,9 @@
 
 #include <types.h>
 #include <assert.h>
-
 #include <config.h>
 #include <kernel.h>
 #include "sched_i.h"
-
 #include <arm/exception.h>
 
 #ifdef DEBUG_MUTEX
@@ -115,16 +113,19 @@ void dispatch_sleep(void)
 {	
 	disable_interrupts();
 	// remove current task from run-bits, if not idle 
+
+	printf("dispatch_sleep\n");
 	if (cur_tcb->native_prio != IDLE_PRIO) {
 		runqueue_remove(cur_tcb->native_prio);
 	} 
 	unsigned prio  = highest_prio();
 	unsigned cur_prio = get_cur_prio();
+	printf("ctx_switch_full\n");
 	ctx_switch_full(&system_tcb[prio].context, &system_tcb[cur_prio].context);
-	
+	printf("returned\n");
 	// now in new context, set cur_tcb
 	cur_tcb = &system_tcb[prio];
-	
+	printf("return from dispatch\n");
 	enable_interrupts();	
 }
 

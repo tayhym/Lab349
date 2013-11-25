@@ -57,10 +57,10 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 
 	size_t i;
 
+	printf("num tasks = %d\n",(int)num_tasks);
 	for (i=0; i<num_tasks;i++) {
-		printf("num tasks = %d",(int)num_tasks);
-		printf("i = %d",(int) i);
-		printf("r4 = %d\n",(int) tasks[i]->lambda);
+		printf("i = %d\n",(int) i);
+		printf("r4 = %x\n",(int) tasks[i]->lambda);
 		//initialize empty context		
 		sched_context_t tcbContext = {.r4 = (unsigned) tasks[i]->lambda, // user_entry_point
 									  .r5 = (unsigned) tasks[i]->data,   // user argument 0

@@ -47,28 +47,15 @@ FUNC(ctx_switch_full)
 
 	
 	@ save current context	
-	str r4, [r1, #0]	
-	str r5, [r1, #4]
-	str r6, [r1, #8]
-	str r7, [r1, #12] 
-	str r8, [r1, #16]
-	str r9, [r1, #20]
-	str r10, [r1, #24]
-	str r11, [r1, #28]
-	str sp, [r1, #32]
-	str lr, [r1, #36]
+	stmfd r1!, {r4-r11, sp, lr}
 	
 	@load new context
-	ldr r4, [r0, #0]	
-	ldr r5, [r0, #4]
-	ldr r6, [r0, #8]
-	ldr r7, [r0, #12] 
-	ldr r8, [r0, #16]
-	ldr r9, [r0, #20]
-	ldr r10, [r0, #24]
-	ldr r11, [r0, #28]
-	ldr sp, [r0, #32]
-	ldr lr, [r0, #36]
+	ldmfd r0!, {r4-r11, sp, lr}
+	
+	@ check whether original function occured before
+	cmp lr, #0
+	beq launch_task  @ launch new task
+	@ otherwise, jump back to where original function left off
 	mov pc, lr
 
 
@@ -78,16 +65,7 @@ FUNC(ctx_switch_full)
 FUNC(ctx_switch_half)
 	
 	@load new context
-	ldr r4, [r0, #0]	
-	ldr r5, [r0, #4]
-	ldr r6, [r0, #8]
-	ldr r7, [r0, #12] 
-	ldr r8, [r0, #16]
-	ldr r9, [r0, #20]
-	ldr r10, [r0, #24]
-	ldr r11, [r0, #28]
-	ldr sp, [r0, #32]
-	ldr lr, [r0, #36]
+	ldmfd r0!, {r4-r11, sp, lr}
 	
 	@ check whether original function occured before
 	cmp lr, #0

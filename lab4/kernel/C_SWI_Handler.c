@@ -25,6 +25,7 @@
  * returns a return value, depending on which swi_handler was called.
  */
 int C_SWI_Handler(int swi_Num, unsigned int *regs) {
+	printf("swi_num : %x\n",swi_Num);
 	switch( swi_Num ) {
 		case READ_SWI: return read_syscall((int)regs[0], (char *)regs[1], (size_t)regs[2]);
 		case WRITE_SWI: return write_syscall((int)regs[0], (char *)regs[1], (size_t)regs[2]);
@@ -38,7 +39,6 @@ int C_SWI_Handler(int swi_Num, unsigned int *regs) {
 		case MUTEX_UNLOCK: return mutex_unlock((int)regs[0]);
 		case EVENT_WAIT: return event_wait((unsigned int)regs[0]);
 		default:
-			// should not reach here 
 			invalid_syscall(swi_Num);
 	}
 

@@ -29,5 +29,5 @@ S_Handler:
 	add	sp, sp, #12
 	msr 	spsr, r1 
 	add 	sp, sp, #4 
-	ldmfd 	sp!, {r1-r3,  r8, ip, lr, pc}^	
+	ldmfd 	sp!, {r1-r3,  r8, ip, lr, pc}^
 

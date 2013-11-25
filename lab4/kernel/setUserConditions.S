@@ -6,10 +6,10 @@
        	.global globArray
                   
 setUserConditions:
-	mrs	r4, cpsr	@ load r4 with cpsr
+	mrs		r4, cpsr	@ load r4 with cpsr
 	bic 	r4, r4, #0xff	@ clear all masks
-	orr	r4, r4, #0x10	@ set USER mode bits
-	msr	cpsr, r4	@ switch to USER mode
-	mov	sp, r0		@ set stack pointer to new user stack
-	mov	pc, r1		@ load user program 
+	orr		r4, r4, #0x10	@ set USER mode bits
+	msr		cpsr, r4	@ switch to USER mode
+	mov		sp, r0		@ set stack pointer to new user stack
+	mov		pc, r1		@ load user program 
 

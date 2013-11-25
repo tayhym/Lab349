@@ -1,12 +1,11 @@
- \
- /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/stdlib/atoi.o:  \
- /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/stdlib/atoi.c \
-  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/stdlib.h \
-  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/ctype.h \
-  /home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/inline.h
+/home/abc/18349/lab4/tasks/libc/stdlib/atoi.o:  \
+ /home/abc/18349/lab4/tasks/libc/stdlib/atoi.c \
+  /home/abc/18349/lab4/tasks/libc/include/stdlib.h \
+  /home/abc/18349/lab4/tasks/libc/include/ctype.h \
+  /home/abc/18349/lab4/tasks/libc/include/inline.h
 
-/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/stdlib.h:
+/home/abc/18349/lab4/tasks/libc/include/stdlib.h:
 
-/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/ctype.h:
+/home/abc/18349/lab4/tasks/libc/include/ctype.h:
 
-/home/matthew/Documents/18-349/Lab349/Lab349/lab4/tasks/libc/include/inline.h:
+/home/abc/18349/lab4/tasks/libc/include/inline.h:

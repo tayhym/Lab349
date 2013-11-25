@@ -49,7 +49,6 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 	}
 	allocate_tasks(pointerArray, num_tasks);
 	
-
 	assert(0); //task_create only returns error conditions
   	return 1; /* remove this line after adding your code */
 }
