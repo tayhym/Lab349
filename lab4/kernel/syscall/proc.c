@@ -30,7 +30,7 @@ void scheduleTasks(task_t *tasks, size_t num_tasks);
 
 int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
 {
-	int errorValue;	
+	int errorValue;	size_t i; task_t *pointerArray[num_tasks];
 	// init empty run-queue 
 	runqueue_init();
 	// schedule TCBs 
@@ -40,11 +40,15 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 	if (errorValue != 0) {
 		return errorValue;
 	}
+
 	// create TCBs to house tasks and make runnable. 
 	// also launches highest priority task  
-	allocate_tasks(&tasks, num_tasks);
+	// create array of task_t * (pointers)
+	for (i = 0;i<num_tasks;i++) { 
+		pointerArray[i] = &tasks[i];
+	}
+	allocate_tasks(pointerArray, num_tasks);
 	
-
 	assert(0); //task_create only returns error conditions
   	return 1; /* remove this line after adding your code */
 }

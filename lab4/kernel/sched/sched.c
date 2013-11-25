@@ -54,20 +54,22 @@ static void __attribute__((unused)) idle(void)
  */
 void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
 {
-	task_t *taskList = *tasks;
+
 	size_t i;
 
 	for (i=0; i<num_tasks;i++) {
 		printf("num tasks = %d",(int)num_tasks);
 		printf("i = %d",(int) i);
+		printf("r4 = %d\n",(int) tasks[i]->lambda);
 		//initialize empty context		
-		sched_context_t tcbContext = {.r4 = (unsigned) taskList[i].lambda, // user_entry_point
-									  .r5 = (unsigned) taskList[i].data,   // user argument 0
-									  .r6 = (unsigned) taskList[i].stack_pos, // user sp
+		sched_context_t tcbContext = {.r4 = (unsigned) tasks[i]->lambda, // user_entry_point
+									  .r5 = (unsigned) tasks[i]->data,   // user argument 0
+									  .r6 = (unsigned) tasks[i]->stack_pos, // user sp
 								      .r7 = 0, .r8 = 0, .r9 = 0, 
 									  .r10 = 0, .r11 = 0, 
-									  .sp = taskList[i].stack_pos, // current user sp
-									  .lr = taskList[i].lambda};  // current user lr
+									  .sp = (void *)(((char*) system_tcb[i].kstack) + 												OS_KSTACK_SIZE - 4),
+																					// kstack 
+									  .lr = 0};  // current user lr
 										
 		//initialize empty tcb
 		system_tcb[i].native_prio = i;
@@ -75,11 +77,11 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 		system_tcb[i].context = tcbContext;
 		system_tcb[i].holds_lock = 0;
 		system_tcb[i].sleep_queue = (void *)0x0; 
-		system_tcb[i].kstack_high[0] =(uint32_t) system_tcb[i].kstack;//kstack for svc 																		    operations
+		system_tcb[i].kstack_high[0] =(uint32_t) system_tcb[i].kstack;//(not used) kstack for 																		    svc operations
 	}
 
 	printf("addIdleTask\n");
-	// add idle task
+	// add idle task and init the dispatcher
 	addIdleTask();
 	
 	printf("makeTasksRunnable\n");
@@ -114,8 +116,6 @@ void launchHighestPrio() {
 	/* dispatch to current priority group */ 
 	printf("dispatch no save\n");	
 	dispatch_nosave();
-	printf("launch task\n");
-	launch_task();
 }
 
 // make tasks, other than idle task, runnable
@@ -136,7 +136,7 @@ void addIdleTask() {
 								  .r7 = 0, .r8 = 0, .r9 = 0,  
 								  .r10 = 0, .r11 = 0, 
 								  .sp = (unsigned *) IDLE_STACK_POS, // current sp
-							      .lr = idle            // current lr  
+							      .lr = 0x0            
 								 };
 	
 	system_tcb[IDLE_PRIO].native_prio = IDLE_PRIO;
