@@ -75,6 +75,7 @@ void dev_wait(unsigned int dev __attribute__((unused)))
 	}
 
 	currSleepQueue = get_cur_tcb();
+
 	currSleepQueue->sleep_queue = 0;
 
 	enable_interrupts();

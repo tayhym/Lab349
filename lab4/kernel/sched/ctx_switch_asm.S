@@ -47,11 +47,11 @@ FUNC(ctx_switch_full)
 
 	
 	@ save current context	
-	stmfd r1!, {r4-r11, sp, lr}
+	stmia r1!, {r4-r11, sp, lr}
 	
 	@load new context
-	ldmfd r0!, {r4-r11, sp, lr}
-
+	ldmia r0!, {r4-r11, sp, lr}
+	
 	@ check whether original function occured before
 	cmp lr, #0
 	beq launch_task  @ launch new task
@@ -65,7 +65,7 @@ FUNC(ctx_switch_full)
 FUNC(ctx_switch_half)
 	
 	@load new context
-	ldmfd r0!, {r4-r11, sp, lr}
+	ldmia r0!, {r4-r11, sp, lr}
 
 	@ check whether original function occured before
 	cmp lr, #0

@@ -118,11 +118,11 @@ void dispatch_sleep(void)
 			runqueue_add(cur_tcb, cur_tcb->native_prio);
 		}
 	}
-
-	ctx_switch_full(&system_tcb[prio].context, &system_tcb[get_cur_prio()].context);
+	// ctx_switch full does not return. interrupts enabled there.
 	cur_tcb = &system_tcb[prio];
+	ctx_switch_full(&system_tcb[prio].context, &system_tcb[get_cur_prio()].context);
 
-	enable_interrupts();
+	
 }
 
 /**

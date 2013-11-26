@@ -49,7 +49,7 @@ void dev_init(void)
 {
    	int i;
 	//initialize all devices to default values
-	for (i = 0; i < NUM_DEVICES; i--) {
+	for (i = 0; i < NUM_DEVICES; i++) {
 		devices[i].sleep_queue = 0; //Empty sleep queue
 		//Next match based on current time + dev freq
 		devices[i].next_match = clock + dev_freq[i]; 
@@ -75,6 +75,7 @@ void dev_wait(unsigned int dev __attribute__((unused)))
 	}
 
 	currSleepQueue = get_cur_tcb();
+
 	currSleepQueue->sleep_queue = 0;
 
 	enable_interrupts();
