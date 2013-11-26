@@ -21,7 +21,7 @@ void panic(const char* str)
 void fun1(void* str)
 {
 	while(1)
-	{	puts("hithere\n");
+	{	
 		putchar((int)str);
 		if (event_wait(0) < 0)
 			panic("Dev 0 failed");
@@ -51,7 +51,7 @@ int main(int argc, char** argv)
 	tasks[1].stack_pos = (void*)0xa1000000;
 	tasks[1].C = 1;
 	tasks[1].T = PERIOD_DEV1;
-	//puts("from user main !");
+	puts("from user main !");
 	
 	task_create(tasks, 2);
 	argc=argc; /* remove compiler warning */

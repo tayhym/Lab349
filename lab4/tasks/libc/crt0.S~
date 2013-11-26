@@ -29,5 +29,5 @@ _start:
     ldmfd sp!, {r14} @ restore link register used during branch         
         
 _loop:
-	b	_loop    
+	mov pc, #0   
                 

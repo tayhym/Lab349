@@ -1,5 +1,2 @@
 /home/abc/18349/lab4/kernel/S_Handler.o:  \
- /home/abc/18349/lab4/kernel/S_Handler.S \
-  /home/abc/18349/lab4/kernel/include/arm/psr.h
-
-/home/abc/18349/lab4/kernel/include/arm/psr.h:
+ /home/abc/18349/lab4/kernel/S_Handler.S

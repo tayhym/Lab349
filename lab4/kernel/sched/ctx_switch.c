@@ -42,30 +42,30 @@ void dispatch_init(tcb_t* idle __attribute__((unused)))
  */
 void dispatch_save(void)
 {	
-	// disable interrupts - if first time run task, then launch task. else, dispatch no 		save.
-	disable_interrupts();
-	
-	unsigned linkReg = (unsigned) cur_tcb->context.lr; // check if first time run
-	unsigned prio;
-	unsigned cur_prio;
+	disable_interrupts(); 
+    printf("dispatch_save \n");
 
-	prio  = highest_prio();
-	// set cur_tcb 	
-	cur_tcb = &system_tcb[prio];
+	unsigned linkReg = (unsigned) cur_tcb->context.lr; //check if first time run
+	unsigned prio = highest_prio();
+	unsigned cur_prio;
 	
+	cur_tcb = &system_tcb[prio];
 	if (linkReg == 0) {
-		// first time launching task
-		// get new context		
 		cur_prio = get_cur_prio();
 		ctx_switch_full(&system_tcb[prio].context, &system_tcb[cur_prio].context);
 	}
 	else {
-		// context switch half to get r5 to new context
-		ctx_switch_half(&system_tcb[prio].context);	
-		launch_task();			
+		ctx_switch_half(&system_tcb[prio].context);
+		launch_task();
 	}
-	//enable interrupts
 	enable_interrupts();
+
+//    tcb_t *tmp = cur_tcb;
+//   tcb_t *hp = runqueue_remove(highest_prio());
+//   runqueue_add(cur_tcb,cur_tcb->native_prio);
+//    cur_tcb = hp; 
+//    ctx_switch_full(&(hp->context),&(tmp->context)) ;
+//    enable_interrupts();
 }
 
 /**
@@ -76,29 +76,23 @@ void dispatch_save(void)
  */
 void dispatch_nosave(void)
 {	
-	// disable interrupts
-	disable_interrupts();
-	printf("got here0\n");
-	// temporarily remove current task, to find next highest priority
-	if (cur_tcb->native_prio != IDLE_PRIO) {
-		runqueue_remove(cur_tcb->native_prio);
-	}
-	unsigned prio  = highest_prio();
-	// add back current task	
-	if (cur_tcb->native_prio != IDLE_PRIO) {
-		runqueue_add(cur_tcb, cur_tcb->native_prio);
-	} 	
-	printf("got here\n");
-	// now in new task's context, set cur_tcb
-	cur_tcb = &system_tcb[prio];
+	disable_interrupts(); 
+	printf("dispatch_nosave\n");
 
-	printf("got here2\n");
-	// context switch
-	ctx_switch_half(&system_tcb[prio].context);
-	
-	
-	printf("got here3\n");
-	// enable interrupts
+	unsigned prio = highest_prio();
+
+	if (prio == cur_tcb->native_prio) {
+		//Find next highest priority if current task is highest priority
+		if (cur_tcb->native_prio != IDLE_PRIO) {
+			runqueue_remove(cur_tcb->native_prio);
+			prio = highest_prio();
+			runqueue_add(cur_tcb, cur_tcb->native_prio);
+		}
+	}
+
+	//Context switch to next task
+	cur_tcb = runqueue_remove(prio);
+	ctx_switch_half(&(cur_tcb->context));
 	enable_interrupts();
 }
 
@@ -111,22 +105,24 @@ void dispatch_nosave(void)
  */
 void dispatch_sleep(void)
 {	
-	disable_interrupts();
-	// remove current task from run-bits, if not idle 
-
 	printf("dispatch_sleep\n");
-	if (cur_tcb->native_prio != IDLE_PRIO) {
-		runqueue_remove(cur_tcb->native_prio);
-	} 
-	unsigned prio  = highest_prio();
-	unsigned cur_prio = get_cur_prio();
-	printf("ctx_switch_full\n");
-	ctx_switch_full(&system_tcb[prio].context, &system_tcb[cur_prio].context);
-	printf("returned\n");
-	// now in new context, set cur_tcb
+	disable_interrupts(); 
+
+	unsigned prio = highest_prio();
+
+	if (prio == cur_tcb->native_prio) {
+		//Find next highest priority if current task is highest priority
+		if (cur_tcb->native_prio != IDLE_PRIO) {
+			runqueue_remove(cur_tcb->native_prio);
+			prio = highest_prio();
+			runqueue_add(cur_tcb, cur_tcb->native_prio);
+		}
+	}
+
+	ctx_switch_full(&system_tcb[prio].context, &system_tcb[get_cur_prio()].context);
 	cur_tcb = &system_tcb[prio];
-	printf("return from dispatch\n");
-	enable_interrupts();	
+
+	enable_interrupts();
 }
 
 /**

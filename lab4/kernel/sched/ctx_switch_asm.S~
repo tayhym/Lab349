@@ -52,8 +52,10 @@ FUNC(ctx_switch_full)
 	@load new context
 	ldmfd r0!, {r4-r11, sp, lr}
 	
+	@mov pc, lr
+
 	@ check whether original function occured before
-	csmp lr, #0
+	cmp lr, #0
 	beq launch_task  @ launch new task
 	@ otherwise, jump back to where original function left off
 	mov pc, lr
@@ -67,6 +69,8 @@ FUNC(ctx_switch_half)
 	@load new context
 	ldmfd r0!, {r4-r11, sp, lr}
 	
+	@mov pc, lr
+
 	@ check whether original function occured before
 	cmp lr, #0
 	beq launch_task  @ launch new task

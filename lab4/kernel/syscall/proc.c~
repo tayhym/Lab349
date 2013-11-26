@@ -30,24 +30,23 @@ void scheduleTasks(task_t *tasks, size_t num_tasks);
 
 int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
 {
-	int errorValue;	size_t i; task_t *pointerArray[num_tasks];
+	printf("task_create\n");
 	// init empty run-queue 
 	runqueue_init();
 	// schedule TCBs 
 	scheduleTasks(tasks, num_tasks);
 	// check for errors
-	errorValue = checkForError(tasks, num_tasks);
-	if (errorValue != 0) {
-		return errorValue;
+	if (num_tasks > (OS_MAX_TASKS-2)) {
+		return -EINVAL;
+	}
+	else if (!(((unsigned) tasks >= RAM_START_ADDR) && ((unsigned)tasks <= RAM_END_ADDR))) {
+		return -EFAULT;
+	}
+	else if (tasksNotSchedulable(tasks, num_tasks)) {
+		return -ESCHED;	
 	}
 
-	// create TCBs to house tasks and make runnable. 
-	// also launches highest priority task  
-	// create array of task_t * (pointers)
-	for (i = 0;i<num_tasks;i++) { 
-		pointerArray[i] = &tasks[i];
-	}
-	allocate_tasks(pointerArray, num_tasks);
+	allocate_tasks(&tasks, num_tasks);
 	
 	assert(0); //task_create only returns error conditions
   	return 1; /* remove this line after adding your code */
@@ -74,22 +73,6 @@ void scheduleTasks(task_t *tasks, size_t num_tasks) {
 	}
 }	
 
-
-// checks for error. return 0 on no error. 	
-int checkForError(task_t *tasks, size_t num_tasks) {
-	// use 0 for king-for-a-day, as mentioned in lecture. 63 for idle task	
-	if (num_tasks>62) {
-		return -EINVAL;
-	}
-	else if (!(((unsigned) tasks >= RAM_START_ADDR) && ((unsigned)tasks <= RAM_END_ADDR))) {
-		return -EFAULT;
-	}
-	else if (tasksNotSchedulable(tasks, num_tasks) == 1) {
-		return -ESCHED;	
-	} 
-	return 0;
-}
-
 // find if tasks can be scheduled - 1 if not schedulable
 int tasksNotSchedulable(task_t *tasks, size_t num_tasks) {
 	double utilization = findUtilization(tasks, num_tasks);
@@ -105,7 +88,7 @@ int tasksNotSchedulable(task_t *tasks, size_t num_tasks) {
 double findUtilization(task_t *tasks, size_t num_tasks) {
 	size_t i;
 	double utilization = 0.0; 		
-	for (i=0;i<num_tasks;i++) {
+	for ( i = 0; i < num_tasks; i++) {
 		double period = tasks[i].T;
 		double util = tasks[i].C/period;
 		utilization += util;
@@ -119,7 +102,8 @@ double findUtilization(task_t *tasks, size_t num_tasks) {
 
 int event_wait(unsigned int dev  __attribute__((unused)))
 {
-	if (dev > NUM_DEVICES) {
+	printf("event_wait\n");
+	if (dev >= NUM_DEVICES) {
 		return -EINVAL;
 	}
 	dev_wait(dev);

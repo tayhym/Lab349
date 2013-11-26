@@ -22,7 +22,7 @@ extern int setUserConditions(unsigned int sp, int addr);
 
 uint32_t global_data;
 volatile uint32_t clock;
-unsigned int resolution = OS_TICKS_PER_SEC
+unsigned int resolution = OS_TICKS_PER_SEC;
 
 int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused)), uint32_t table)
 {
@@ -73,9 +73,10 @@ int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused))
 	*kernelIrqAddr = LDR_INSTR;        
 	*((unsigned int*)kernelIrqAddr + 1) = (unsigned int)((unsigned int*)irq_wrapper);                  
 
+	setupIRQStack(IRQ_SP);	
+	
 	/* Initialize timer, not using IRQ stack-> uses SVC stack */
 	clock = 0;
-		
 
 	/* Calculate time between IRQs based on desired resolution */
 	offset = (resolution * OSTMR_FREQ_VERDEX)/1000;

@@ -73,9 +73,10 @@ int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused))
 	*kernelIrqAddr = LDR_INSTR;        
 	*((unsigned int*)kernelIrqAddr + 1) = (unsigned int)((unsigned int*)irq_wrapper);                  
 
+	setIRQStack(IRQ_SP);	
+	
 	/* Initialize timer, not using IRQ stack-> uses SVC stack */
 	clock = 0;
-		
 
 	/* Calculate time between IRQs based on desired resolution */
 	offset = (resolution * OSTMR_FREQ_VERDEX)/1000;

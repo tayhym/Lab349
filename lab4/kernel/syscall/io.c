@@ -80,7 +80,7 @@ ssize_t read_syscall(int fd __attribute__((unused)), void *cbuf __attribute__((u
 ssize_t write_syscall(int fd  __attribute__((unused)), const void *cbuf  __attribute__((unused)), size_t count  __attribute__((unused)))
 {
 	//set useful variables
-	char *buf = (char *)buf;
+	const char *buf = (const char *)cbuf;
 	size_t bytesWritten = 0;
 
 	//check for bad file descriptor 
@@ -91,13 +91,10 @@ ssize_t write_syscall(int fd  __attribute__((unused)), const void *cbuf  __attri
 				|| valid_addr(cbuf, count, RAM_START_ADDR, RAM_END_ADDR))) {
 		return -EFAULT;
 	}
-
-	puts("a\n");
 	
 	while (bytesWritten < count) {
 		char c = *(buf+bytesWritten);
 		if ( (int)c == 0 || (int)c == 3 || (int)c == 4 ){
-			puts("b\n");
 			return bytesWritten;
 		}
 		else {
