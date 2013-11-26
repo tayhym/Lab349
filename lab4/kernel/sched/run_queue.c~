@@ -96,7 +96,8 @@ void runqueue_add(tcb_t *tcb  __attribute__((unused)), uint8_t prio  __attribute
 	group_run_bits = group_run_bits | ostcby_bit;
 	
 	ostcbx_bit = 0x1 << ostcbx;
-	run_bits[ostcby] = run_bits[ostcby] | ostcbx_bit;	
+	run_bits[ostcby] = run_bits[ostcby] | ostcbx_bit;
+
 }
 
 
@@ -109,6 +110,7 @@ void runqueue_add(tcb_t *tcb  __attribute__((unused)), uint8_t prio  __attribute
  */
 tcb_t *runqueue_remove(uint8_t prio  __attribute__((unused)))
 {
+
 	// get tcb at given priority
 	tcb_t *tcb = run_list[prio];
 	// set tcb at prio to empty tcb
@@ -120,11 +122,14 @@ tcb_t *runqueue_remove(uint8_t prio  __attribute__((unused)))
 	int ostcbx = (prio & 0x7);
 	
 	unsigned ostcby_bit = 0x1 << ostcby;
-	group_run_bits = group_run_bits & (~ostcby_bit);
+
 	
 	unsigned ostcbx_bit = 0x1 << ostcbx;
 	run_bits[ostcby] = run_bits[ostcby] & (~ostcbx_bit);	
-
+	/* remove the group run bits if no more tasks in that group running */
+	if (run_bits[ostcby] == 0) {
+		group_run_bits = group_run_bits & (~ostcby_bit);
+	printf("REMOVED PRIO %d, new run_bits[0] = %x\n", prio, run_bits[ostcby]);	
 	return tcb;
 }
 
@@ -134,8 +139,11 @@ tcb_t *runqueue_remove(uint8_t prio  __attribute__((unused)))
  */
 uint8_t highest_prio(void)
 {
+	printf("group_run_bits = %x\n", group_run_bits);
+	
 	unsigned y = prio_unmap_table[group_run_bits];
 	unsigned x = prio_unmap_table[run_bits[y]];
+	printf("prio_unmap_table x = %d\n", (int) prio_unmap_table[run_bits[y]]);
 	uint8_t prio = (y<<3) + x;
 	return prio;		
 }

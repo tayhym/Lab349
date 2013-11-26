@@ -88,11 +88,13 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 void launchHighestPrio() {
 	printf("launchHighestPrio\n");
 	unsigned prio = highest_prio();
+	runqueue_remove(prio);
+	prio = highest_prio();
 	/* extract r4 = user program entry point
 	 *	  	   r5 = prog argument 0
 	 *		   r6 = user stack pointer 
 	 */			 
-	printf("highest prio %x\n",(int) prio);	
+	printf("highest prio %d\n",(int) prio);	
 	unsigned entryPoint = system_tcb[prio].context.r4;
 	printf("entryPoint %x\n", (int) entryPoint);	
 	unsigned progData = system_tcb[prio].context.r5;
@@ -110,7 +112,8 @@ void makeTasksRunnable(size_t num_tasks) {
 	for (i = 0; i < num_tasks; i++) {
 		prio = i;
 		disable_interrupts();
-		runqueue_add(&system_tcb[i], prio);		
+		runqueue_add(&system_tcb[i], prio);	
+		printf("added prio %d",prio);	
 		enable_interrupts();	
 	}		
 }
