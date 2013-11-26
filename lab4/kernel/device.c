@@ -69,16 +69,25 @@ void dev_wait(unsigned int dev __attribute__((unused)))
 	printf("dev_wait\n");
 	
 	tcb_t *currSleepQueue = devices[dev].sleep_queue;
-
-	while (currSleepQueue != 0) {
-		currSleepQueue = currSleepQueue->sleep_queue;
+	
+	if (currSleepQueue == 0) {
+		//empty device sleepQueue, add to device and initialize
+		currSleepQueue = get_cur_tcb();
+		currSleepQueue->sleep_queue = 0;
+		devices[dev].sleep_queue = currSleepQueue;
 	}
-
-	currSleepQueue = get_cur_tcb();
-
-	currSleepQueue->sleep_queue = 0;
-
-	enable_interrupts();
+	else {
+		printf("second DEV_WAIT on NON_EMPTY QUEUE\n"); // shouldnt reach here for these
+									//tests
+		panic("reached dev_wait Second\n");
+		// search for empty spot and append			
+		while (currSleepQueue->sleep_queue != 0) {
+			currSleepQueue = currSleepQueue->sleep_queue;
+		}
+		currSleepQueue->sleep_queue = get_cur_tcb();
+		currSleepQueue->sleep_queue->sleep_queue = 0;
+	}
+	//enable_interrupts();
 	dispatch_sleep();
 }
 

@@ -52,9 +52,13 @@ void dispatch_save(void)
 	cur_tcb = &system_tcb[prio];
 	if (linkReg == 0) {
 		cur_prio = get_cur_prio();
+		// set new cur_tcb 
+		cur_tcb = &system_tcb[prio];
 		ctx_switch_full(&system_tcb[prio].context, &system_tcb[cur_prio].context);
 	}
 	else {
+		// set new cur_tcb 
+		cur_tcb = &system_tcb[prio];
 		ctx_switch_half(&system_tcb[prio].context);
 		launch_task();
 	}
@@ -78,22 +82,38 @@ void dispatch_nosave(void)
 {	
 	disable_interrupts(); 
 	printf("dispatch_nosave\n");
-
 	unsigned prio = highest_prio();
+	printf("prio = %d\n",prio);
+	unsigned cur_prio = cur_tcb->native_prio;
 
-	if (prio == cur_tcb->native_prio) {
-		//Find next highest priority if current task is highest priority
-		if (cur_tcb->native_prio != IDLE_PRIO) {
-			runqueue_remove(cur_tcb->native_prio);
+	
+
+	if (prio == cur_prio) {
+		//Find next highest priority if current task is highest priority - not likely 
+		// to be used. so return;				
+		printf("PRIO== cur_prio of %d ?\n", (int) cur_prio);
+		panic("hi");
+		if (cur_prio != IDLE_PRIO) {
+			runqueue_remove(cur_prio);
 			prio = highest_prio();
-			runqueue_add(cur_tcb, cur_tcb->native_prio);
+			runqueue_add(cur_tcb, cur_prio);
+			// set new current tcb 
+			cur_tcb = &system_tcb[prio];
+			ctx_switch_half(&(system_tcb[prio].context));
+		}
+		else {
+			cur_tcb = &system_tcb[prio];
+			// cur_prio == prio == IDLE_PRIO 
+			ctx_switch_half(&(cur_tcb->context));
 		}
 	}
+	
+	else {
+		// set new current tcb 
+		cur_tcb = &system_tcb[prio];
+		ctx_switch_half(&(system_tcb[prio].context));
+	}
 
-	//Context switch to next task
-	cur_tcb = runqueue_remove(prio);
-	ctx_switch_half(&(cur_tcb->context));
-	enable_interrupts();
 }
 
 
@@ -109,20 +129,24 @@ void dispatch_sleep(void)
 	disable_interrupts(); 
 
 	unsigned prio = highest_prio();
+	unsigned cur_prio = cur_tcb->native_prio;
+	
+	
 
-	if (prio == cur_tcb->native_prio) {
-		//Find next highest priority if current task is highest priority
-		if (cur_tcb->native_prio != IDLE_PRIO) {
-			runqueue_remove(cur_tcb->native_prio);
-			prio = highest_prio();
-			runqueue_add(cur_tcb, cur_tcb->native_prio);
-		}
+	if (cur_prio == IDLE_PRIO) {
+		printf("should not be calling dispatch sleep from idle task!\n");
+		panic("hi");
 	}
-	// ctx_switch full does not return. interrupts enabled there.
+	//Find next highest priority
+	runqueue_remove(cur_prio);
+	prio = highest_prio();
+	printf("new highest prio is %d\n", prio);
+
+	// set global cur_tcb 
 	cur_tcb = &system_tcb[prio];
+	// interrupts enabled in ctx_switch
 	ctx_switch_full(&system_tcb[prio].context, &system_tcb[get_cur_prio()].context);
 
-	
 }
 
 /**
