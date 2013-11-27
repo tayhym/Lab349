@@ -15,6 +15,7 @@ extern volatile unsigned long clock;
 
 /* Called by assembly I_Handler */
 void C_IRQ_Handler() {
+	printf("interrupt occured!\n");
 	/* Find which interrupt flags are set */
 	uint32_t isTimerInt = reg_read(INT_ICPR_ADDR);
 	/* Check if timer interrupt flag is set */
@@ -25,6 +26,7 @@ void C_IRQ_Handler() {
 		reg_set(OSTMR_OSSR_ADDR, OSTMR_OIER_E0);
 		/* Increment our personal clock*/
 		clock++;
+		printf("clock value= %d\n");
 		/* Update devices */
 		dev_update(clock);
 	}

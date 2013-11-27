@@ -103,16 +103,17 @@ void dev_update(unsigned long millis __attribute__((unused)))
 {
 	int i;
 	tcb_t* currTask;
-
+	
     for (i = 0; i < NUM_DEVICES; i++) {
 		// Check if time to wake up task from current device 
-        if (devices[i].next_match > millis) {
+        if (devices[i].next_match <= millis) {
 			disable_interrupts();
 			// Get next match time based on current time and dev freq
             devices[i].next_match = clock + dev_freq[i];
 			
 			// If dev sleep queue is empty, nothing to update
          	if (devices[i].sleep_queue != 0) {
+				
 		        for (currTask= devices[i].sleep_queue; currTask != 0; currTask=currTask->sleep_queue) {
 					// wake up each task in dev and add to run_queue
 		            runqueue_add(currTask, currTask->native_prio);

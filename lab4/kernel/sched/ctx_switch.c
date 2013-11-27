@@ -91,10 +91,7 @@ void dispatch_nosave(void)
 	disable_interrupts(); 
 	printf("dispatch_nosave\n");
 	unsigned prio = highest_prio();
-
 	unsigned cur_prio = cur_tcb->native_prio;
-
-	
 
 	if (prio == cur_prio) {
 		//Find next highest priority if current task is highest priority - not likely 
