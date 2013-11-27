@@ -61,6 +61,7 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
     dev_init();
 
     for (i = 0; i < num_tasks; i++) {
+	
 		sched_context_t tcbContext = {.r4 = (unsigned)(tasks[i]->lambda), //user entry point
 									  .r5 = (unsigned)(tasks[i]->data), //user argument 0
 									  .r6 = (unsigned)(tasks[i]->stack_pos), //user sp
@@ -74,6 +75,7 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 		system_tcb[i].holds_lock = 0;
 		system_tcb[i].sleep_queue = 0;
 		system_tcb[i].kstack_high[0] = (uint32_t)system_tcb[i].kstack;
+		printf("system_tcb[%d].context.r4 = %d\n",i,system_tcb[i].context.r4);
 	}
 
 	addIdleTask();

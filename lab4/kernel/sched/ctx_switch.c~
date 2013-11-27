@@ -151,7 +151,7 @@ void dispatch_sleep(void)
 	printf("system_tcb value of context's r5 is %x\n",(int) system_tcb[prio].context.r5);
 	printf("cur prio = %d prio = %d\n", cur_prio, prio);
 	// interrupts enabled in ctx_switch
-	ctx_switch_full(&system_tcb[prio].context, &system_tcb[cur_prio].context); /// reached 
+	ctx_switch_full(&(system_tcb[prio].context), &(system_tcb[cur_prio].context)); /// reached 
 	
 }
 

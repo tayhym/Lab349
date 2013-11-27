@@ -85,7 +85,7 @@ void dispatch_nosave(void)
 	unsigned prio = highest_prio();
 	printf("prio = %d\n",prio);
 	unsigned cur_prio = cur_tcb->native_prio;
-
+	printf("system_tcb[1]'s context value %d\n", system_tcb[1].context.r4);
 	
 
 	if (prio == cur_prio) {

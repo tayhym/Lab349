@@ -25,29 +25,35 @@
 double findUtilization(task_t *tasks, size_t num_tasks);
 int tasksNotSchedulable(task_t *tasks, size_t num_tasks);
 int checkForError(task_t *tasks, size_t num_tasks);
-void scheduleTasks(task_t *tasks, size_t num_tasks);
+void scheduleTasks(task_t **tasks, size_t num_tasks);
 
 
 int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
 {
-	printf("task_create\n");
+	int errorValue;	size_t i; 
+	task_t *taskArray[num_tasks];
 	// init empty run-queue 
 	runqueue_init();
 	// schedule TCBs 
-	scheduleTasks(tasks, num_tasks);
-	// check for errors
-	if (num_tasks > (OS_MAX_TASKS-2)) {
-		return -EINVAL;
-	}
-	else if (!(((unsigned) tasks >= RAM_START_ADDR) && ((unsigned)tasks <= RAM_END_ADDR))) {
-		return -EFAULT;
-	}
-	else if (tasksNotSchedulable(tasks, num_tasks)) {
-		return -ESCHED;	
-	}
+	printf("schedule tasks!\n");
 
-	allocate_tasks(&tasks, num_tasks);
+	// check for errors
+	errorValue = checkForError(tasks, num_tasks);
+	if (errorValue != 0) {
+		return errorValue;
+	}
 	
+	// create task array to house tasks 
+	for (i=0;i<num_tasks;i++) {
+		taskArray[i] = tasks;
+		tasks++;
+	}
+	scheduleTasks(taskArray, num_tasks);
+	// create TCBs to house tasks and make runnable. 	
+	// also launches highest priority task  
+	allocate_tasks(taskArray, num_tasks);
+	
+
 	assert(0); //task_create only returns error conditions
   	return 1; /* remove this line after adding your code */
 }
@@ -59,19 +65,36 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 
 
 // sort from smallest completion time to largest 
-void scheduleTasks(task_t *tasks, size_t num_tasks) {
+void scheduleTasks(task_t **tasks, size_t num_tasks) {
 	size_t x; size_t y;
 	for (x=0;x<num_tasks;x++) {
+		printf("scheduleTasks, task %d lambda = %d \n",(int)x,(int)tasks[x]->lambda);
 		for (y=0;y<num_tasks-1;y++) {
-			if (tasks[y].T > tasks[y+1].T) {
+			if (tasks[y]->T > tasks[y+1]->T) {
 				// swap 
-				task_t temp = tasks[y];
+				task_t *temp = tasks[y];
 				tasks[y] = tasks[y+1];
 				tasks[y+1] = temp;
 			}
 		}
 	}
 }	
+
+
+// checks for error. return 0 on no error. 	
+int checkForError(task_t *tasks, size_t num_tasks) {
+	// use 0 for king-for-a-day, as mentioned in lecture. 63 for idle task	
+	if (num_tasks>62) {
+		return -EINVAL;
+	}
+	else if (!(((unsigned) tasks >= RAM_START_ADDR) && ((unsigned)tasks <= RAM_END_ADDR))) {
+		return -EFAULT;
+	}
+	else if (tasksNotSchedulable(tasks, num_tasks) == 1) {
+		return -ESCHED;	
+	} 
+	return 0;
+}
 
 // find if tasks can be scheduled - 1 if not schedulable
 int tasksNotSchedulable(task_t *tasks, size_t num_tasks) {
@@ -88,7 +111,7 @@ int tasksNotSchedulable(task_t *tasks, size_t num_tasks) {
 double findUtilization(task_t *tasks, size_t num_tasks) {
 	size_t i;
 	double utilization = 0.0; 		
-	for ( i = 0; i < num_tasks; i++) {
+	for (i=0;i<num_tasks;i++) {
 		double period = tasks[i].T;
 		double util = tasks[i].C/period;
 		utilization += util;
@@ -102,8 +125,7 @@ double findUtilization(task_t *tasks, size_t num_tasks) {
 
 int event_wait(unsigned int dev  __attribute__((unused)))
 {
-	printf("event_wait\n");
-	if (dev >= NUM_DEVICES) {
+	if (dev > NUM_DEVICES) {
 		return -EINVAL;
 	}
 	dev_wait(dev);
