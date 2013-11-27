@@ -66,8 +66,7 @@ void dev_init(void)
 void dev_wait(unsigned int dev __attribute__((unused)))
 {
 	disable_interrupts();
-	printf("dev_wait\n");
-	
+
 	tcb_t *currSleepQueue = devices[dev].sleep_queue;
 	
 	if (currSleepQueue == 0) {
@@ -103,30 +102,25 @@ void dev_update(unsigned long millis __attribute__((unused)))
 {
 	int i;
 	tcb_t* currTask;
-	
+	disable_interrupts();
     for (i = 0; i < NUM_DEVICES; i++) {
 		// Check if time to wake up task from current device 
         if (devices[i].next_match <= millis) {
-			disable_interrupts();
-			// Get next match time based on current time and dev freq
+			// update next match time
             devices[i].next_match = clock + dev_freq[i];
 			
-			// If dev sleep queue is empty, nothing to update
+			// update all devices on sleep queue
          	if (devices[i].sleep_queue != 0) {
-				
-		        for (currTask= devices[i].sleep_queue; currTask != 0; currTask=currTask->sleep_queue) {
+				// If dev sleep queue is empty, nothing to update
+		        for (currTask= devices[i].sleep_queue; currTask != 0; currTask=currTask->sleep_queue) 	{
 					// wake up each task in dev and add to run_queue
 		            runqueue_add(currTask, currTask->native_prio);
 		        }
 				// Reset current dev's sleep queue to empty
 		        devices[i].sleep_queue = 0;
-		            
-				enable_interrupts();
-		        dispatch_save();
 			}
         }
     }
-
-    enable_interrupts();
+	dispatch_save();
 }
 

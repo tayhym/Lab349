@@ -39,7 +39,6 @@ int C_SWI_Handler(int swi_Num, unsigned int *regs) {
 		case MUTEX_UNLOCK: return mutex_unlock((int)regs[0]);
 		case EVENT_WAIT: return event_wait((unsigned int)regs[0]);
 		default:
-			// should not reach here 
 			invalid_syscall(swi_Num);
 	}
 
