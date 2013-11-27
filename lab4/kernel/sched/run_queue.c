@@ -110,7 +110,6 @@ void runqueue_add(tcb_t *tcb  __attribute__((unused)), uint8_t prio  __attribute
  */
 tcb_t *runqueue_remove(uint8_t prio  __attribute__((unused)))
 {
-
 	// get tcb at given priority
 	tcb_t *tcb = run_list[prio];
 	// set tcb at prio to empty tcb

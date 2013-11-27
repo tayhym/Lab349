@@ -36,15 +36,14 @@ FUNC(launch_task)
 	msr     cpsr_c, #(PSR_MODE_USR)
 	mov     sp, r6
 	mov     r6, #0
-	ldr     lr, =0xdeadbeef   /* Causes a crash instead of calling the reset vector */
+	ldr     lr, =0xdeadbeef   /* Causes a crash instead of calling the reset vector */	
 	ldr 	r3, =global_data  /* restore r8 */
-	ldr 	r8, [r3]	
+	ldr 	r8, [r3]		
 	mov     pc, r4
 
 /* r0 points to the target context, r1 to the current context. */
 /* add your code to perform a full context switch */
 FUNC(ctx_switch_full)
-
 	
 	@ save current context	
 	stmia r1!, {r4-r11, sp, lr}
@@ -55,9 +54,9 @@ FUNC(ctx_switch_full)
 	@ check whether original function occured before
 	cmp lr, #0
 	beq launch_task  @ launch new task
-	@ otherwise, jump back to where original function left off
+	@ otherwise, jump back to where original function left off	
 	mov pc, lr
-
+	
 
 
 /* r0 points to target context */

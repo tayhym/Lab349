@@ -4,31 +4,31 @@
 
 @ On entering S_Handler, CPU has switched to SVC mode, and saves cpsr into spsr
 @ S_Handler stores registers on stack, stores saved user state (spsr)
-@ Before call to exit, restores link register from supervisor stack.           
-@ This thus supports reentrant calls to S_Handler                              
-	.global S_Handler
-	.global linkR
+@ Before call to exit, restores link register from supervisor stack.
+@ This thus supports reentrant calls to S_Handler
+        .global S_Handler
+        .global linkR
 
-S_Handler:                                                                     
-        sub	sp, sp, #4        	@ leave room on stack for spsr of (USER)      
-        stmfd	sp!, {r0-r12, lr} 	@ store gp regs, lr to prepare to call swi    
-        mrs	r2, spsr            	@ get spsr into gp registers
-        str	r2, [sp, #14*4]     	@ store spsr for return to user mode
-	mrs	r2, cpsr
-	bic	r2, r2, #0xec
-	msr	cpsr, r2
-        mov	r1, sp			@ pointer to parameters on stack        
-        ldr	r0, [lr, #-4]		@ extract swi number                    
-	bic	r0, r0, #0xff000000	@ extract 24 bit swi number 
-
-	ldr 	r4, =global_data	@ restore table
-	ldr 	r8, [r4] 
-	bl 	C_SWI_Handler
-	ldr 	r2, [sp, #14*4]		@ extract back user spsr into r2        
-        msr 	spsr, r2			@ restore spsr
-	add 	sp, sp, #4			@ adjust by 4 becuase r0 is ret val     
-        ldmfd 	sp!, {r1-r12, lr} 	@ restore gp registers, lr      
-        add 	sp, sp, #4   		@ reclaim space from spsr
-	movs 	pc, lr			@ return to user function
+#include <arm/psr.h>
+S_Handler:
+        stmfd         sp!, {lr}
+        stmfd         sp!, {r0-r3,r8,ip, lr}
+        mrs r0, spsr
+        stmfd         sp, {r0, sp, lr}^
+        sub         sp, sp, #12
+        ldr         r0, =global_data
+        ldr         r8, [r0]
+        msr         cpsr_c, #(PSR_MODE_SVC|PSR_FIQ)
+        
+        ldr         r0, [lr, #-4]        
+        bic         r0, r0, #0xff000000         
+        add         r1, sp, #12
+        mov         lr, pc
+        ldr         pc, =C_SWI_Handler
+        ldmfd         sp, {r1,sp,lr}^
+        add        sp, sp, #12
+        msr         spsr, r1
+        add         sp, sp, #4
+        ldmfd         sp!, {r1-r3, r8, ip, lr, pc}^    
 
 

@@ -43,7 +43,7 @@ void dispatch_init(tcb_t* idle __attribute__((unused)))
 void dispatch_save(void)
 {	
 	disable_interrupts(); 
-    printf("dispatch_save \n");
+    	printf("dispatch_save \n");
 
 	unsigned linkReg = (unsigned) cur_tcb->context.lr; //check if first time run
 	unsigned prio = highest_prio();
@@ -90,7 +90,7 @@ void dispatch_nosave(void)
 
 	if (prio == cur_prio) {
 		//Find next highest priority if current task is highest priority - not likely 
-		// to be used. so return;				
+		// to be used (for now in debug) so return;				
 		printf("PRIO== cur_prio of %d ?\n", (int) cur_prio);
 		panic("hi");
 		if (cur_prio != IDLE_PRIO) {
@@ -111,6 +111,7 @@ void dispatch_nosave(void)
 	else {
 		// set new current tcb 
 		cur_tcb = &system_tcb[prio];
+		printf("new tcb has prio: %d\n", system_tcb[prio].native_prio);
 		ctx_switch_half(&(system_tcb[prio].context));
 	}
 
@@ -142,11 +143,15 @@ void dispatch_sleep(void)
 	prio = highest_prio();
 	printf("new highest prio is %d\n", prio);
 
+	
 	// set global cur_tcb 
 	cur_tcb = &system_tcb[prio];
+	printf("system_tcb value of context's lr is %x\n",(int) system_tcb[prio].context.lr);
+	printf("system_tcb value of context's r4 is %x\n",(int) system_tcb[prio].context.r4);
+	printf("system_tcb value of context's r5 is %x\n",(int) system_tcb[prio].context.r5);
+	printf("cur prio = %d prio = %d\n", cur_prio, prio);
 	// interrupts enabled in ctx_switch
-	ctx_switch_full(&system_tcb[prio].context, &system_tcb[get_cur_prio()].context);
-
+	ctx_switch_full(&system_tcb[prio].context, &system_tcb[cur_prio].context); /// reached 
 	
 }
 

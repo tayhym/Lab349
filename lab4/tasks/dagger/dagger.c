@@ -30,6 +30,7 @@ void fun1(void* str)
 
 void fun2(void* str)
 {
+	putchar('<');
 	while(1)
 	{
 		putchar((int)str);
@@ -52,6 +53,7 @@ int main(int argc, char** argv)
 	tasks[1].C = 1;
 	tasks[1].T = PERIOD_DEV1;
 	puts("from user main !");
+	printf("PERIOD_DEV1 = %d\n", PERIOD_DEV1);
 	
 	task_create(tasks, 2);
 	argc=argc; /* remove compiler warning */

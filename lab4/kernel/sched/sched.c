@@ -67,6 +67,7 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 									  .r7 = 0, .r8 = 0, .r9 = 0, .r10 = 0, .r11 = 0,
 									  .sp = (void *)(((char *)system_tcb[i].kstack)+OS_KSTACK_SIZE-4),
 									  .lr = 0};
+		
 		system_tcb[i].native_prio = i;
 		system_tcb[i].cur_prio = i;
 		system_tcb[i].context = tcbContext;
@@ -88,8 +89,7 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 void launchHighestPrio() {
 	printf("launchHighestPrio\n");
 	unsigned prio = highest_prio();
-	runqueue_remove(prio);
-	prio = highest_prio();
+
 	/* extract r4 = user program entry point
 	 *	  	   r5 = prog argument 0
 	 *		   r6 = user stack pointer 

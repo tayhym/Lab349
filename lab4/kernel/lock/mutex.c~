@@ -94,7 +94,7 @@ int mutex_lock(int mutex  __attribute__((unused)))
 	currMutex->bLock = 1;
 
 	dispatch_sleep();
-	enable_interrupts()
+	enable_interrupts();
 	return 0; //Return 0 to indicate success
 }
 
