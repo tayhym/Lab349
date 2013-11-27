@@ -80,13 +80,13 @@ int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused))
 
 	/* Calculate time between IRQs based on desired resolution */
 	offset = (resolution * OSTMR_FREQ_VERDEX)/1000;
-
+	printf("ENABLING interrupts\n");
 	/* Setup memory mapped registers for timer*/
-	//reg_write(OSTMR_OSMR_ADDR(0), offset);	      // Set match register to desired offset
-	//reg_set(OSTMR_OIER_ADDR, OSTMR_OIER_E0);      // Set OSMR0 match register to active
-	//reg_clear(INT_ICLR_ADDR, (1<<INT_OSTMR_0));   // Ensure that timer interrupt is always IRQ 
-	//reg_set(INT_ICMR_ADDR, (1<<INT_OSTMR_0));     // reg_set(INT_ICMR_ADDR, INT_OSTMR_0);
-	//reg_write(OSTMR_OSCR_ADDR, 0x0); 	      // Reset counter
+	reg_write(OSTMR_OSMR_ADDR(0), offset);	      // Set match register to desired offset
+	reg_set(OSTMR_OIER_ADDR, OSTMR_OIER_E0);      // Set OSMR0 match register to active
+	reg_clear(INT_ICLR_ADDR, (1<<INT_OSTMR_0));   // Ensure that timer interrupt is always IRQ 
+	reg_set(INT_ICMR_ADDR, (1<<INT_OSTMR_0));     // reg_set(INT_ICMR_ADDR, INT_OSTMR_0);
+	reg_write(OSTMR_OSCR_ADDR, 0x0); 	      // Reset counter
 
 	/* Set up user space and jump to user function */
 	setUserConditions(USR_STACK, USR_START_ADDR);	

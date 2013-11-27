@@ -75,7 +75,7 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 		system_tcb[i].holds_lock = 0;
 		system_tcb[i].sleep_queue = 0;
 		system_tcb[i].kstack_high[0] = (uint32_t)system_tcb[i].kstack;
-		printf("system_tcb[%d].context.r4 = %d\n",i,system_tcb[i].context.r4);
+		//printf("system_tcb[%d].context.r4 = %d\n",i,system_tcb[i].context.r4);
 	}
 
 	addIdleTask();
