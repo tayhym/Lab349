@@ -18,7 +18,6 @@
 #define DELAY 970
 
 extern int S_Handler(void);
-extern void setIRQStack(unsigned int sp);
 extern int setUserConditions(unsigned int sp, int addr);
 
 uint32_t global_data;
@@ -73,8 +72,6 @@ int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused))
 	*((unsigned int*)kernelSwiAddr + 1 ) = (unsigned int)((unsigned int*)S_Handler);
 	*kernelIrqAddr = LDR_INSTR;        
 	*((unsigned int*)kernelIrqAddr + 1) = (unsigned int)((unsigned int*)irq_wrapper);                  
-
-	setIRQStack(IRQ_SP);	
 	
 	/* Initialize timer, not using IRQ stack-> uses SVC stack */
 	clock = 0;
@@ -89,6 +86,8 @@ int kmain(int argc __attribute__((unused)), char** argv  __attribute__((unused))
 	reg_clear(INT_ICLR_ADDR, (1<<INT_OSTMR_0));   // Ensure that timer interrupt is always IRQ 
 	reg_set(INT_ICMR_ADDR, (1<<INT_OSTMR_0));     // reg_set(INT_ICMR_ADDR, INT_OSTMR_0);
 	reg_write(OSTMR_OSCR_ADDR, 0x0); 	  		  // Reset counter
+
+	enable_interrupts();
 
 	/* Set up user space and jump to user function */
 	setUserConditions(USR_STACK, USR_START_ADDR);	
