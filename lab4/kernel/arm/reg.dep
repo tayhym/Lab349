@@ -1,11 +1,11 @@
-/home/matthew/Documents/18-349/Lab349/lab4/kernel/arm/reg.o:  \
- /home/matthew/Documents/18-349/Lab349/lab4/kernel/arm/reg.c \
-  /home/matthew/Documents/18-349/Lab349/lab4/kernel/include/types.h \
-  /home/matthew/Documents/18-349/Lab349/lab4/kernel/include/arm/reg.h \
-  /home/matthew/Documents/18-349/Lab349/lab4/kernel/include/inline.h
+/home/abc/18349/lab4/kernel/arm/reg.o:  \
+ /home/abc/18349/lab4/kernel/arm/reg.c \
+  /home/abc/18349/lab4/kernel/include/types.h \
+  /home/abc/18349/lab4/kernel/include/arm/reg.h \
+  /home/abc/18349/lab4/kernel/include/inline.h
 
-/home/matthew/Documents/18-349/Lab349/lab4/kernel/include/types.h:
+/home/abc/18349/lab4/kernel/include/types.h:
 
-/home/matthew/Documents/18-349/Lab349/lab4/kernel/include/arm/reg.h:
+/home/abc/18349/lab4/kernel/include/arm/reg.h:
 
-/home/matthew/Documents/18-349/Lab349/lab4/kernel/include/inline.h:
+/home/abc/18349/lab4/kernel/include/inline.h:

@@ -55,7 +55,6 @@ static void __attribute__((unused)) idle(void)
  */
 void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
 {
-	printf("allocate_tasks\n");
 	unsigned int i;
     runqueue_init();
     dev_init();
@@ -75,7 +74,6 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 		system_tcb[i].holds_lock = 0;
 		system_tcb[i].sleep_queue = 0;
 		system_tcb[i].kstack_high[0] = (uint32_t)system_tcb[i].kstack;
-		//printf("system_tcb[%d].context.r4 = %d\n",i,system_tcb[i].context.r4);
 	}
 
 	addIdleTask();
@@ -89,22 +87,11 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 
 // launch highest priority task
 void launchHighestPrio() {
-	printf("launchHighestPrio\n");
-	//unsigned prio = highest_prio(); // debug statement
 
 	/* extract r4 = user program entry point
 	 *	  	   r5 = prog argument 0
 	 *		   r6 = user stack pointer 
 	 */			 
-
-	// debug(s)
-	/*printf("highest prio %d\n",(int) prio);	
-	unsigned entryPoint = system_tcb[prio].context.r4;
-	printf("entryPoint %x\n", (int) entryPoint);	
-	unsigned progData = system_tcb[prio].context.r5;
-	printf("progData %x\n", (int) progData); 
-	unsigned userSp = system_tcb[prio].context.r6;
-	printf("userSp %x\n", (int) userSp);*/
 	
 	/* dispatch to current priority group */
 	dispatch_nosave();
@@ -117,14 +104,12 @@ void makeTasksRunnable(size_t num_tasks) {
 		prio = i;
 		disable_interrupts();
 		runqueue_add(&system_tcb[i], prio);	
-		printf("added prio %d",prio);	
 		enable_interrupts();	
 	}		
 }
 
 // add Idle Task to systemTCB 
 void addIdleTask() {
-	printf("addIdleTask\n");
 
 	unsigned IDLE_STACK_POS = RAM_END_ADDR;
 	// Initialize empty context

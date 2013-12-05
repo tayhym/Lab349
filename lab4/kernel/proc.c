@@ -30,19 +30,26 @@ void scheduleTasks(task_t *tasks, size_t num_tasks);
 
 int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
 {
-	int errorValue;	
+	int errorValue;	size_t i; 
+	task_t *taskArray[num_tasks];
 	// init empty run-queue 
 	runqueue_init();
 	// schedule TCBs 
-	scheduleTasks(tasks, num_tasks);
 	// check for errors
 	errorValue = checkForError(tasks, num_tasks);
 	if (errorValue != 0) {
 		return errorValue;
 	}
-	// create TCBs to house tasks and make runnable. 
+	
+	// create task array to house tasks 
+	for (i=0;i<num_tasks;i++) {
+		taskArray[i] = tasks;
+		tasks++
+	}
+	scheduleTasks(taskArray, num_tasks);
+	// create TCBs to house tasks and make runnable. 	
 	// also launches highest priority task  
-	allocate_tasks(&tasks, num_tasks);
+	allocate_tasks(taskArray, num_tasks);
 	
 
 	assert(0); //task_create only returns error conditions
@@ -56,13 +63,13 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 
 
 // sort from smallest completion time to largest 
-void scheduleTasks(task_t *tasks, size_t num_tasks) {
+void scheduleTasks(task_t **tasks, size_t num_tasks) {
 	size_t x; size_t y;
 	for (x=0;x<num_tasks;x++) {
 		for (y=0;y<num_tasks-1;y++) {
 			if (tasks[y].T > tasks[y+1].T) {
 				// swap 
-				task_t temp = tasks[y];
+				task_t *temp = tasks[y];
 				tasks[y] = tasks[y+1];
 				tasks[y+1] = temp;
 			}

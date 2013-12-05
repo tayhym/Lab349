@@ -34,8 +34,6 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 	task_t *taskArray[num_tasks];
 	// init empty run-queue 
 	runqueue_init();
-	// schedule TCBs 
-	printf("schedule tasks!\n");
 
 	// check for errors
 	errorValue = checkForError(tasks, num_tasks);
@@ -68,7 +66,6 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 void scheduleTasks(task_t **tasks, size_t num_tasks) {
 	size_t x; size_t y;
 	for (x=0;x<num_tasks;x++) {
-		printf("scheduleTasks, task %d lambda = %d \n",(int)x,(int)tasks[x]->lambda);
 		for (y=0;y<num_tasks-1;y++) {
 			if (tasks[y]->T > tasks[y+1]->T) {
 				// swap 
