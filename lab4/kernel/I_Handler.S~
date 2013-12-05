@@ -8,7 +8,8 @@
 
 I_Handler: 
 	sub	sp, sp, #4              @ leave room on stack for spsr of previous state    
-        stmfd	sp!, {r0-r12, lr}       @ store gp regs, lr to prepare to call swi    
+        stmfd	sp!, {r0-r12, lr}       @ store gp regs, lr to prepare to call swi 
+		str		r1, [OSTMR_OSSR_ADDR]   
         mrs	r2, cpsr                @ get spsr into gp registers         
         str	r2, [sp, #14*4]         @ store spsr for return to user mode
 	

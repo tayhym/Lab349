@@ -9,8 +9,10 @@
 #include <arm/interrupt.h>
 #include <arm/timer.h>
 #include <exports.h>
-
 #include <device.h>
+
+#define offset 325000
+
 extern volatile unsigned long clock;
 
 /* Called by assembly I_Handler */

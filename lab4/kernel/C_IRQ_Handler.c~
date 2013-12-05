@@ -9,8 +9,10 @@
 #include <arm/interrupt.h>
 #include <arm/timer.h>
 #include <exports.h>
-
 #include <device.h>
+
+#define offset 325000
+
 extern volatile unsigned long clock;
 
 /* Called by assembly I_Handler */
@@ -20,12 +22,12 @@ void C_IRQ_Handler() {
 	/* Check if timer interrupt flag is set */
 	if (((isTimerInt >> INT_OSTMR_0) & 0x01)) {
 		/* Reset counter */
+		printf("diff = %d\n",(int)(reg_read(OSTMR_OSCR_ADDR)-offset));
 		reg_write(OSTMR_OSCR_ADDR,0x0);
 		/* Acknowldge match and clear pending register bit */
 		reg_set(OSTMR_OSSR_ADDR, OSTMR_OIER_E0);
 		/* Increment our personal clock*/
 		clock++;
-		printf("clock value= %lu\n",clock);
 		/* Update devices */
 		dev_update(clock);
 	}
