@@ -30,22 +30,32 @@ void scheduleTasks(task_t **tasks, size_t num_tasks);
 
 int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
 {
-	int errorValue;	size_t i; 
+	size_t i; 
 	task_t *taskArray[num_tasks];
 	// init empty run-queue 
 	runqueue_init();
 
-	// check for errors
-	errorValue = checkForError(tasks, num_tasks);
-	if (errorValue != 0) {
-		return errorValue;
+	// Check is number of tasks is within maximum value
+	if (num_tasks>62) {
+		return -EINVAL;
 	}
+	else if (!(((unsigned) tasks >= RAM_START_ADDR) && ((unsigned)tasks <= RAM_END_ADDR))) {
+		// Check if task space is within valid memory
+		return -EFAULT;
+	}
+	 
 	
 	// create task array to house tasks 
 	for (i=0;i<num_tasks;i++) {
 		taskArray[i] = tasks;
 		tasks++;
 	}
+
+	// Check if tasks are schedulable
+	if (assign_schedule(taskArray, num_tasks) == 1) {
+		return -ESCHED;	
+	}
+
 	scheduleTasks(taskArray, num_tasks);
 	// create TCBs to house tasks and make runnable. 	
 	// also launches highest priority task  
@@ -75,22 +85,6 @@ void scheduleTasks(task_t **tasks, size_t num_tasks) {
 			}
 		}
 	}
-}	
-
-
-// checks for error. return 0 on no error. 	
-int checkForError(task_t *tasks, size_t num_tasks) {
-	// use 0 for king-for-a-day, as mentioned in lecture. 63 for idle task	
-	if (num_tasks>62) {
-		return -EINVAL;
-	}
-	else if (!(((unsigned) tasks >= RAM_START_ADDR) && ((unsigned)tasks <= RAM_END_ADDR))) {
-		return -EFAULT;
-	}
-	else if (tasksNotSchedulable(tasks, num_tasks) == 1) {
-		return -ESCHED;	
-	} 
-	return 0;
 }
 
 // find if tasks can be scheduled - 1 if not schedulable

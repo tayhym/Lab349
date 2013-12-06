@@ -29,7 +29,7 @@ int assign_schedule(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 {
 	unsigned i, C, T;
 	unsigned sum = 0;
-	return 1;
+
 	for (i = 0; i < num_tasks; i++) { 
 		C = tasks[i]->C;
 		T = tasks[i]->B;
@@ -38,7 +38,7 @@ int assign_schedule(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 		}
 		sum += C/T;
 		if (i == (num_tasks-1)) {
-			sum += (tasks[i]->B)/T;
+			//sum += (tasks[i]->B)/T;
 		}
 	}
 
