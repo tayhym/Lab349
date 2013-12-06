@@ -44,7 +44,6 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 		return -EFAULT;
 	}
 	 
-	
 	// create task array to house tasks 
 	for (i=0;i<num_tasks;i++) {
 		taskArray[i] = tasks;
@@ -69,8 +68,6 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 
 
 // ************** helper functions ****************************
-
-
 
 // sort from smallest completion time to largest 
 void scheduleTasks(task_t **tasks, size_t num_tasks) {

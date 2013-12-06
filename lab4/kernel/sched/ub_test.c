@@ -27,22 +27,23 @@
  */
 int assign_schedule(task_t** tasks  __attribute__((unused)), size_t num_tasks  __attribute__((unused)))
 {
-	unsigned i, C, T;
-	unsigned sum = 0;
+	unsigned i;
+	double C, T;
+	double sum = 0;
 
 	for (i = 0; i < num_tasks; i++) { 
-		C = tasks[i]->C;
-		T = tasks[i]->B;
+		C = (double)(tasks[i]->C);
+		T = (double)(tasks[i]->B);
 		if (T == 0) {
 			return 0;
 		}
 		sum += C/T;
 		if (i == (num_tasks-1)) {
-			sum += (tasks[i]->B)/T;
+			sum += ((double)(tasks[i]->B))/T;
 		}
 	}
 
-	if ((num_tasks*ilog2(sum+num_tasks)) <= (num_tasks*ilog2(num_tasks) + 1)) {
+	if ((num_tasks*ilog2(sum+num_tasks)) <= (double)(num_tasks*ilog2(num_tasks) + 1)) {
 		return 1;
 	}
 
