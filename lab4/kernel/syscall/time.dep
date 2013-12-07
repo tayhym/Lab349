@@ -1,20 +1,20 @@
-/home/abc/18349/lab4/kernel/syscall/time.o:  \
- /home/abc/18349/lab4/kernel/syscall/time.c \
-  /home/abc/18349/lab4/kernel/include/types.h \
-  /home/abc/18349/lab4/kernel/include/config.h \
-  /home/abc/18349/lab4/kernel/include/bits/errno.h \
-  /home/abc/18349/lab4/kernel/include/arm/timer.h \
-  /home/abc/18349/lab4/kernel/include/syscall.h \
-  /home/abc/18349/lab4/kernel/include/task.h
+/home/matthew/Documents/18-349/Lab349/lab4/kernel/syscall/time.o:  \
+ /home/matthew/Documents/18-349/Lab349/lab4/kernel/syscall/time.c \
+  /home/matthew/Documents/18-349/Lab349/lab4/kernel/include/types.h \
+  /home/matthew/Documents/18-349/Lab349/lab4/kernel/include/config.h \
+  /home/matthew/Documents/18-349/Lab349/lab4/kernel/include/bits/errno.h \
+  /home/matthew/Documents/18-349/Lab349/lab4/kernel/include/arm/timer.h \
+  /home/matthew/Documents/18-349/Lab349/lab4/kernel/include/syscall.h \
+  /home/matthew/Documents/18-349/Lab349/lab4/kernel/include/task.h
 
-/home/abc/18349/lab4/kernel/include/types.h:
+/home/matthew/Documents/18-349/Lab349/lab4/kernel/include/types.h:
 
-/home/abc/18349/lab4/kernel/include/config.h:
+/home/matthew/Documents/18-349/Lab349/lab4/kernel/include/config.h:
 
-/home/abc/18349/lab4/kernel/include/bits/errno.h:
+/home/matthew/Documents/18-349/Lab349/lab4/kernel/include/bits/errno.h:
 
-/home/abc/18349/lab4/kernel/include/arm/timer.h:
+/home/matthew/Documents/18-349/Lab349/lab4/kernel/include/arm/timer.h:
 
-/home/abc/18349/lab4/kernel/include/syscall.h:
+/home/matthew/Documents/18-349/Lab349/lab4/kernel/include/syscall.h:
 
-/home/abc/18349/lab4/kernel/include/task.h:
+/home/matthew/Documents/18-349/Lab349/lab4/kernel/include/task.h:
