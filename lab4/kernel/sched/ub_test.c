@@ -33,7 +33,7 @@ int assign_schedule(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 
 	for (i = 0; i < num_tasks; i++) { 
 		C = (double)(tasks[i]->C);
-		T = (double)(tasks[i]->B);
+		T = (double)(tasks[i]->T);
 		if (T == 0) {
 			return 0;
 		}

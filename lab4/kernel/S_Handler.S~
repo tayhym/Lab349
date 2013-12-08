@@ -4,31 +4,38 @@
 
 @ On entering S_Handler, CPU has switched to SVC mode, and saves cpsr into spsr
 @ S_Handler stores registers on stack, stores saved user state (spsr)
-@ Before call to exit, restores link register from supervisor stack.           
-@ This thus supports reentrant calls to S_Handler                              
-	.global S_Handler
-	.global linkR
+@ Before call to exit, restores link register from supervisor stack.
+@ This thus supports reentrant calls to S_Handler
 
-S_Handler:                                                                     
-        sub	sp, sp, #4        	@ leave room on stack for spsr of (USER)      
-        stmfd	sp!, {r0-r12, lr} 	@ store gp regs, lr to prepare to call swi    
-        mrs	r2, spsr            	@ get spsr into gp registers
-        str	r2, [sp, #14*4]     	@ store spsr for return to user mode
-	mrs	r2, cpsr
-	bic	r2, r2, #0xec
-	msr	cpsr, r2
-        mov	r1, sp			@ pointer to parameters on stack        
-        ldr	r0, [lr, #-4]		@ extract swi number                    
-	bic	r0, r0, #0xff000000	@ extract 24 bit swi number 
+#include <arm/psr.h>
 
-	ldr 	r4, =global_data	@ restore table
-	ldr 	r8, [r4] 
-	bl 	C_SWI_Handler
-	ldr 	r2, [sp, #14*4]		@ extract back user spsr into r2        
-        msr 	spsr, r2			@ restore spsr
-	add 	sp, sp, #4			@ adjust by 4 becuase r0 is ret val     
-        ldmfd 	sp!, {r1-r12, lr} 	@ restore gp registers, lr      
-        add 	sp, sp, #4   		@ reclaim space from spsr
-	movs 	pc, lr			@ return to user function
+.file "S_Handler.S"
+        .global S_Handler
 
+S_Handler:
+	stmfd 	sp!, {sp, lr}^			@ store context
+	sub		sp, sp, #4
+	stmfd	sp!, {r0-r12,lr}		@ Store callee registers
 
+	mrs		r2, spsr				@ Store current spsr
+	str		r2, [sp, #14*4]
+	mov		r1, sp
+	ldr		r0,  [lr, #-4]
+	bic		r0, r0, #0xff000000		@ Parse swi_num
+	
+	msr     cpsr_c, #(PSR_MODE_SVC|PSR_IRQ)	@ Switch to supervisor mode
+
+	ldr		r8, =global_data		@ Restore r8
+	ldr 	r8, [r8]
+	bl		C_SWI_Handler			@ Handle swi call
+
+	msr     cpsr_c, #(PSR_MODE_SVC)	@ Enable interrupts
+
+	ldr		r2, [sp, #14*4]			@ restore spsr
+	msr		spsr, r2
+
+	add		sp, sp, #4				@ restore callee registers
+	ldmfd	sp!, {r1-r12, lr}
+	add		sp, sp, #4
+	ldmia	sp!, {sp, lr}^			@ restore context
+	movs	pc, lr

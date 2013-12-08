@@ -104,7 +104,7 @@ void dispatch_sleep(void)
 	disable_interrupts(); 
 
 	unsigned prio = highest_prio();
-	unsigned cur_prio = cur_tcb->cur_prio;
+	unsigned cur_prio = cur_tcb->native_prio;
 	
 	//Find next highest priority
 
@@ -124,7 +124,7 @@ void dispatch_sleep(void)
  */
 uint8_t get_cur_prio(void)
 {
-	return cur_tcb->cur_prio;
+	return cur_tcb->native_prio;
 }
 
 /**

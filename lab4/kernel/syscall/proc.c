@@ -51,7 +51,7 @@ int task_create(task_t* tasks  __attribute__((unused)), size_t num_tasks  __attr
 	}
 
 	// Check if tasks are schedulable
-	if (assign_schedule(taskArray, num_tasks) == 1) {
+	if (!assign_schedule(taskArray, num_tasks)) {
 		return -ESCHED;	
 	}
 

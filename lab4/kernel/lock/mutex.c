@@ -57,7 +57,7 @@ int mutex_lock(int mutex  __attribute__((unused)))
 	disable_interrupts();
 
 	/* Check if mutex id has been initialized */
-	if (mutex >= num_mutex) {
+	if (mutex >= num_mutex || mutex < 0) {
 		enable_interrupts();
 		return -EINVAL;
 	}
@@ -70,13 +70,18 @@ int mutex_lock(int mutex  __attribute__((unused)))
 		return -EDEADLOCK;
 	}
 
-	cur_tcb tcbCurrent = get_cur_tcb();
-	tcbCurrent->cur_prio = 0;
-
-	currMutex->bAvailable = 0;
+	/* Wait till Mutex is acquirable */
+	while (currMutex->bAvailable != 1) {
+		enable_interrupts();
+		dispatch_sleep();
+		disable_interrupts();
+	}
+	
+	currMutex->pHolding_Tcb = currTask;
 	currMutex->bLock = 1;
-
+	currMutex->bAvailable = 0;
 	enable_interrupts();
+
 	return 0; //Return 0 to indicate success
 }
 
@@ -85,7 +90,7 @@ int mutex_unlock(int mutex  __attribute__((unused)))
 	disable_interrupts();
 
 	/* Check if mutex has been initialized */
-	if (mutex >= num_mutex) {
+	if (mutex >= num_mutex || mutex < 0) {
 		enable_interrupts();
 		return -EINVAL;
 	}
@@ -97,6 +102,10 @@ int mutex_unlock(int mutex  __attribute__((unused)))
 		enable_interrupts();
 		return -EPERM;
 	}
+
+	currMutex->pHolding_Tcb = 0;
+	currMutex->bAvailable = 1;
+	currMutex->bLock = 0;
 
 	enable_interrupts();
 	return 0; //Return 0 to indicate success
