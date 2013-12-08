@@ -68,8 +68,8 @@ void allocate_tasks(task_t** tasks  __attribute__((unused)), size_t num_tasks  _
 									  .sp = (void *)(((char *)system_tcb[i].kstack)+OS_KSTACK_SIZE-4),
 									  .lr = 0};
 		
-		system_tcb[i].native_prio = i;
-		system_tcb[i].cur_prio = i;
+		system_tcb[i].native_prio = i+1;
+		system_tcb[i].cur_prio = i+1;
 		system_tcb[i].context = tcbContext;
 		system_tcb[i].holds_lock = 0;
 		system_tcb[i].sleep_queue = 0;

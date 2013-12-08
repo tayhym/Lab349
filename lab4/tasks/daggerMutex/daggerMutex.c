@@ -11,6 +11,7 @@
 #include <task.h>
 #include <unistd.h>
 
+
 int mutexOne;
 void panic(const char* str)
 {
@@ -37,6 +38,9 @@ void fun2(void* str)
 		putchar((int)str);
 		if (event_wait(1) < 0)
 			panic("Dev 1 failed");
+		puts("task 2 sleeping");
+		sleep(30);
+		puts("task 2 woke up");
 		mutex_unlock(mutexOne);
 	}
 }
